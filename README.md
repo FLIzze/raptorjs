@@ -1,12 +1,7 @@
 # RaptorJS
 
 ```
-(SSH)
-git clone git@github.com:FLIzze/raptorjs.git /opt/raptorjs
-(HTTPS)
-git clone https://github.com/FLIzze/raptorjs.git /opt/raptorjs
-cd /opt/raptorjs
-npm run init
+sudo npx raptorjs-discord
 ```
 
 ## Command Manager
