@@ -24,11 +24,16 @@ echo "Welcome to the RaptorJs init script"
 
 USER=$(whoami)
 FRAMEWORK_PATH="/home/$USER/.raptorjs"
-PROJECT_PATH=$1
 
 read -p 'What is your project name ? ' PROJECT_NAME
 read -n 1 -p "Would you like to use Typescript ? y/n " USE_TS
 echo
+
+PROJECT_PATH="$1/$PROJECT_NAME"
+
+mkdir "$PROJECT_PATH"
+
+cd "$PROJECT_PATH"
 
 cp $FRAMEWORK_PATH/templates/.env $PROJECT_PATH
 cp $FRAMEWORK_PATH/templates/README.md $PROJECT_PATH
