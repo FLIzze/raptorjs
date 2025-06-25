@@ -1,5 +1,14 @@
 # RaptorJS
 
+```
+(SSH)
+git clone git@github.com:FLIzze/raptorjs.git /opt/raptorjs
+(HTTPS)
+git clone https://github.com/FLIzze/raptorjs.git /opt/raptorjs
+cd /opt/raptorjs
+npm run init
+```
+
 ## Command Manager
 
 *All commands start with `raptorjs`*
@@ -35,9 +44,45 @@
 
 ## Logs
 
-All logs will be displayed in a .log file.
+`/var/log/raptorjs.logs`
 
 ## Doc
 
 Everything should be documented.
 Every command should have a -h, --help flag.
+
+## Hierarchy
+
+For the Users
+
+```
+<project_name>/
+    .env
+    README.md
+    raptor.conf.json
+    src/
+        -> models/
+        // Commands related to the discord bot
+        -> commands/
+        -> events/
+        -> db/
+```
+
+The framework itself
+
+```
+/opt/RaptorJs/
+    README.md
+    src/
+        -> main.js
+        // Commands related to the framework
+        -> commands/
+        -> tests/
+    templates/
+    install/
+    package.json
+```
+
+## Conf 
+
+raptor.conf.json
