@@ -1,18 +1,30 @@
 #!/bin/bash
 
 # Author          : RaptorTeam
-# Script Name     : install.sh
 # Description     : install RaptorJs on your pc
 # Creation Date   : 25/06/2025
 # Last Modified   : 25/06/2025
-# Version         : 0.1
+# Version         : 1.0.0
 # Contact         : RaptorTeam@gmail.com
-#
-# Usage           :
-#   ./install.sh
-#
-# Notes           :
-#   - Make sure to run with appropriate permissions (e.g., chmod +x).
 #
 # ----- SCRIPT BEGIN HERE ----
 
+set -e
+
+echo "Starting cloning of the RaptorJS repository"
+
+TARGET_DIR="/opt/raptorjs"
+
+rm -rf "$TARGET_DIR"
+
+git clone https://github.com/FLIzze/raptorjs.git "$TARGET_DIR"
+
+cd "$TARGET_DIR"
+
+git checkout install
+
+ln -sf "$TARGET_DIR/install/raptor_cli.sh" /usr/local/bin/raptorjs
+
+chmod +x /usr/local/bin/raptorjs
+
+echo "[+] Installation completed."
