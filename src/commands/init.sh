@@ -22,16 +22,18 @@
 
 echo "Welcome to the RaptorJs init script"
 
+USER=$(whoami)
+FRAMEWORK_PATH="/home/$USER/.raptor"
 PROJECT_PATH=$1
 
 read -p 'What is your project name ? ' PROJECT_NAME
 read -n 1 -p "Would you like to use Typescript ? y/n " USE_TS
 echo
 
-cp /opt/raptorjs/templates/.env $PROJECT_PATH
-cp /opt/raptorjs/templates/README.md $PROJECT_PATH
-cp /opt/raptorjs/templates/index.js $PROJECT_PATH
-cp /opt/raptorjs/templates/package.json $PROJECT_PATH
+cp $FRAMEWORK_PATH/templates/.env $PROJECT_PATH
+cp $FRAMEWORK_PATH/templates/README.md $PROJECT_PATH
+cp $FRAMEWORK_PATH/templates/index.js $PROJECT_PATH
+cp $FRAMEWORK_PATH/templates/package.json $PROJECT_PATH
 
 RAPTOR_CONF="./raptor.conf.json"
 

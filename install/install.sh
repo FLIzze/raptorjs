@@ -13,16 +13,26 @@ set -e
 
 echo "Starting cloning of the RaptorJS repository"
 
-TARGET_DIR="/opt/raptorjs"
+USER=$(whoami)
 
-rm -rf "$TARGET_DIR"
+RAPTORJS_DIR="/home/$USER/.raptorjs"
 
-git clone https://github.com/FLIzze/raptorjs.git "$TARGET_DIR"
+CLI_DIR="/home/$USER/.local/bin"
 
-rm /usr/local/bin/raptorjs
+rm -rf "$RAPTORJS_DIR"
 
-ln -sf "$TARGET_DIR/install/raptor_cli.sh" /usr/local/bin/raptorjs
+git clone https://github.com/FLIzze/raptorjs.git "$RAPTORJS_DIR"
 
-chmod +x /usr/local/bin/raptorjs
+rm "$CLI_DIR/raptorjs"
+
+mkdir -p "$CLI_DIR"
+
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+
+source ~/.bashrc
+
+ln -sf "$RAPTORJS_DIR/install/raptor_cli.sh" "$CLI_DIR/raptorjs"
+
+chmod +x "$CLI_DIR/raptorjs"
 
 echo "[+] Installation completed."

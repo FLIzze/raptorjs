@@ -11,7 +11,9 @@
 #
 # ----- SCRIPT BEGIN HERE ----
 
-APP_DIR="/opt/raptorjs"
+USER=$(whoami)
+
+APP_DIR="/home/$USER/.raptor"
 
 CMD=$1
 
