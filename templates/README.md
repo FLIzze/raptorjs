@@ -1,3 +1,5 @@
-# Edit this README
+# Auto-genered by raptorjs 
 
-Auto-genered by raptorJs 
+```
+node index.js
+```
