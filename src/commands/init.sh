@@ -35,10 +35,21 @@ mkdir "$PROJECT_PATH"
 
 cd "$PROJECT_PATH"
 
-cp $FRAMEWORK_PATH/templates/.env $PROJECT_PATH
-cp $FRAMEWORK_PATH/templates/README.md $PROJECT_PATH
-cp $FRAMEWORK_PATH/templates/index.js $PROJECT_PATH
-cp $FRAMEWORK_PATH/templates/package.json $PROJECT_PATH
+cp $FRAMEWORK_PATH/templates/init/.env $PROJECT_PATH
+cp $FRAMEWORK_PATH/templates/init/README.md $PROJECT_PATH
+cp $FRAMEWORK_PATH/templates/init/package.json $PROJECT_PATH
+echo '# RaptorJS gitignore
+node_modules
+package-lock.json
+.env' > .gitignore
+
+MINI_PROJECT_NAME=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
+
+sed -i "s/\"name\": *\"[^\"]*\"/\"name\": \"$MINI_PROJECT_NAME\"/" package.json
+
+mkdir src
+
+cp $FRAMEWORK_PATH/templates/init/index.js $PROJECT_PATH/src
 
 RAPTOR_CONF="./raptor.conf.json"
 
