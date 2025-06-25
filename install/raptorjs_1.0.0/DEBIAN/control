@@ -1,0 +1,8 @@
+Package: raptorjs
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: all
+Maintainer: RaptorTeam <RaptorTeam@gmail.com>
+Depends: git, nodejs, npm
+Description: Automatically installs RaptorJS from a Git repository
