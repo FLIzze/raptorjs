@@ -1,7 +1,7 @@
 # RaptorJS
 
 ```
-sudo npx raptorjs-discord
+npx raptorjs-discord
 ```
 
 ## Command Manager
