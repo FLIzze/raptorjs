@@ -28,28 +28,40 @@ echo
 
 projectDir="$HOME/Documents/$projectName"
 mkdir -p $projectDir
-mkdir $projectDir/{src,commands,models,events,db}
+mkdir -p "$projectDir/src"
 
-# Will change src to /opt
-cp $HOME/Documents/raptorjs/templates/.env $projectDir/
-cp $HOME/Documents/raptorjs/templates/README.md $projectDir/
+cp /opt/raptorjs/templates/.env $projectDir/
+cp /opt/raptorjs/templates/README.md $projectDir/
+cp /opt/raptorjs/templates/index.js $projectDir/
+cp /opt/raptorjs/templates/package.json $projectDir/
 
 raptorConf="$projectDir/raptor.conf.json"
-if [[ "$useTs" == "y" || "$useTs" == "Y" ]] then
+
+if [[ "$useTs" == "y" || "$useTs" == "Y" ]]; then
         cat <<EOF > "$raptorConf"
 {
-        "ts": true
+  "ts": true
 }
 EOF
-elif [[ "$useTs" == "n" || "$useTs" == "N" ]] then
+
+elif [[ "$useTs" == "n" || "$useTs" == "N" ]]; then
         cat <<EOF > "$raptorConf"
 {
-        "ts": false
+  "ts": false
 }
 EOF
+
 else 
         echo "Invalid input. Please use 'y' or 'n'."
         exit 1
 fi
 
-echo "Project $projectName created at $projectDir"
+echo "Project '$projectName' created at '$projectDir'"
+
+cd "$projectDir" || { echo "Failed to enter project directory."; exit 1; }
+npm install discord.js dotenv
+
+if [[ "$useTs" == "y" || "$useTs" == "Y" ]]; then
+    npm install --save-dev typescript ts-node @types/node
+    npx tsc --init
+fi

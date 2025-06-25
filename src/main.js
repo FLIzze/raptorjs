@@ -5,7 +5,9 @@ const commandsFolderUrl = new URL("./commands/", import.meta.url);
 
 class Command {
         /**
-         * Init the project
+         * Init the project in the $HOME/Documents directory 
+         * TODO
+         * Do it in a cleaner way
          */
         init() {
                 const initCommandUrl = new URL("init.sh", commandsFolderUrl);
@@ -19,7 +21,7 @@ class Command {
          */
         execFile(filePath) {
                 const child = spawn("bash", [filePath], {
-                        stdio: "inherit" 
+                        stdio: "inherit"
                 });
 
                 child.on("error", (err) => {
