@@ -20,9 +20,10 @@ class Command {
         /**
          * Execute the (.sh) file with given filePath
          * @param {string} filePath
+         * @param {string[]} args
          */
-        execFile(filePath) {
-                const child = spawn("bash", [filePath], {
+        execFile(filePath, args = []) {
+                const child = spawn("bash", [filePath, ...args], {
                         stdio: "inherit"
                 });
 
