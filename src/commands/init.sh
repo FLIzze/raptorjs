@@ -22,26 +22,28 @@
 
 echo "Welcome to the RaptorJs init script"
 
-read -p 'What is your project name ? ' projectName
-read -n 1 -p "Would you like to use Typescript ? y/n " useTs
+PROJECT_PATH=$1
+
+read -p 'What is your project name ? ' PROJECT_NAME
+read -n 1 -p "Would you like to use Typescript ? y/n " USE_TS
 echo
 
-cp /opt/raptorjs/templates/.env .
-cp /opt/raptorjs/templates/README.md .
-cp /opt/raptorjs/templates/index.js .
-cp /opt/raptorjs/templates/package.json .
+cp /opt/raptorjs/templates/.env $PROJECT_PATH
+cp /opt/raptorjs/templates/README.md $PROJECT_PATH
+cp /opt/raptorjs/templates/index.js $PROJECT_PATH
+cp /opt/raptorjs/templates/package.json $PROJECT_PATH
 
-raptorConf="./raptor.conf.json"
+RAPTOR_CONF="./raptor.conf.json"
 
-if [[ "$useTs" == "y" || "$useTs" == "Y" ]]; then
-        cat <<EOF > "$raptorConf"
+if [[ "$useTs" == "y" || "$USE_TS" == "Y" ]]; then
+        cat <<EOF > "$RAPTOR_CONF"
 {
   "ts": true
 }
 EOF
 
-elif [[ "$useTs" == "n" || "$useTs" == "N" ]]; then
-        cat <<EOF > "$raptorConf"
+elif [[ "$USE_TS" == "n" || "$USE_TS" == "N" ]]; then
+        cat <<EOF > "$RAPTOR_CONF"
 {
   "ts": false
 }
@@ -52,12 +54,12 @@ else
         exit 1
 fi
 
-echo "Project '$projectName' created at '$projectDir'"
+echo "Project '$PROJECT_NAME' created at '$PROJECT_PATH'"
 
-cd "$projectDir" || { echo "Failed to enter project directory."; exit 1; }
+cd "$PROJECT_PATH" || { echo "Failed to enter project directory."; exit 1; }
 npm install discord.js dotenv
 
-if [[ "$useTs" == "y" || "$useTs" == "Y" ]]; then
+if [[ "$USE_TS" == "y" || "$USE_TS" == "Y" ]]; then
     npm install --save-dev typescript ts-node @types/node
     npx tsc --init
 fi

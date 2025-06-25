@@ -15,10 +15,12 @@ APP_DIR="/opt/raptorjs"
 
 CMD=$1
 
+PROJECT_PATH=$(pwd)
+
 case "$CMD" in
     init)
         cd "$APP_DIR" || exit 1
-        npm run init
+        npm run init "$PROJECT_PATH"
         ;;
     *)
         echo "Unknown command: $CMD"

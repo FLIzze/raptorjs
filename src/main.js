@@ -3,6 +3,8 @@ import {fileURLToPath} from "url";
 
 const commandsFolderUrl = new URL("./commands/", import.meta.url);
 
+const firstArg = process.argv[2]
+
 class Command {
         /**
          * Init the project in the $HOME/Documents directory 
@@ -12,7 +14,7 @@ class Command {
         init() {
                 const initCommandUrl = new URL("init.sh", commandsFolderUrl);
                 const initCommandPath = fileURLToPath(initCommandUrl);
-                this.execFile(initCommandPath);
+                this.execFile(initCommandPath, [firstArg]);
         }
 
         /**
