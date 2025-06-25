@@ -4,7 +4,7 @@
 (SSH)
 git clone git@github.com:FLIzze/raptorjs.git /opt/
 (HTTPS)
-git clone https://github.com/FLIzze/raptorjs.git
+git clone https://github.com/FLIzze/raptorjs.git /opt/
 cd /opt/raptorjs
 npm run init
 ```
