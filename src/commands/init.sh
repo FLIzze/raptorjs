@@ -23,7 +23,7 @@
 echo "Welcome to the RaptorJs init script"
 
 USER=$(whoami)
-FRAMEWORK_PATH="/home/$USER/.raptor"
+FRAMEWORK_PATH="/home/$USER/.raptorjs"
 PROJECT_PATH=$1
 
 read -p 'What is your project name ? ' PROJECT_NAME
