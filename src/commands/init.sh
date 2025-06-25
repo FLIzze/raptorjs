@@ -21,6 +21,7 @@
 # ----- SCRIPT BEGIN HERE ----
 
 echo "Welcome to the RaptorJs init script"
+
 read -p 'What is your project name ? ' projectName
 read -n 1 -p "Would you like to use Typescript ? y/n " useTs
 echo

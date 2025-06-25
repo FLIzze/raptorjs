@@ -1,12 +1,7 @@
 # RaptorJS
 
 ```
-(SSH)
-git clone git@github.com:FLIzze/raptorjs.git /opt/
-(HTTPS)
-git clone https://github.com/FLIzze/raptorjs.git /opt/
-cd /opt/raptorjs
-npm run init
+sudo npx raptorjs-discord
 ```
 
 ## Command Manager
@@ -59,6 +54,7 @@ For the Users
 <project_name>/
     .env
     README.md
+    raptor.conf.json
     src/
         -> models/
         // Commands related to the discord bot
@@ -81,3 +77,7 @@ The framework itself
     install/
     package.json
 ```
+
+## Conf 
+
+raptor.conf.json

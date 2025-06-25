@@ -1,20 +1,24 @@
 {
-        "name": "raptorjs",
-        "version": "0.0.1",
-        "description": "RaptorJs",
-        "main": "src/main.js",
-        "scripts": {
-                "init": "node src/main.js"
-        },
-        "repository": {
-                "type": "git",
-                "url": "git+https://github.com/FLIzze/raptorjs.git"
-        },
-        "author": "RaptorTeam",
-        "license": "MIT",
-        "bugs": {
-                "url": "https://github.com/FLIzze/raptorjs/issues"
-        },
-        "homepage": "https://github.com/FLIzze/raptorjs#readme",
-        "type": "module"
+  "name": "raptorjs-discord",
+  "version": "0.1.1",
+  "description": "RaptorJs",
+  "main": "src/main.js",
+  "bin": {
+    "raptorjs": "./install/install.js"
+  },
+  "scripts": {
+    "init": "node src/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FLIzze/raptorjs.git"
+  },
+  "author": "RaptorTeam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FLIzze/raptorjs/issues"
+  },
+  "homepage": "https://github.com/FLIzze/raptorjs#readme",
+  "type": "module",
+  "keywords": ["cli", "installer", "node", "raptorjs"]
 }
