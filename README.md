@@ -35,9 +35,22 @@
 
 ## Logs
 
-All logs will be displayed in a .log file.
+`/var/log/raptorjs.logs`
 
 ## Doc
 
 Everything should be documented.
 Every command should have a -h, --help flag.
+
+## Hierarchy
+
+```
+RaptorJS
+    -> src
+        -> models
+        -> commands
+        -> events
+        -> tests
+        -> db
+    .env
+```
