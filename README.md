@@ -1,5 +1,14 @@
 # RaptorJS
 
+```
+(SSH)
+git clone git@github.com:FLIzze/raptorjs.git /opt/
+(HTTPS)
+git clone https://github.com/FLIzze/raptorjs.git
+cd /opt/raptorjs
+npm run init
+```
+
 ## Command Manager
 
 *All commands start with `raptorjs`*
