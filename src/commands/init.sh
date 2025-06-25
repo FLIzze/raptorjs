@@ -21,6 +21,7 @@
 # ----- SCRIPT BEGIN HERE ----
 
 echo "Welcome to the RaptorJs init script"
+
 read -p 'What is your project name ? ' projectName
 read -n 1 -p "Would you like to use Typescript ? y/n " useTs
 echo
@@ -29,5 +30,26 @@ projectDir="$HOME/Documents/$projectName"
 mkdir -p $projectDir
 mkdir $projectDir/{src,commands,models,events,db}
 
-cp /opt/raptorjs/templates/.env $projectDir/
-cp /opt/raptorjs/templates/README.md $projectDir/
+# Will change src to /opt
+cp $HOME/Documents/raptorjs/templates/.env $projectDir/
+cp $HOME/Documents/raptorjs/templates/README.md $projectDir/
+
+raptorConf="$projectDir/raptor.conf.json"
+if [[ "$useTs" == "y" || "$useTs" == "Y" ]] then
+        cat <<EOF > "$raptorConf"
+{
+        "ts": true
+}
+EOF
+elif [[ "$useTs" == "n" || "$useTs" == "N" ]] then
+        cat <<EOF > "$raptorConf"
+{
+        "ts": false
+}
+EOF
+else 
+        echo "Invalid input. Please use 'y' or 'n'."
+        exit 1
+fi
+
+echo "Project $projectName created at $projectDir"

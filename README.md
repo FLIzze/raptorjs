@@ -2,9 +2,9 @@
 
 ```
 (SSH)
-git clone git@github.com:FLIzze/raptorjs.git /opt/
+git clone git@github.com:FLIzze/raptorjs.git /opt/raptorjs
 (HTTPS)
-git clone https://github.com/FLIzze/raptorjs.git /opt/
+git clone https://github.com/FLIzze/raptorjs.git /opt/raptorjs
 cd /opt/raptorjs
 npm run init
 ```
@@ -59,6 +59,7 @@ For the Users
 <project_name>/
     .env
     README.md
+    raptor.conf.json
     src/
         -> models/
         // Commands related to the discord bot
@@ -81,3 +82,7 @@ The framework itself
     install/
     package.json
 ```
+
+## Conf 
+
+raptor.conf.json
