@@ -13,7 +13,7 @@
 
 USER=$(whoami)
 
-APP_DIR="/home/$USER/.raptor"
+APP_DIR="/home/$USER/.raptorjs"
 
 CMD=$1
 
