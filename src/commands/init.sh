@@ -1,6 +1,6 @@
 #!/bin/bash
-
-# Author          : RaptorTeam
+#
+# Author          : BEL Alexandre
 # Script Name     : init.sh
 # Description     : Init the project
 # Creation Date   : 25/06/2025
@@ -21,3 +21,13 @@
 # ----- SCRIPT BEGIN HERE ----
 
 echo "Welcome to the RaptorJs init script"
+read -p 'What is your project name ? ' projectName
+read -n 1 -p "Would you like to use Typescript ? y/n " useTs
+echo
+
+projectDir="$HOME/Documents/$projectName"
+mkdir -p $projectDir
+mkdir $projectDir/{src,commands,models,events,db}
+
+cp /opt/raptorjs/templates/.env $projectDir/
+cp /opt/raptorjs/templates/README.md $projectDir/

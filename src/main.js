@@ -1,5 +1,7 @@
-import {exec} from "child_process";
+import {spawn} from "child_process";
 import {fileURLToPath} from "url";
+
+const commandsFolderUrl = new URL("./commands/", import.meta.url);
 
 class Command {
         /**
@@ -7,7 +9,7 @@ class Command {
          */
         init() {
                 const initCommandUrl = new URL("init.sh", commandsFolderUrl);
-                const initCommandPath = fileURLToPath(initCommandUrl); 
+                const initCommandPath = fileURLToPath(initCommandUrl);
                 this.execFile(initCommandPath);
         }
 
@@ -16,19 +18,19 @@ class Command {
          * @param {string} filePath
          */
         execFile(filePath) {
-                exec(filePath, (error, stdout, stderr) => {
-                        if (error) {
-                                console.error(`Execution error: ${error}`);
-                                return;
-                        }
-
-                        console.log(`stdout: ${stdout}`);
-                        console.error(`stderr: ${stderr}`);
+                const child = spawn("bash", [filePath], {
+                        stdio: "inherit" 
                 });
+
+                child.on("error", (err) => {
+                        console.error(`Failed to start subprocess: ${err}`);
+                });
+
+                // child.on("exit", (code) => {
+                //         console.log(`Process exited with code ${code}`);
+                // });
         }
 }
 
-const commandsFolderUrl = new URL("./commands/", import.meta.url);
 const command = new Command();
-
 command.init();

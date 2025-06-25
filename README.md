@@ -55,19 +55,19 @@ For the Users
         // Commands related to the discord bot
         -> commands/
         -> events/
-        -> tests/
         -> db/
 ```
 
 The framework itself
 
 ```
-/Opt/RaptorJs/
+/opt/RaptorJs/
     README.md
     src/
         -> main.js
         // Commands related to the framework
         -> commands/
+        -> tests/
     templates/
     install/
     package.json
