@@ -19,10 +19,6 @@ rm -rf "$TARGET_DIR"
 
 git clone https://github.com/FLIzze/raptorjs.git "$TARGET_DIR"
 
-cd "$TARGET_DIR"
-
-git checkout install
-
 ln -sf "$TARGET_DIR/install/raptor_cli.sh" /usr/local/bin/raptorjs
 
 chmod +x /usr/local/bin/raptorjs

@@ -1,8 +1,11 @@
 {
-  "name": "raptorjs",
-  "version": "0.0.1",
+  "name": "raptorjs-discord",
+  "version": "0.1.0",
   "description": "RaptorJs",
   "main": "src/main.js",
+  "bin": {
+    "raptorjs": "./install/install.js"
+  },
   "scripts": {
     "init": "node src/main.js"
   },
@@ -16,5 +19,6 @@
     "url": "https://github.com/FLIzze/raptorjs/issues"
   },
   "homepage": "https://github.com/FLIzze/raptorjs#readme",
-  "type": "module"
+  "type": "module",
+  "keywords": ["cli", "installer", "node", "raptorjs"]
 }
