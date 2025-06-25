@@ -3,8 +3,13 @@
         "version": "0.0.1",
         "description": "RaptorJs",
         "main": "src/main.js",
+        "bin": {
+                "raptorjs": "./src/main.js"
+        },
         "scripts": {
-                "init": "node src/main.js"
+                "init": "node src/main.js init",
+                "help": "node src/main.js --help",
+                "test": "node src/main.js --help"
         },
         "repository": {
                 "type": "git",
