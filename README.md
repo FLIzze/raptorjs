@@ -44,13 +44,31 @@ Every command should have a -h, --help flag.
 
 ## Hierarchy
 
+For the Users
+
 ```
-RaptorJS
-    -> src
-        -> models
-        -> commands
-        -> events
-        -> tests
-        -> db
+<project_name>/
     .env
+    README.md
+    src/
+        -> models/
+        // Commands related to the discord bot
+        -> commands/
+        -> events/
+        -> tests/
+        -> db/
+```
+
+The framework itself
+
+```
+/Opt/RaptorJs/
+    README.md
+    src/
+        -> main.js
+        // Commands related to the framework
+        -> commands/
+    templates/
+    install/
+    package.json
 ```

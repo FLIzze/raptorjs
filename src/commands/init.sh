@@ -1,15 +1,15 @@
 #!/bin/bash
 
 # Author          : RaptorTeam
-# Script Name     : <script_name>.sh
-# Description     : <Short description of what the script does>
-# Creation Date   : <DD/MM/YYYY>
-# Last Modified   : <DD/MM/YYYY>
-# Version         : <Version number>
+# Script Name     : init.sh
+# Description     : Init the project
+# Creation Date   : 25/06/2025
+# Last Modified   : 25/06/2025
+# Version         : 0.1
 # Contact         : RaptorTeam@gmail.com
 #
 # Usage           :
-#   ./<script_name>.sh [options]
+#   ./init.sh
 #
 # Example         :
 #   ./init_project.sh
@@ -19,3 +19,5 @@
 #   - Ensure required environment variables are set (.env).
 #
 # ----- SCRIPT BEGIN HERE ----
+
+echo "Welcome to the RaptorJs init script"
