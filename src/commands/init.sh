@@ -26,10 +26,15 @@ read -p 'What is your project name ? ' projectName
 read -n 1 -p "Would you like to use Typescript ? y/n " useTs
 echo
 
-cp /opt/raptorjs/templates/.env .
-cp /opt/raptorjs/templates/README.md .
-cp /opt/raptorjs/templates/index.js .
-cp /opt/raptorjs/templates/package.json .
+TEMPLATE_DIR="/opt/raptorjs/templates"
+
+CURRENT_DIR=pwd
+cd pwd
+
+cp "$TEMPLATE_DIR/.env" .
+cp "$TEMPLATE_DIR/README.md" .
+cp "$TEMPLATE_DIR/index.js" .
+cp "$TEMPLATE_DIR/package.json" .
 
 raptorConf="./raptor.conf.json"
 
