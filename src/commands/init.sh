@@ -26,16 +26,12 @@ read -p 'What is your project name ? ' projectName
 read -n 1 -p "Would you like to use Typescript ? y/n " useTs
 echo
 
-projectDir="$HOME/Documents/$projectName"
-mkdir -p $projectDir
-mkdir -p "$projectDir/src"
+cp /opt/raptorjs/templates/.env ./
+cp /opt/raptorjs/templates/README.md ./
+cp /opt/raptorjs/templates/index.js ./
+cp /opt/raptorjs/templates/package.json ./
 
-cp /opt/raptorjs/templates/.env $projectDir/
-cp /opt/raptorjs/templates/README.md $projectDir/
-cp /opt/raptorjs/templates/index.js $projectDir/
-cp /opt/raptorjs/templates/package.json $projectDir/
-
-raptorConf="$projectDir/raptor.conf.json"
+raptorConf="./raptor.conf.json"
 
 if [[ "$useTs" == "y" || "$useTs" == "Y" ]]; then
         cat <<EOF > "$raptorConf"
