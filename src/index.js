@@ -20,13 +20,13 @@ class Command {
 
         /**
          * Add a model that would be later migrated in sqlite
+         * argv[3] is modelName, argv[2] is function call
          * @param {string} modelName
          */
         addModel(modelName) {
-                console.log(`addind model: ${modelName}`);
-                // const initCommandUrl = new URL("addModel.sh", commandsFolderUrl);
-                // const initCommandPath = fileURLToPath(initCommandUrl);
-                // this.execFile(initCommandPath, [firstArg]);
+                const loc = window.location.pathname;
+                console.log(loc);
+                // copyTo(src, modelName);
         }
 
         /**
@@ -53,12 +53,24 @@ const command = new Command();
 
 // TODO - args check
 switch (argv[2]) {
-case "init":
-        command.init();
-        break;
-case "addModel":
-        command.addModel(argv[3]);
-        break;
-default:
-        console.error("Unknown command: ", firstArg);
+        case "init":
+                command.init();
+                break;
+        case "addModel":
+                command.addModel(argv[3]);
+                break;
+        default:
+                console.error("Unknown command: ", firstArg);
+}
+
+/**
+ * @param {string} src
+ * @param {string} dest
+ */
+async function copyTo(src, dest) {
+        try {
+                await copyFile(src, dest);
+        } catch (err) {
+                console.error(err);
+        }
 }
