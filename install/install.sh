@@ -17,13 +17,18 @@ USER=$(whoami)
 
 RAPTORJS_DIR="/home/$USER/.raptorjs"
 
+if [ -d $RAPTORJS_DIR ] then;
+        echo "Directory $RAPTORJS_DIR already exists."
+        exit 0
+fi
+
 CLI_DIR="/home/$USER/.local/bin"
 
-rm -rf "$RAPTORJS_DIR"
+rm -rf "$RAPTORJS_DIR" 2>/dev/null
 
 git clone https://github.com/FLIzze/raptorjs.git "$RAPTORJS_DIR"
 
-rm "$CLI_DIR/raptorjs"
+rm "$CLI_DIR/raptorjs" 2>/dev/null
 
 mkdir -p "$CLI_DIR"
 
