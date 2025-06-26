@@ -30,12 +30,6 @@ class Command {
                 // this.execFile(initCommandPath, [firstArg]);
         }
 
-        install() {
-                const initCommandUrl = new URL("install.sh", installFolder);
-                const initCommandPath = fileURLToPath(initCommandUrl);
-                this.execFile(initCommandPath, [firstArg]);
-        }
-
         /**
          * Execute the (.sh) file with given filePath
          * @param {string} filePath
@@ -65,9 +59,6 @@ case "init":
         break;
 case "addModel":
         command.addModel(argv[3]);
-        break;
-case "install":
-        command.install();
         break;
 default:
         console.error("Unknown command: ", firstArg);
