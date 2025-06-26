@@ -48,13 +48,14 @@ Every command should have a -h, --help flag.
 
 ## Hierarchy
 
-For the Users
+For the users
 
 ```
 <project_name>/
     .env
     README.md
     raptor.conf.json
+    package.json
     src/
         -> models/
         // Commands related to the discord bot
@@ -66,7 +67,7 @@ For the Users
 The framework itself
 
 ```
-/opt/RaptorJs/
+~/.raptorjs
     README.md
     src/
         -> main.js
@@ -76,6 +77,7 @@ The framework itself
     templates/
     install/
     package.json
+    raptor.conf.json
 ```
 
 ## Conf 
