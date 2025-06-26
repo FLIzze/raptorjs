@@ -26,10 +26,16 @@ USER=$(whoami)
 FRAMEWORK_PATH="/home/$USER/.raptorjs"
 
 read -p 'What is your project name ? ' PROJECT_NAME
-read -n 1 -p "Would you like to use Typescript ? y/n " USE_TS
-echo
 
 PROJECT_PATH="$1/$PROJECT_NAME"
+
+if [ -d "$PROJECT_PATH" ]; then
+        echo "This project already exists"
+        exit 1
+fi
+
+read -n 1 -p "Would you like to use Typescript (Recommended) ? y/n " USE_TS
+echo
 
 mkdir "$PROJECT_PATH"
 
@@ -67,9 +73,6 @@ elif [[ "$USE_TS" == "n" || "$USE_TS" == "N" ]]; then
 }
 EOF
 
-else 
-        echo "Invalid input. Please use 'y' or 'n'."
-        exit 1
 fi
 
 echo "Project '$PROJECT_NAME' created at '$PROJECT_PATH'"

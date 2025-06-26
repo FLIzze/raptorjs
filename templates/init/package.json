@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "scripts": {
-    "bot": "node src/main.js"
+    "bot": "node src/index.js"
   },
   "keywords": ["bot", "discord", "raptorjs"],
   "type": "module"
