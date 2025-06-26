@@ -1,5 +1,5 @@
 # Auto-genered by raptorjs 
 
 ```
-node index.js
+npm run bot
 ```

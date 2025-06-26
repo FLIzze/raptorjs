@@ -1,18 +1,37 @@
+#!/usr/bin/env node
+
 import {spawn} from "child_process";
 import {fileURLToPath} from "url";
+import {argv} from "process";
 
 const commandsFolderUrl = new URL("./commands/", import.meta.url);
+const installFolder = new URL("../install/", import.meta.url);
 
 const firstArg = process.argv[2]
 
 class Command {
         /**
          * Init the project in the $HOME/Documents directory 
-         * TODO
-         * Do it in a cleaner way
          */
         init() {
                 const initCommandUrl = new URL("init.sh", commandsFolderUrl);
+                const initCommandPath = fileURLToPath(initCommandUrl);
+                this.execFile(initCommandPath, [firstArg]);
+        }
+
+        /**
+         * Add a model that would be later migrated in sqlite
+         * @param {string} modelName
+         */
+        addModel(modelName) {
+                console.log(`addind model: ${modelName}`);
+                // const initCommandUrl = new URL("addModel.sh", commandsFolderUrl);
+                // const initCommandPath = fileURLToPath(initCommandUrl);
+                // this.execFile(initCommandPath, [firstArg]);
+        }
+
+        install() {
+                const initCommandUrl = new URL("install.sh", installFolder);
                 const initCommandPath = fileURLToPath(initCommandUrl);
                 this.execFile(initCommandPath, [firstArg]);
         }
@@ -38,4 +57,18 @@ class Command {
 }
 
 const command = new Command();
-command.init();
+
+// TODO - args check
+switch (argv[2]) {
+case "init":
+        command.init();
+        break;
+case "addModel":
+        command.addModel(argv[3]);
+        break;
+case "install":
+        command.install();
+        break;
+default:
+        console.error("Unknown command: ", firstArg);
+}
