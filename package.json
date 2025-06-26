@@ -1,6 +1,6 @@
 {
-        "name": "raaaaaw",
-        "version": "0.3.0",
+        "name": "raptorjs-discord",
+        "version": "0.3.7",
         "description": "RaptorJs",
         "main": "src/main.js",
         "bin": {
