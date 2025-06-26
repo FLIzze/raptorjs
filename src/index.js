@@ -5,7 +5,6 @@ import {fileURLToPath} from "url";
 import {argv} from "process";
 
 const commandsFolderUrl = new URL("./commands/", import.meta.url);
-const installFolder = new URL("../install/", import.meta.url);
 
 const firstArg = process.argv[2]
 

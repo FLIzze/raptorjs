@@ -1,7 +1,7 @@
 # RaptorJS
 
 ```
-npx raptorjs-discord
+npx raptorjs-discord init
 ```
 
 ## Command Manager

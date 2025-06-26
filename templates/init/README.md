@@ -1,5 +1,5 @@
 # Auto-genered by raptorjs 
 
-```
-npm run bot
-```
+Pour lancer le bot `npm run bot`
+
+Pour utiliser les commandes du framework `npx raptorjs <command>`
