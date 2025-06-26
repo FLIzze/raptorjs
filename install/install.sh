@@ -17,7 +17,7 @@ USER=$(whoami)
 
 RAPTORJS_DIR="/home/$USER/.raptorjs"
 
-if [ -d $RAPTORJS_DIR ] then;
+if [ -d $RAPTORJS_DIR ]; then
         echo "Directory $RAPTORJS_DIR already exists."
         exit 0
 fi
