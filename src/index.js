@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { Logger } from "../src/logger.js";
 import {spawn, exec} from "child_process";
 import { fileURLToPath, pathToFileURL } from "url";
 import {argv} from "process";
@@ -15,6 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const { migrateModels } = await import(pathToFileURL(path.join(__dirname, "db/migrations.js")).href);
 
+const logger = new Logger
 const commandsFolderUrl = new URL("./commands/", import.meta.url);
 const pwd = process.cwd();
 const home = homedir();
@@ -117,6 +119,9 @@ switch (firstArg) {
                 break;
         case "migrate":
                 command.migrate();
+                break;
+        case "test":
+                logger.info('test');
                 break;
         default:
                 console.error("Unknown command:", firstArg);
