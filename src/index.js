@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { Logger } from "../src/logger.js";
 import {spawn, exec} from "child_process";
 import {fileURLToPath} from "url";
 import {argv} from "process";
@@ -8,6 +9,7 @@ import fsp from "fs/promises";
 import {homedir} from "os";
 import path from "path";
 
+const logger = new Logger
 const commandsFolderUrl = new URL("./commands/", import.meta.url);
 const pwd = process.cwd();
 const home = homedir();
@@ -100,6 +102,11 @@ switch (firstArg) {
         case "update":
                 command.update();
                 break;
+        
+        case "test":
+                logger.info('test');
+                break;
+
         default:
                 console.error("Unknown command:", firstArg);
                 process.exit(1);
