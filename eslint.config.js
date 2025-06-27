@@ -3,16 +3,16 @@ import globals from "globals";
 import {defineConfig} from "eslint/config";
 
 export default defineConfig([
-    {
-        files: ["**/*.{js,mjs,cjs}"],
-        plugins: {js},
-        extends: ["js/recommended"],
-        languageOptions: {
-            globals: globals.node
+        {
+                files: ["**/*.{js,mjs,cjs}"],
+                plugins: {js},
+                extends: ["js/recommended"],
+                languageOptions: {
+                        globals: globals.node
+                },
+                rules: {
+                        "indent": ["error", 8],
+                        "semi": ["error", "always"]
+                }
         },
-        rules: {
-            "indent": ["error", 4],
-            "semi": ["error", "always"]
-        }
-    },
 ]);
