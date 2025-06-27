@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import {spawn} from "child_process";
+import {spawn, exec} from "child_process";
 import {fileURLToPath} from "url";
 import {argv} from "process";
 
 const commandsFolderUrl = new URL("./commands/", import.meta.url);
-
+const pwd = process.cwd();
 const firstArg = process.argv[2]
 
 class Command {
@@ -19,14 +19,38 @@ class Command {
         }
 
         /**
+         * Update the project in the $HOME/Documents directory 
+         */
+        update() {
+                console.log("Updating the repository...");
+                exec('git pull', (error, _, stderr) => {
+                        if (error) {
+                                console.error(`Error updating the repository: ${error.message}`);
+                                return;
+                        }
+                        if (stderr) {
+                                console.error(`stderr updating the repository: ${stderr}`);
+                                return;
+                        }
+                        console.log("Succesfully updated the repository !");
+                });
+        }
+
+        /**
          * Add a model that would be later migrated in sqlite
          * argv[3] is modelName, argv[2] is function call
          * @param {string} modelName
          */
         addModel(modelName) {
-                const loc = window.location.pathname;
-                console.log(loc);
-                // copyTo(src, modelName);
+                const filePath = path.join(pwd, "raptor.conf.json");
+
+                if (!fs.existsSync(filePath)) {
+                        console.error(`No 'raptor.conf.json' in current directory, 
+                        please use commands in projet root.`);
+
+                        return;
+                }
+                copyTo(src, modelName);
         }
 
         /**
@@ -59,8 +83,12 @@ switch (argv[2]) {
         case "addModel":
                 command.addModel(argv[3]);
                 break;
+        case "update":
+                command.update();
+                break;
         default:
                 console.error("Unknown command: ", firstArg);
+                break;
 }
 
 /**
