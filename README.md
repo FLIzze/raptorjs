@@ -10,6 +10,8 @@ npx raptorjs-discord init
 
 `init` Init the project.
 
+`update` Updates the framework.
+
 `addCommand <name>` Add a template file, and the related command in discord dashboard.
 
 `addEvent <name>` Add a template file, and the related event in discord dashboard.
