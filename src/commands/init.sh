@@ -59,11 +59,7 @@ MINI_PROJECT_NAME=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
 sed -i "s/\"name\": *\"[^\"]*\"/\"name\": \"$MINI_PROJECT_NAME\"/" package.json
 
 if [[ $SQLITE == "y" || $SQLITE == "Y" ]]; then
-        mkdir -p ./src/db
         mkdir -p ./src/models
-        cp $FRAMEWORK_DIRECTORY/templates/db/connection.js ./src/db
-        cp $FRAMEWORK_DIRECTORY/templates/db/model.js ./src/db
-        cp $FRAMEWORK_DIRECTORY/templates/db/migrate.js ./src/db
 fi
 
 # ----- FOR USER DIR ----
@@ -96,7 +92,7 @@ if [[ $TS == "y" || $TS == "Y" ]]; then
 fi
 
 if [[ $SQLITE == "y" || $SQLITE == "Y" ]]; then
-        npm install sqlite3
+        npm install sqlite3 sqlite
 fi
 
 echo "Project '$PROJECT_NAME' created at '$(pwd)'"
