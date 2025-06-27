@@ -6,8 +6,6 @@ import {argv} from "process";
 
 const commandsFolderUrl = new URL("./commands/", import.meta.url);
 
-const firstArg = process.argv[2]
-
 class Command {
         /**
          * Init the project in the $HOME/Documents directory 
@@ -15,8 +13,18 @@ class Command {
         init() {
                 const initCommandUrl = new URL("init.sh", commandsFolderUrl);
                 const initCommandPath = fileURLToPath(initCommandUrl);
-                this.execFile(initCommandPath, [firstArg]);
+                this.execFile(initCommandPath, []);
         }
+
+        /**
+         * Add command to the project 
+         */
+        addCommand() {
+                const addCommandUrl = new URL("addCommand.sh", commandsFolderUrl);
+                const addCommandPath = fileURLToPath(addCommandUrl);
+                this.execFile(addCommandPath, [])
+        }
+
 
         /**
          * Add a model that would be later migrated in sqlite
@@ -58,6 +66,9 @@ switch (argv[2]) {
                 break;
         case "addModel":
                 command.addModel(argv[3]);
+                break;
+        case "":
+                command.addCommand();
                 break;
         default:
                 console.error("Unknown command: ", firstArg);
