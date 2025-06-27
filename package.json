@@ -1,6 +1,6 @@
 {
         "name": "raptorjs-discord",
-        "version": "0.4.40",
+        "version": "0.4.46",
         "description": "RaptorJs",
         "main": "src/main.js",
         "bin": {
@@ -22,5 +22,9 @@
                 "installer",
                 "node",
                 "raptorjs"
-        ]
+        ],
+        "dependencies": {
+                "sqlite": "^5.1.1",
+                "sqlite3": "^5.1.7"
+        }
 }

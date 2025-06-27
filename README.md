@@ -60,8 +60,6 @@ For the users
     package.json
     src/
         -> models/
-        -> migrations/
-        -> db/
         -> table.js
         -> index.js
         // Commands related to the discord bot

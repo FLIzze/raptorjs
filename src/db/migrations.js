@@ -8,6 +8,7 @@ export async function migrateModels() {
         const files = fs.readdirSync(modelDir).filter(file => file.endsWith(".js"));
         const db = await getDB();
 
+        console.log("Starting migration...");
         for (const file of files) {
                 try {
                         const modelPath = pathToFileURL(path.join(modelDir, file)).pathname;
@@ -21,6 +22,9 @@ export async function migrateModels() {
                         await db.exec(sql);
                 } catch (err) {
                         console.error(`Failed to migrate ${file}:`, err);
+                        return;
                 }
         }
+
+        console.log("Successfully migrated!");
 }

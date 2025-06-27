@@ -1,14 +1,19 @@
 #!/usr/bin/env node
 
 import {spawn, exec} from "child_process";
-import {fileURLToPath} from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 import {argv} from "process";
 import fs from "fs";
 import fsp from "fs/promises";
 import {homedir} from "os";
 import path from "path";
-// IMPORT IS RELATIVE TO BIN
-import {migrateModels} from "./db/migrations";
+
+// Since index.js (this file), is used as bin in package.json,
+// relative imports are relative to bin not this file.
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const { migrateModels } = await import(pathToFileURL(path.join(__dirname, "db/migrations.js")).href);
 
 const commandsFolderUrl = new URL("./commands/", import.meta.url);
 const pwd = process.cwd();
