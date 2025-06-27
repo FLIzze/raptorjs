@@ -3,14 +3,19 @@
 import {spawn, exec} from "child_process";
 import {fileURLToPath} from "url";
 import {argv} from "process";
+import fs from "fs";
+import fsp from "fs/promises";
+import {homedir} from "os";
+import path from "path";
 
 const commandsFolderUrl = new URL("./commands/", import.meta.url);
 const pwd = process.cwd();
-const firstArg = process.argv[2]
+const home = homedir();
+const firstArg = argv[2];
 
 class Command {
         /**
-         * Init the project in the $HOME/Documents directory 
+         * Initialize the user project by running init.sh script.
          */
         init() {
                 const initCommandUrl = new URL("init.sh", commandsFolderUrl);
@@ -19,11 +24,11 @@ class Command {
         }
 
         /**
-         * Update the project in the $HOME/Documents directory 
+         * Pull latest changes in the framework repository.
          */
         update() {
                 console.log("Updating the repository...");
-                exec('git pull', (error, _, stderr) => {
+                exec(`git pull ${path.join(home, ".raptorjs")}`, (error, _, stderr) => {
                         if (error) {
                                 console.error(`Error updating the repository: ${error.message}`);
                                 return;
@@ -32,73 +37,84 @@ class Command {
                                 console.error(`stderr updating the repository: ${stderr}`);
                                 return;
                         }
-                        console.log("Succesfully updated the repository !");
+                        console.log("Successfully updated the repository!");
                 });
         }
 
         /**
-         * Add a model that would be later migrated in sqlite
-         * argv[3] is modelName, argv[2] is function call
-         * @param {string} modelName
+         * Add a model file from templates to project src/models directory.
+         * @param {string} modelName - Name of the model file to add (without extension)
          */
-        addModel(modelName) {
-                const filePath = path.join(pwd, "raptor.conf.json");
-
-                if (!fs.existsSync(filePath)) {
-                        console.error(`No 'raptor.conf.json' in current directory, 
-                        please use commands in projet root.`);
-
+        async addModel(modelName) {
+                const configFilePath = path.join(pwd, "raptor.conf.json");
+                if (!fs.existsSync(configFilePath)) {
+                        console.error("Please run this command from the project root directory.");
                         return;
                 }
-                copyTo(src, modelName);
+
+                const source = path.join(home, ".raptorjs", "templates", "db", "model.js");
+                const targetDir = path.join(pwd, "src", "models");
+
+                // Ensure target directory exists
+                try {
+                        await fsp.mkdir(targetDir, {recursive: true});
+                } catch (err) {
+                        console.error(`Error creating models directory: ${err.message}`);
+                        return;
+                }
+
+                const target = path.join(targetDir, `${modelName}.js`);
+
+                await copyTo(source, target);
+                console.log(`Model successfully added as ${target}`);
         }
 
         /**
-         * Execute the (.sh) file with given filePath
-         * @param {string} filePath
-         * @param {string[]} args
+         * Execute a shell script file with arguments.
+         * @param {string} filePath - Path to the shell script
+         * @param {string[]} args - Arguments to pass to the script
          */
         execFile(filePath, args = []) {
-                const child = spawn("bash", [filePath, ...args], {
-                        stdio: "inherit"
-                });
+                const child = spawn("bash", [filePath, ...args], {stdio: "inherit"});
 
                 child.on("error", (err) => {
                         console.error(`Failed to start subprocess: ${err}`);
                 });
-
-                // child.on("exit", (code) => {
-                //         console.log(`Process exited with code ${code}`);
-                // });
         }
 }
 
 const command = new Command();
 
-// TODO - args check
-switch (argv[2]) {
+// Basic argument check & command dispatch
+switch (firstArg) {
         case "init":
                 command.init();
                 break;
         case "addModel":
-                command.addModel(argv[3]);
+                if (!argv[3]) {
+                        console.error("Please provide a model name.");
+                        process.exit(1);
+                }
+                await command.addModel(argv[3]);
                 break;
         case "update":
                 command.update();
                 break;
         default:
-                console.error("Unknown command: ", firstArg);
-                break;
+                console.error("Unknown command:", firstArg);
+                process.exit(1);
 }
 
 /**
- * @param {string} src
- * @param {string} dest
+ * Copy a file asynchronously.
+ * @param {string} src - Source file path
+ * @param {string} dest - Destination file path
  */
 async function copyTo(src, dest) {
         try {
-                await copyFile(src, dest);
+                await fsp.copyFile(src, dest);
+                console.log(`Copied file from ${src} to ${dest}`);
         } catch (err) {
-                console.error(err);
+                console.error(`Error copying file: ${err.message}`);
         }
 }

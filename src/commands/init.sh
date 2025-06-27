@@ -60,12 +60,12 @@ sed -i "s/\"name\": *\"[^\"]*\"/\"name\": \"$MINI_PROJECT_NAME\"/" package.json
 
 if [[ $SQLITE == "y" || $SQLITE == "Y" ]]; then
         mkdir -p ./src/db
+        mkdir -p ./src/models
         cp $FRAMEWORK_DIRECTORY/templates/db/connection.js ./src/db
         cp $FRAMEWORK_DIRECTORY/templates/db/model.js ./src/db
         cp $FRAMEWORK_DIRECTORY/templates/db/migrate.js ./src/db
 fi
 
-# ----- RAPTOR CONF -----
 # ----- FOR USER DIR ----
 
 RAPTOR_CONF="./raptor.conf.json"
