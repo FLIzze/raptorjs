@@ -2,12 +2,19 @@
 
 import { Logger } from "../src/logger.js";
 import {spawn, exec} from "child_process";
-import {fileURLToPath} from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 import {argv} from "process";
 import fs from "fs";
 import fsp from "fs/promises";
 import {homedir} from "os";
 import path from "path";
+
+// Since index.js (this file), is used as bin in package.json,
+// relative imports are relative to bin not this file.
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const { migrateModels } = await import(pathToFileURL(path.join(__dirname, "db/migrations.js")).href);
 
 const logger = new Logger
 const commandsFolderUrl = new URL("./commands/", import.meta.url);
@@ -17,7 +24,7 @@ const firstArg = argv[2];
 
 class Command {
         /**
-         * Initialize the user project by running init.sh script.
+         * Initializes the user project by running init.sh script.
          */
         init() {
                 const initCommandUrl = new URL("init.sh", commandsFolderUrl);
@@ -26,7 +33,7 @@ class Command {
         }
 
         /**
-         * Pull latest changes in the framework repository.
+         * Pulls latest changes in the framework repository.
          */
         update() {
                 console.log("Updating the repository...");
@@ -44,8 +51,8 @@ class Command {
         }
 
         /**
-         * Add a model file from templates to project src/models directory.
-         * @param {string} modelName - Name of the model file to add (without extension)
+         * Adds a model file from templates to project src/models directory.
+         * @param {string} modelName 
          */
         async addModel(modelName) {
                 const configFilePath = path.join(pwd, "raptor.conf.json");
@@ -57,7 +64,6 @@ class Command {
                 const source = path.join(home, ".raptorjs", "templates", "db", "model.js");
                 const targetDir = path.join(pwd, "src", "models");
 
-                // Ensure target directory exists
                 try {
                         await fsp.mkdir(targetDir, {recursive: true});
                 } catch (err) {
@@ -72,9 +78,9 @@ class Command {
         }
 
         /**
-         * Execute a shell script file with arguments.
-         * @param {string} filePath - Path to the shell script
-         * @param {string[]} args - Arguments to pass to the script
+         * Executes a shell script file with arguments.
+         * @param {string} filePath 
+         * @param {string[]} args 
          */
         execFile(filePath, args = []) {
                 const child = spawn("bash", [filePath, ...args], {stdio: "inherit"});
@@ -83,11 +89,20 @@ class Command {
                         console.error(`Failed to start subprocess: ${err}`);
                 });
         }
+
+        migrate() {
+                const configFilePath = path.join(pwd, "raptor.conf.json");
+                if (!fs.existsSync(configFilePath)) {
+                        console.error("Please run this command from the project root directory.");
+                        return;
+                }
+
+                migrateModels();
+        }
 }
 
 const command = new Command();
 
-// Basic argument check & command dispatch
 switch (firstArg) {
         case "init":
                 command.init();
@@ -102,11 +117,12 @@ switch (firstArg) {
         case "update":
                 command.update();
                 break;
-        
+        case "migrate":
+                command.migrate();
+                break;
         case "test":
                 logger.info('test');
                 break;
-
         default:
                 console.error("Unknown command:", firstArg);
                 process.exit(1);
@@ -114,8 +130,8 @@ switch (firstArg) {
 
 /**
  * Copy a file asynchronously.
- * @param {string} src - Source file path
- * @param {string} dest - Destination file path
+ * @param {string} src 
+ * @param {string} dest 
  */
 async function copyTo(src, dest) {
         try {

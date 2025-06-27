@@ -60,10 +60,11 @@ For the users
     package.json
     src/
         -> models/
+        -> table.js
+        -> index.js
         // Commands related to the discord bot
         -> commands/
         -> events/
-        -> db/
 ```
 
 The framework itself
@@ -75,7 +76,6 @@ The framework itself
         -> main.js
         // Commands related to the framework
         -> commands/
-        -> tests/
     templates/
     install/
     package.json
