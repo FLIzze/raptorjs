@@ -3,7 +3,8 @@ import fs from "fs";
 import fsp from "fs/promises";
 import path from "path";
 import {fileURLToPath, pathToFileURL} from "url";
-import copyTo, {commandsFolderUrl, firstArg, home, pwd} from ".";
+import {commandsFolderUrl, firstArg, home, pwd} from "./cli.js";
+import {copyTo} from "../utils/copyTo.js";
 
 // Since index.js (this file), is used as bin in package.json,
 // relative imports are relative to bin not this file.
@@ -11,21 +12,15 @@ import copyTo, {commandsFolderUrl, firstArg, home, pwd} from ".";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const {migrateModels} = await import(pathToFileURL(path.join(__dirname, "db/migrations.js")).href);
+const {migrateModels} = await import(pathToFileURL(path.join(__dirname, "../db/migrations.js")).href);
 
 export class Command {
-        /**
-         * Initializes the user project by running init.sh script.
-         */
         init() {
                 const initCommandUrl = new URL("init.sh", commandsFolderUrl);
                 const initCommandPath = fileURLToPath(initCommandUrl);
                 this.execFile(initCommandPath, [firstArg]);
         }
 
-        /**
-         * Pulls latest changes in the framework repository.
-         */
         update() {
                 console.log("Updating the repository...");
                 exec(`git pull ${path.join(home, ".raptorjs")}`, (error, _, stderr) => {

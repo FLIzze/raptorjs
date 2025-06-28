@@ -4,8 +4,8 @@
 # Script Name     : init.sh
 # Description     : Init the project
 # Creation Date   : 25/06/2025
-# Last Modified   : 26/06/2025
-# Version         : 0.2
+# Last Modified   : 28/06/2025
+# Version         : 0.3
 # Contact         : RaptorTeam@gmail.com
 #
 # Usage           :
@@ -44,6 +44,9 @@ echo
 
 read -n 1 -p "Would you like to use a sqlite database ? y/n " SQLITE
 echo
+        
+# this will be used later to import the exports from index.js into user workspace
+# npm install git+https://github.com/FLIzze/raptorjs.git
 
 # ----- COPPYING TEMPLATES -----
 
