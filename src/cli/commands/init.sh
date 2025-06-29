@@ -45,9 +45,6 @@ echo
 read -n 1 -p "Would you like to use a sqlite database ? y/n " SQLITE
 echo
         
-# this will be used later to import the exports from index.js into user workspace
-# npm install git+https://github.com/FLIzze/raptorjs.git
-
 # ----- COPPYING TEMPLATES -----
 
 mkdir -p ./src
@@ -97,5 +94,7 @@ fi
 if [[ $SQLITE == "y" || $SQLITE == "Y" ]]; then
         npm install sqlite3 sqlite
 fi
+
+npm link raptorjs-discord
 
 echo "Project '$PROJECT_NAME' created at '$(pwd)'"

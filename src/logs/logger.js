@@ -14,68 +14,130 @@ const ANSI_COLORS = {
         cyan: "\x1b[36m"
 };
 
+/**
+ * Logger utility for console and file output.
+ *
+ * @example
+ * const logger = new Logger();
+ * logger.info('Application started');
+ */
 export class Logger {
-        constructor(logPath){
+        /**
+         * Initializes the logger with a log file path.
+         *
+         * @param {string} [logPath] - Optional custom log file path.
+         */
+        constructor(logPath) {
                 this.path = logPath ?? path.join(__dirname, "..", "log", "raptorjs.log");
                 this.buildLogFile();
         }
 
-        buildLogFile () {
+        /**
+         * Ensures the log directory and file exist.
+         */
+        buildLogFile() {
                 const dir = path.dirname(this.path);
-                if (!fs.existsSync(dir)){
+                if (!fs.existsSync(dir)) {
                         fs.mkdirSync(dir, { recursive: true });
                 }
-                if (!fs.existsSync(this.path)){
+                if (!fs.existsSync(this.path)) {
                         fs.writeFileSync(this.path, "");
-                        this.info("le fichier log a bien été créé");
+                        this.info("Log file created");
                 }
         }
 
-        date () {
+        /**
+         * Returns a formatted timestamp.
+         *
+         * @returns {string}
+         */
+        date() {
                 const date = new Date();
+                const pad = (n, len = 2) => String(n).padStart(len, '0');
 
-                const jour = String(date.getDate()).padStart(2, '0');
-                const mois = String(date.getMonth() + 1).padStart(2, '0');
-                const annee = String(date.getFullYear()).slice(-2);
+                const day = pad(date.getDate());
+                const month = pad(date.getMonth() + 1);
+                const year = String(date.getFullYear()).slice(-2);
+                const hour = pad(date.getHours());
+                const min = pad(date.getMinutes());
+                const sec = pad(date.getSeconds());
+                const ms = pad(date.getMilliseconds(), 3);
 
-                const heures = String(date.getHours()).padStart(2, '0');
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-                const secondes = String(date.getSeconds()).padStart(2, '0');
-                const miliseconde = String(date.getMilliseconds()).padStart(2, '0');
-
-                return `[${jour}-${mois}-${annee}T${heures}:${minutes}:${secondes}.${miliseconde}Z]`;
+                return `[${day}-${month}-${year}T${hour}:${min}:${sec}.${ms}Z]`;
         }
 
+        /**
+         * Adds ANSI color codes to message.
+         *
+         * @param {string} message - Log message.
+         * @param {string} color - Color name (green, yellow, red, blue, cyan).
+         * @returns {string}
+         */
         colorize(message, color) {
                 return `${ANSI_COLORS[color] ?? ""}${message}${ANSI_COLORS.reset}`;
         }
 
-        info (message) {
-                const mes = this.date() + "INFO:" + message;
+        /**
+         * Logs an informational message.
+         *
+         * @param {string} message - Message to log.
+         * @example
+         * logger.info("Server is running");
+         */
+        info(message) {
+                const mes = this.date() + " INFO: " + message;
                 fs.appendFileSync(this.path, mes + "\n");
                 console.log(this.colorize(mes, "green"));
         }
 
-        warn (message) {
-                const mes = this.date() + "WARN:" + message;
+        /**
+         * Logs a warning message.
+         *
+         * @param {string} message - Message to log.
+         * @example
+         * logger.warn("Disk space running low");
+         */
+        warn(message) {
+                const mes = this.date() + " WARN: " + message;
                 fs.appendFileSync(this.path, mes + "\n");
                 console.log(this.colorize(mes, "yellow"));
         }
 
-        error (message) {
-                const mes = this.date() + "ERROR:" + message;
+        /**
+         * Logs an error message.
+         *
+         * @param {string} message - Message to log.
+         * @example
+         * logger.error("Database connection failed");
+         */
+        error(message) {
+                const mes = this.date() + " ERROR: " + message;
                 fs.appendFileSync(this.path, mes + "\n");
                 console.log(this.colorize(mes, "red"));
-        } 
+        }
 
-        debug (message) {
-                const mes = this.date() + "DEBUG:" + message;
+        /**
+         * Logs a debug message.
+         *
+         * @param {string} message - Message to log.
+         * @example
+         * logger.debug("Query executed with ID 42");
+         */
+        debug(message) {
+                const mes = this.date() + " DEBUG: " + message;
                 fs.appendFileSync(this.path, mes + "\n");
                 console.log(this.colorize(mes, "blue"));
         }
 
-        trace (message) {
-                const mes = this.date() + "TRACE:" + message;
+        /**
+         * Logs a trace-level message.
+         *
+         * @param {string} message - Message to log.
+         * @example
+         * logger.trace("Function entered: parseData()");
+         */
+        trace(message) {
+                const mes = this.date() + " TRACE: " + message;
                 fs.appendFileSync(this.path, mes + "\n");
                 console.log(this.colorize(mes, "cyan"));
         }

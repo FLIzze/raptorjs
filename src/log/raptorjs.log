@@ -1,0 +1,23 @@
+[29-06-25T12:01:42.896Z] INFO: Database initialized
+[29-06-25T12:02:23.171Z] INFO: Database initialized
+[29-06-25T10:56:28.182Z]INFO:le fichier log a bien été créé
+[29-06-25T12:02:47.524Z] INFO: Database initialized
+[29-06-25T12:03:30.409Z] INFO: Starting migration...
+[29-06-25T12:03:30.410Z] INFO: Database initialized
+[29-06-25T12:03:30.410Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[29-06-25T12:03:30.421Z] INFO: Migration completed.
+[29-06-25T12:04:50.739Z] INFO: Database initialized
+[29-06-25T12:05:26.089Z] INFO: Database initialized
+[29-06-25T12:05:46.499Z] INFO: Database initialized
+[29-06-25T12:06:07.745Z] INFO: Database initialized
+[29-06-25T12:06:19.898Z] INFO: Starting migration...
+[29-06-25T12:06:19.899Z] INFO: Database initialized
+[29-06-25T12:06:19.899Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[29-06-25T12:06:19.909Z] INFO: Migration completed.
+[29-06-25T12:06:22.228Z] INFO: Starting migration...
+[29-06-25T12:06:22.229Z] INFO: Database initialized
+[29-06-25T12:06:22.229Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[29-06-25T12:06:22.230Z] INFO: Migration completed.
+[29-06-25T12:08:50.848Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["john doe"]
+[29-06-25T12:08:50.849Z] INFO: Database initialized
+[29-06-25T12:08:50.858Z] DEBUG: [SQL] SELECT * FROM user 

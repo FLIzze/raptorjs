@@ -1,8 +1,8 @@
 {
         "name": "raptorjs-discord",
-        "version": "0.4.58",
+        "version": "0.6.00",
         "description": "RaptorJs",
-        "main": "src/index.js",
+        "main": "src/main.js",
         "bin": {
                 "raptorjs": "src/cli/cli.js"
         },

@@ -1,3 +1,3 @@
 export const fields = {
-        id: "TEXT PRIMARY KEY AUTOINCREMENT",
+        id: "INTEGER PRIMARY KEY AUTOINCREMENT",
 };
