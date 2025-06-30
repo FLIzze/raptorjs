@@ -17,7 +17,7 @@ const commands = {
                         console.log("Usage: cli <command> [args]\n");
                         console.log("Available commands:");
                         for (const [name, cmd] of Object.entries(commands)) {
-                                console.log(`  ${name.padEnd(10)} - ${cmd.description}`);
+                                console.log(`  ${name.padEnd(15)} - ${cmd.description}`);
                         }
                 }
         },
@@ -30,6 +30,25 @@ const commands = {
                 requiredArgs: 1,
                 handler: async ([name]) => {
                         await command.addModel(name);
+                }
+        },
+        addCommand: {
+                description: "Add a new Discord command. Usage: addCommand <name>",
+                requiredArgs: 1,
+                handler: async ([name]) => {
+                        await command.addCommand(name);
+                }
+        },
+        listCommands: {
+                description: "List all Discord commands in the project.",
+                handler: async () => {
+                        await command.listCommands();
+                }
+        },
+        generateReadme: {
+                description: "Generate commands documentation (COMMANDS.md).",
+                handler: async () => {
+                        await command.generateReadme();
                 }
         },
         update: {
