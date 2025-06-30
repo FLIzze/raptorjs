@@ -5,9 +5,7 @@ import { Database } from "../db/database.js";
 import { Command } from "./command.js";
 import { argv, exit } from "process";
 
-const logger = new Logger();
 const command = new Command();
-const db = new Database();
 
 /**
  * Command registry with handlers and optional argument count requirements.
@@ -41,6 +39,7 @@ const commands = {
         migrate: {
                 description: "Run database migrations.",
                 handler: async () => {
+                        const db = new Database();
                         await db.migrate();
                 }
         },
@@ -69,6 +68,7 @@ const commands = {
         try {
                 await commandEntry.handler(args);
         } catch (err) {
+                const logger = new Logger();
                 logger.error(`Command "${cmd}" failed: ${err.message}`);
                 exit(1);
         }
