@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import { Logger } from "../logs/logger.js";
-import { Database } from "../db/database.js";
-import { Command } from "./command.js";
-import { argv, exit } from "process";
+import {Logger} from "../logs/logger.js";
+import db from "../db/database.js";
+import {Command} from "./command.js";
+import {argv, exit} from "process";
 
 const command = new Command();
 
@@ -36,7 +36,6 @@ const commands = {
         migrate: {
                 description: "Run database migrations.",
                 handler: async () => {
-                        const db = new Database();
                         await db.migrate();
                 }
         },
@@ -57,7 +56,7 @@ const commands = {
 };
 
 (async function main() {
-        const [,, cmd, ...args] = argv;
+        const [, , cmd, ...args] = argv;
 
         if (!cmd || cmd === "--help" || cmd === "-h") {
                 commands.help.handler();

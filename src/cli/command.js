@@ -5,7 +5,7 @@ import path from "path";
 import {fileURLToPath} from "url";
 import {copyTo} from "../utils/copyTo.js";
 import {homedir} from "os";
-import {Database} from "../db/database.js";
+import db from "../db/database.js";
 
 export class Command {
         constructor() {
@@ -107,7 +107,6 @@ export class Command {
                         return;
                 }
 
-                const db = new Database();
                 await db.renameTable(oldName, newName);
         }
 
@@ -130,7 +129,6 @@ export class Command {
                         return;
                 }
 
-                const db = new Database();
                 await db.dropTable(name);
         }
 }

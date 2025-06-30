@@ -89,4 +89,6 @@ if [[ $SQLITE == "y" || $SQLITE == "Y" ]]; then
         npm install sqlite3 sqlite
 fi
 
+npm install ~/.raptorjs
+
 echo "Project '$PROJECT_NAME' created at '$(pwd)'"
