@@ -16,13 +16,7 @@ sqlite3.verbose();
  * const users = await db.findAll('users');
  */
 export class Database {
-        static instance = null;
-
         constructor() {
-                if (Database.instance) {
-                        return Database.instance;
-                }
-
                 this.logger = new Logger();
 
                 this.db = new sqlite3.Database('db.sqlite', (err) => {
@@ -35,10 +29,6 @@ export class Database {
 
                 this.run = promisify(this.db.run.bind(this.db));
                 this.all = promisify(this.db.all.bind(this.db));
-                this.get = promisify(this.db.get.bind(this.db));
-
-                Database.instance = this;
-                return this;
         }
 
         /**
@@ -228,3 +218,6 @@ export class Database {
                 this.logger.info('Migration completed.');
         }
 }
+
+const db = new Database();
+export default db;

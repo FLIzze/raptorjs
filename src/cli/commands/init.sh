@@ -8,13 +8,9 @@
 # Version         : 0.3
 # Contact         : RaptorTeam@gmail.com
 #
-# Usage           :
-#   ./init.sh
-#
-# Example         :
-#   ./init_project.sh
-#
 # ----- SCRIPT BEGIN HERE -----
+
+# ----- GIT CLONE FRAMEWORK -----
 
 FRAMEWORK_DIRECTORY=~/.raptorjs
 
@@ -22,8 +18,6 @@ if [ ! -d $FRAMEWORK_DIRECTORY ]; then
         echo "Downloading framework..."
         git clone https://github.com/FLIzze/raptorjs.git $FRAMEWORK_DIRECTORY
 fi
-
-# ----- GIT CLONE FRAMEWORK -----
 
 echo "Welcome to the RaptorJs init script"
 
@@ -62,7 +56,7 @@ if [[ $SQLITE == "y" || $SQLITE == "Y" ]]; then
         mkdir -p ./src/models
 fi
 
-# ----- FOR USER DIR ----
+# ----- USER DIR ----
 
 RAPTOR_CONF="./raptor.conf.json"
 
