@@ -1,7 +1,6 @@
 import fsp from "fs/promises";
 
 /**
- * Copy a file asynchronously.
  * @param {string} src
  * @param {string} dest
  */

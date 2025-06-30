@@ -4,17 +4,13 @@
 # Script Name     : init.sh
 # Description     : Init the project
 # Creation Date   : 25/06/2025
-# Last Modified   : 26/06/2025
-# Version         : 0.2
+# Last Modified   : 28/06/2025
+# Version         : 0.3
 # Contact         : RaptorTeam@gmail.com
 #
-# Usage           :
-#   ./init.sh
-#
-# Example         :
-#   ./init_project.sh
-#
 # ----- SCRIPT BEGIN HERE -----
+
+# ----- GIT CLONE FRAMEWORK -----
 
 FRAMEWORK_DIRECTORY=~/.raptorjs
 
@@ -22,8 +18,6 @@ if [ ! -d $FRAMEWORK_DIRECTORY ]; then
         echo "Downloading framework..."
         git clone https://github.com/FLIzze/raptorjs.git $FRAMEWORK_DIRECTORY
 fi
-
-# ----- GIT CLONE FRAMEWORK -----
 
 echo "Welcome to the RaptorJs init script"
 
@@ -44,7 +38,7 @@ echo
 
 read -n 1 -p "Would you like to use a sqlite database ? y/n " SQLITE
 echo
-
+        
 # ----- COPPYING TEMPLATES -----
 
 mkdir -p ./src
@@ -62,7 +56,7 @@ if [[ $SQLITE == "y" || $SQLITE == "Y" ]]; then
         mkdir -p ./src/models
 fi
 
-# ----- FOR USER DIR ----
+# ----- USER DIR ----
 
 RAPTOR_CONF="./raptor.conf.json"
 
@@ -94,5 +88,7 @@ fi
 if [[ $SQLITE == "y" || $SQLITE == "Y" ]]; then
         npm install sqlite3 sqlite
 fi
+
+npm link raptorjs-discord
 
 echo "Project '$PROJECT_NAME' created at '$(pwd)'"

@@ -1,10 +1,10 @@
 {
         "name": "raptorjs-discord",
-        "version": "0.4.46",
+        "version": "0.6.01",
         "description": "RaptorJs",
         "main": "src/main.js",
         "bin": {
-                "raptorjs": "src/index.js"
+                "raptorjs": "src/cli/cli.js"
         },
         "repository": {
                 "type": "git",
