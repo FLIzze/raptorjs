@@ -88,8 +88,8 @@ export class Database {
          * @param {Object} [conditions] - Optional WHERE clause conditions.
          * @returns {Promise<Array<Object>>}
          * @example
-         * const users = await db.find('users', '*'); // All columns, all rows
-         * const names = await db.find('users', 'name'); // Just "name" column
+         * const users = await db.find('users'); // All columns, all rows
+         * const names = await db.find('users', 'name'); // Just 'name' column
          * const filtered = await db.find('users', ['name', 'age'], { age: 30 });
          */
         async find(table, columns = '*', conditions = {}) {
@@ -182,7 +182,9 @@ export class Database {
          */
         async renameTable(oldName, newName) {
                 const sql = `ALTER TABLE ${oldName} RENAME TO ${newName}`;
+
                 this.log(sql);
+
                 try {
                         await this.run(sql);
                         this.logger.info(`Renamed table "${oldName}" to "${newName}"`);
@@ -199,7 +201,9 @@ export class Database {
          */
         async dropTable(name) {
                 const sql = `DROP TABLE IF EXISTS ${name}`;
+
                 this.log(sql);
+
                 try {
                         await this.run(sql);
                         this.logger.info(`Dropped table "${name}"`);
@@ -224,6 +228,7 @@ export class Database {
                         if (!data || Object.keys(data).length === 0) {
                                 throw new Error('No data provided to update.');
                         }
+
                         if (!conditions || Object.keys(conditions).length === 0) {
                                 throw new Error('Update conditions are required to prevent full table overwrite.');
                         }
@@ -238,7 +243,9 @@ export class Database {
                         const values = [...setValues, ...whereValues];
 
                         this.log(sql, values);
+
                         await this.run(sql, values);
+
                         this.logger.info(`Updated rows in table "${table}"`);
                 } catch (err) {
                         this.logger.error(`Update failed: ${err}`);

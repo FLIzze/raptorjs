@@ -47,7 +47,6 @@ cp $FRAMEWORK_DIRECTORY/templates/init/.env .
 cp $FRAMEWORK_DIRECTORY/templates/init/README.md .
 cp $FRAMEWORK_DIRECTORY/templates/init/package.json .
 cp $FRAMEWORK_DIRECTORY/templates/init/.gitignore .
-cp $FRAMEWORK_DIRECTORY/templates/init/index.js ./src
 
 MINI_PROJECT_NAME=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
 sed -i "s/\"name\": *\"[^\"]*\"/\"name\": \"$MINI_PROJECT_NAME\"/" package.json
@@ -83,6 +82,9 @@ npm install discord.js dotenv
 if [[ $TS == "y" || $TS == "Y" ]]; then
         npm install --save-dev typescript ts-node @types/node
         npx tsc --init
+        cp $FRAMEWORK_DIRECTORY/templates/init/index.ts ./src
+else
+        cp $FRAMEWORK_DIRECTORY/templates/init/index.js ./src
 fi
 
 if [[ $SQLITE == "y" || $SQLITE == "Y" ]]; then

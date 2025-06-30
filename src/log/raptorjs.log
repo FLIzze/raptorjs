@@ -33,3 +33,27 @@
 [30-06-25T13:56:49.261Z] DEBUG: [SQL] SELECT * FROM users 
 [30-06-25T13:56:49.262Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: users
 [30-06-25T13:56:49.262Z] ERROR: findAll failed: Error: SQLITE_ERROR: no such table: users
+[30-06-25T15:10:32.258Z] ERROR: Insert failed: TypeError: Cannot convert undefined or null to object
+[30-06-25T15:13:21.196Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Jane Doe"]
+[30-06-25T15:13:21.197Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[30-06-25T15:13:21.198Z] DEBUG: [SQL] SELECT * FROM user 
+[30-06-25T15:13:21.198Z] ERROR: findAll failed: Error: SQLITE_ERROR: no such table: user
+[30-06-25T15:13:34.915Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Jane Doe"]
+[30-06-25T15:13:34.917Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[30-06-25T15:13:34.917Z] DEBUG: [SQL] SELECT * FROM user 
+[30-06-25T15:13:34.917Z] ERROR: findAll failed: Error: SQLITE_ERROR: no such table: user
+[30-06-25T15:13:54.105Z] INFO: Starting migration...
+[30-06-25T15:13:54.106Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS migrate (id INTEGER PRIMARY KEY AUTOINCREMENT); 
+[30-06-25T15:13:54.116Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[30-06-25T15:13:54.126Z] INFO: Migration completed.
+[30-06-25T15:13:56.710Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Jane Doe"]
+[30-06-25T15:13:56.720Z] DEBUG: [SQL] SELECT * FROM user 
+[30-06-25T15:14:13.872Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["John Doe"]
+[30-06-25T15:14:13.882Z] DEBUG: [SQL] SELECT * FROM user 
+[30-06-25T15:14:20.785Z] DEBUG: [SQL] SELECT * FROM user 
+[30-06-25T15:14:38.170Z] DEBUG: [SQL] SELECT * FROM user 
+[30-06-25T15:15:02.125Z] DEBUG: [SQL] SELECT name FROM user 
+[30-06-25T15:15:05.290Z] DEBUG: [SQL] SELECT name FROM user 
+[30-06-25T15:16:18.972Z] DEBUG: [SQL] SELECT name, id FROM user 
+[30-06-25T15:17:02.006Z] DEBUG: [SQL] SELECT name, id FROM user WHERE name = ? ["Jane Doe"]
+[30-06-25T15:17:25.227Z] DEBUG: [SQL] SELECT name, id FROM user WHERE name = ? ["Jane Doe"]
