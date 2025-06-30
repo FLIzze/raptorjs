@@ -5,6 +5,7 @@ import path from "path";
 import {fileURLToPath} from "url";
 import {copyTo} from "../utils/copyTo.js";
 import {homedir} from "os";
+import {Database} from "../db/database.js";
 
 export class Command {
         constructor() {
@@ -19,6 +20,9 @@ export class Command {
                 this.execFile(initCommandPath);
         }
 
+        /**
+         * TODO - change 
+         */
         update() {
                 console.log("Updating the repository...");
                 exec(`git pull ${path.join(this.home, ".raptorjs")}`, (error, _, stderr) => {
@@ -72,6 +76,62 @@ export class Command {
                 child.on("error", (err) => {
                         console.error(`Failed to start subprocess: ${err}`);
                 });
+        }
+
+
+        /**
+         * Renames model file name (which is used as table name)
+         * @param {string} oldName
+         * @param {string} newName
+         */
+        async renameModel(oldName, newName) {
+                const configFilePath = path.join(this.pwd, "raptor.conf.json");
+                if (!fs.existsSync(configFilePath)) {
+                        console.error("Please run this command from the project root directory.");
+                        return;
+                }
+
+                const oldPath = path.join(this.pwd, "src", "models", `${oldName}.js`);
+                const newPath = path.join(this.pwd, "src", "models", `${newName}.js`);
+
+                if (!fs.existsSync(oldPath)) {
+                        console.error(`Model "${oldName}" does not exist.`);
+                        return;
+                }
+
+                try {
+                        await fsp.rename(oldPath, newPath);
+                        console.log(`Model file renamed to "${newName}.js"`);
+                } catch (err) {
+                        console.error(`Failed to rename model file: ${err.message}`);
+                        return;
+                }
+
+                const db = new Database();
+                await db.renameTable(oldName, newName);
+        }
+
+        /**
+         * Deletes the model base on its filename.
+         * @param {string} name
+         */
+        async deleteModel(name) {
+                const modelPath = path.join(this.pwd, "src", "models", `${name}.js`);
+                if (!fs.existsSync(modelPath)) {
+                        console.error(`Model "${name}" does not exist.`);
+                        return;
+                }
+
+                try {
+                        await fsp.unlink(modelPath);
+                        console.log(`Deleted model file "${name}.js"`);
+                } catch (err) {
+                        console.error(`Failed to delete model file: ${err.message}`);
+                        return;
+                }
+
+                const db = new Database();
+                await db.dropTable(name);
         }
 }
 

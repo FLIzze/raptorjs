@@ -7,9 +7,6 @@ import { argv, exit } from "process";
 
 const command = new Command();
 
-/**
- * Command registry with handlers and optional argument count requirements.
- */
 const commands = {
         help: {
                 description: "Display this help message.",
@@ -41,6 +38,20 @@ const commands = {
                 handler: async () => {
                         const db = new Database();
                         await db.migrate();
+                }
+        },
+        renameModel: {
+                description: "Rename a model and its DB table. Usage: renameModel <oldName> <newName>",
+                requiredArgs: 2,
+                handler: async ([oldName, newName]) => {
+                        await command.renameModel(oldName, newName);
+                }
+        },
+        deleteModel: {
+                description: "Delete a model and its DB table. Usage: deleteModel <name>",
+                requiredArgs: 1,
+                handler: async ([name]) => {
+                        await command.deleteModel(name);
                 }
         },
 };

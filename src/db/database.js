@@ -217,6 +217,38 @@ export class Database {
                 }
                 this.logger.info('Migration completed.');
         }
+
+
+        /**
+         * @param {string} oldName
+         * @param {string} newName
+         * @returns {Promise<void>}
+         */
+        async renameTable(oldName, newName) {
+                const sql = `ALTER TABLE ${oldName} RENAME TO ${newName}`;
+                this.log(sql);
+                try {
+                        await this.run(sql);
+                        this.logger.info(`Renamed table "${oldName}" to "${newName}"`);
+                } catch (err) {
+                        this.logger.error(`Rename table failed: ${err}`);
+                }
+        }
+
+        /**
+         * @param {string} name
+         * @returns {Promise<void>}
+         */
+        async dropTable(name) {
+                const sql = `DROP TABLE IF EXISTS ${name}`;
+                this.log(sql);
+                try {
+                        await this.run(sql);
+                        this.logger.info(`Dropped table "${name}"`);
+                } catch (err) {
+                        this.logger.error(`Drop table failed: ${err}`);
+                }
+        }
 }
 
 const db = new Database();
