@@ -26,3 +26,55 @@
 [30-06-25T09:38:44.474Z] INFO: Database initialized
 [30-06-25T09:43:23.166Z] INFO: Database initialized
 [30-06-25T09:43:23.167Z] INFO: Database initialized
+[30-06-25T12:36:47.268Z] INFO: Database initialized
+[30-06-25T12:37:14.342Z] INFO: Database initialized
+[30-06-25T12:37:34.266Z] INFO: Database initialized
+[30-06-25T12:37:41.031Z] INFO: Database initialized
+[30-06-25T12:38:10.591Z] INFO: Database initialized
+[30-06-25T12:39:51.002Z] INFO: Database initialized
+[30-06-25T12:40:00.181Z] INFO: Starting migration...
+[30-06-25T12:40:00.182Z] INFO: Database initialized
+[30-06-25T12:40:00.182Z] INFO: Database initialized
+[30-06-25T12:40:00.182Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS migrate (id INTEGER PRIMARY KEY AUTOINCREMENT); 
+[30-06-25T12:40:00.196Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[30-06-25T12:40:00.206Z] INFO: Migration completed.
+[30-06-25T12:41:06.251Z] INFO: Database initialized
+[30-06-25T12:41:13.781Z] INFO: Database initialized
+[30-06-25T12:41:48.473Z] INFO: Database initialized
+[30-06-25T12:42:16.992Z] INFO: Database initialized
+[30-06-25T12:42:35.410Z] INFO: Starting migration...
+[30-06-25T12:42:35.411Z] INFO: Database initialized
+[30-06-25T12:42:35.412Z] INFO: Database initialized
+[30-06-25T12:42:35.412Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[30-06-25T12:42:35.422Z] INFO: Migration completed.
+[30-06-25T12:42:56.777Z] INFO: Database initialized
+[30-06-25T12:43:01.388Z] INFO: Database initialized
+[30-06-25T12:43:01.389Z] DEBUG: [SQL] DROP TABLE IF EXISTS user 
+[30-06-25T12:43:01.389Z] INFO: Database initialized
+[30-06-25T12:43:01.399Z] INFO: Dropped table "user"
+[30-06-25T12:43:24.636Z] INFO: Database initialized
+[30-06-25T12:43:34.811Z] INFO: Database initialized
+[30-06-25T12:43:43.547Z] INFO: Database initialized
+[30-06-25T12:43:43.548Z] DEBUG: [SQL] ALTER TABLE user RENAME TO test 
+[30-06-25T12:43:43.548Z] INFO: Database initialized
+[30-06-25T12:43:43.548Z] ERROR: Rename table failed: Error: SQLITE_ERROR: no such table: user
+[30-06-25T12:44:23.217Z] INFO: Database initialized
+[30-06-25T12:44:23.217Z] DEBUG: [SQL] DROP TABLE IF EXISTS test 
+[30-06-25T12:44:23.218Z] INFO: Database initialized
+[30-06-25T12:44:23.218Z] INFO: Dropped table "test"
+[30-06-25T12:44:31.504Z] INFO: Database initialized
+[30-06-25T12:44:36.573Z] INFO: Starting migration...
+[30-06-25T12:44:36.574Z] INFO: Database initialized
+[30-06-25T12:44:36.574Z] INFO: Database initialized
+[30-06-25T12:44:36.574Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT); 
+[30-06-25T12:44:36.584Z] INFO: Migration completed.
+[30-06-25T12:44:53.251Z] INFO: Database initialized
+[30-06-25T12:44:58.463Z] INFO: Database initialized
+[30-06-25T12:44:58.463Z] DEBUG: [SQL] ALTER TABLE user RENAME TO test 
+[30-06-25T12:44:58.464Z] INFO: Database initialized
+[30-06-25T12:44:58.474Z] INFO: Renamed table "user" to "test"
+[30-06-25T12:49:33.731Z] INFO: Starting migration...
+[30-06-25T12:49:33.732Z] INFO: Database initialized
+[30-06-25T12:49:33.732Z] INFO: Database initialized
+[30-06-25T12:49:33.732Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[30-06-25T12:49:33.733Z] INFO: Migration completed.

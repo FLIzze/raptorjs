@@ -89,6 +89,4 @@ if [[ $SQLITE == "y" || $SQLITE == "Y" ]]; then
         npm install sqlite3 sqlite
 fi
 
-npm link raptorjs-discord
-
 echo "Project '$PROJECT_NAME' created at '$(pwd)'"
