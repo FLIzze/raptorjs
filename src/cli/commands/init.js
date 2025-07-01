@@ -65,6 +65,7 @@ export const initFunc = async (frameworkpath) => {
             await copyFile(`${frameworkpath}/templates/init/TSbun/tsconfig.json`, "tsconfig.json")
             await copyFile(`${frameworkpath}/templates/init/TSbun/raptor.config.json`, "raptor.config.json")
             await copyFile(`${frameworkpath}/templates/init/TSbun/index.ts`, "./src/index.ts")
+            await copyFile(`${frameworkpath}/templates/init/TSbun/type.ts`, "./src/type.ts")
             await copyFile(`${frameworkpath}/templates/init/TSbun/handler.ts`, "./src/commands/handler.ts")
             await copyFile(`${frameworkpath}/templates/init/TSbun/ping.ts`, "./src/commands/ping.ts")
             await writeFile("package.json", JSON.stringify({
