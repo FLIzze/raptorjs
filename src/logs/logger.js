@@ -28,7 +28,7 @@ export class Logger {
          * @param {string} [logPath] - Optional custom log file path.
          */
         constructor(logPath) {
-                this.path = logPath ?? path.join(__dirname, "..", "log", "raptorjs.log");
+                this.path = logPath ?? path.join(path.resolve(process.cwd()), "log", "raptorjs.log");
                 this.buildLogFile();
         }
 

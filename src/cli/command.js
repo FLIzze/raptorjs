@@ -9,6 +9,7 @@ import {fileURLToPath, pathToFileURL} from "url";
 import {Rollback} from "../db/rollback.js";
 import {Logger} from "../logs/logger.js";
 import {copyFile} from "../utils/file.js";
+import { initFunc } from "./commands/init.js";
 
 export class Command {
         constructor() {
@@ -23,10 +24,8 @@ export class Command {
                 this.logger = new Logger();
         }
 
-        init() {
-                const initCommandUrl = new URL("init.sh", this.commandsFolderUrl);
-                const initCommandPath = fileURLToPath(initCommandUrl);
-                this.execFile(initCommandPath, [this.filename]);
+        async init() {
+                await initFunc(this.npxpath);
         }
 
         /**

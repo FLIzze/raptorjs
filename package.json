@@ -1,6 +1,6 @@
 {
         "name": "raptorjs-discord",
-        "version": "0.7.51",
+        "version": "0.8.0",
         "description": "RaptorJs",
         "main": "src/main.js",
         "bin": {
@@ -17,6 +17,7 @@
         },
         "homepage": "https://github.com/FLIzze/raptorjs#readme",
         "type": "module",
+        "types": "src/main.d.ts",
         "keywords": [
                 "cli",
                 "installer",
