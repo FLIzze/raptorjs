@@ -8,6 +8,6 @@ export const command = {
     
     async execute(interaction) {
         // Logique de la commande
-        await interaction.reply("Commande exécutée avec succès !");
+        await interaction.reply("Order completed successfully!");
     }
 };
