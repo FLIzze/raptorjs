@@ -48,6 +48,8 @@ cp $FRAMEWORK_DIRECTORY/templates/init/README.md .
 cp $FRAMEWORK_DIRECTORY/templates/init/package.json .
 cp $FRAMEWORK_DIRECTORY/templates/init/.gitignore .
 
+mkdir -p ./.rollback.backups.json
+
 MINI_PROJECT_NAME=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
 sed -i "s/\"name\": *\"[^\"]*\"/\"name\": \"$MINI_PROJECT_NAME\"/" package.json
 
@@ -92,5 +94,6 @@ if [[ $SQLITE == "y" || $SQLITE == "Y" ]]; then
 fi
 
 npm install ~/.raptorjs
+npm i @inquirer/prompts
 
 echo "Project '$PROJECT_NAME' created at '$(pwd)'"

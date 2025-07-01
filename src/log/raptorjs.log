@@ -57,3 +57,260 @@
 [30-06-25T15:16:18.972Z] DEBUG: [SQL] SELECT name, id FROM user 
 [30-06-25T15:17:02.006Z] DEBUG: [SQL] SELECT name, id FROM user WHERE name = ? ["Jane Doe"]
 [30-06-25T15:17:25.227Z] DEBUG: [SQL] SELECT name, id FROM user WHERE name = ? ["Jane Doe"]
+[01-07-25T13:39:31.098Z] ERROR: Command "test" failed: currentEntries.push is not a function
+[01-07-25T14:00:16.840Z] DEBUG: [SQL] SELECT * FROM usr 
+[01-07-25T14:00:16.843Z] ERROR: find failed: Error: SQLITE_ERROR: no such table: usr
+[01-07-25T14:00:22.470Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T14:00:22.471Z] ERROR: find failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T14:00:22.472Z] DEBUG: [SQL] DROP TABLE IF EXISTS user 
+[01-07-25T14:00:22.472Z] INFO: Dropped table "user"
+[01-07-25T14:00:43.501Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T14:00:43.503Z] ERROR: find failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T14:00:43.503Z] DEBUG: [SQL] DROP TABLE IF EXISTS user 
+[01-07-25T14:00:43.503Z] INFO: Dropped table "user"
+[01-07-25T14:01:57.155Z] DEBUG: [SQL] ALTER TABLE migrate RENAME TO user 
+[01-07-25T14:01:57.156Z] ERROR: Rename table failed: Error: SQLITE_ERROR: no such table: migrate
+[01-07-25T14:02:34.945Z] INFO: Starting migration...
+[01-07-25T14:02:34.946Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[01-07-25T14:02:34.957Z] INFO: Migration completed.
+[01-07-25T14:04:07.920Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Pierre"]
+[01-07-25T14:04:08.931Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Pierre"]
+[01-07-25T14:04:09.240Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Pierre"]
+[01-07-25T14:04:09.540Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Pierre"]
+[01-07-25T14:04:09.825Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Pierre"]
+[01-07-25T14:04:10.110Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Pierre"]
+[01-07-25T14:04:10.350Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Pierre"]
+[01-07-25T14:04:10.635Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Pierre"]
+[01-07-25T14:04:10.905Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Pierre"]
+[01-07-25T14:04:11.222Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["Pierre"]
+[01-07-25T14:04:54.686Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T14:04:54.688Z] DEBUG: [SQL] DROP TABLE IF EXISTS user 
+[01-07-25T14:04:54.698Z] INFO: Dropped table "user"
+[01-07-25T14:54:39.904Z] INFO: Model successfully added as /home/abel/poop/raaaaaaw/src/models/user.js
+[01-07-25T14:55:14.026Z] INFO: Starting migration...
+[01-07-25T14:55:14.027Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[01-07-25T14:55:14.027Z] INFO: Migration completed.
+[01-07-25T14:55:14.037Z] INFO: Created table user with columns id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)
+[01-07-25T15:36:32.886Z] ERROR: Please run this command from the project root directory.
+[01-07-25T15:36:32.886Z] INFO: Backup addModel
+[01-07-25T15:36:32.887Z] INFO: Model successfully added as /home/abel/poop/src/models/user.js
+[01-07-25T15:38:43.447Z] ERROR: Please run this command from the project root directory.
+[01-07-25T15:38:49.467Z] INFO: Backup addModel
+[01-07-25T15:38:49.468Z] INFO: Model successfully added as /home/abel/poop/raw/src/models/user.js
+[01-07-25T15:39:10.239Z] INFO: Starting migration...
+[01-07-25T15:39:10.240Z] INFO: Backup migration
+[01-07-25T15:39:10.240Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[01-07-25T15:39:10.241Z] INFO: Migration completed.
+[01-07-25T15:39:10.251Z] INFO: Created table user with columns id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)
+[01-07-25T15:40:10.422Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T15:40:10.423Z] INFO: Backup deleteModel
+[01-07-25T15:40:10.424Z] INFO: Deleted model file "user.js"
+[01-07-25T15:40:10.424Z] DEBUG: [SQL] DROP TABLE IF EXISTS user 
+[01-07-25T15:40:10.433Z] INFO: Dropped table "user"
+[01-07-25T16:13:48.789Z] INFO: Backup addModel
+[01-07-25T16:13:48.790Z] INFO: Model successfully added as /home/abel/poop/row/src/models/user.js
+[01-07-25T16:14:12.497Z] INFO: Starting migration...
+[01-07-25T16:14:12.498Z] INFO: Backup migration
+[01-07-25T16:14:12.498Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[01-07-25T16:14:12.498Z] INFO: Migration completed.
+[01-07-25T16:14:12.509Z] INFO: Created table user with columns id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)
+[01-07-25T16:15:37.924Z] INFO: Backup rename
+[01-07-25T16:15:37.925Z] INFO: Model file renamed to "users.js"
+[01-07-25T16:15:37.925Z] DEBUG: [SQL] ALTER TABLE user RENAME TO users 
+[01-07-25T16:15:37.935Z] INFO: Renamed table "user" to "users"
+[01-07-25T16:15:48.238Z] DEBUG: [SQL] SELECT * FROM users 
+[01-07-25T16:15:48.239Z] INFO: Backup deleteModel
+[01-07-25T16:15:48.239Z] INFO: Deleted model file "users.js"
+[01-07-25T16:15:48.239Z] DEBUG: [SQL] DROP TABLE IF EXISTS users 
+[01-07-25T16:15:48.249Z] INFO: Dropped table "users"
+[01-07-25T16:30:01.830Z] INFO: Backup addModel
+[01-07-25T16:30:01.831Z] INFO: Model successfully added as /home/abel/poop/raw/src/models/user.js
+[01-07-25T16:30:24.343Z] INFO: Starting migration...
+[01-07-25T16:30:24.344Z] INFO: Backup migration
+[01-07-25T16:30:24.344Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[01-07-25T16:30:24.344Z] INFO: Migration completed.
+[01-07-25T16:30:24.355Z] INFO: Created table user with columns id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)
+[01-07-25T16:32:00.130Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:00.986Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:01.256Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:01.450Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:01.615Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:01.765Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:01.914Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:02.066Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:02.184Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:02.469Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:02.575Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:02.755Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:02.995Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:03.144Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:32:35.546Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["adamai"]
+[01-07-25T16:32:35.557Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:32:47.591Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["adamai"]
+[01-07-25T16:32:47.605Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:33:06.795Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:33:06.797Z] INFO: Backup deleteModel
+[01-07-25T16:33:06.797Z] INFO: Deleted model file "user.js"
+[01-07-25T16:33:06.797Z] DEBUG: [SQL] DROP TABLE IF EXISTS user 
+[01-07-25T16:33:06.808Z] INFO: Dropped table "user"
+[01-07-25T16:34:07.962Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["adamai"]
+[01-07-25T16:34:07.963Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:34:07.963Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:34:07.964Z] ERROR: find failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:46:00.032Z] INFO: Backup addModel
+[01-07-25T16:46:00.033Z] INFO: Model successfully added as /home/abel/poop/raaaaaaaaw/src/models/user.js
+[01-07-25T16:46:19.261Z] INFO: Starting migration...
+[01-07-25T16:46:19.261Z] INFO: Backup migration
+[01-07-25T16:46:19.262Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)); 
+[01-07-25T16:46:19.262Z] INFO: Migration completed.
+[01-07-25T16:46:19.274Z] INFO: Created table user with columns id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255)
+[01-07-25T16:47:51.523Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:47:51.534Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:47:53.235Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:47:53.246Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:01.800Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:01.814Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:02.160Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:02.171Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:02.340Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:02.351Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:02.519Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:02.530Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:02.969Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:02.980Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:03.134Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:03.145Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:03.269Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:03.280Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:03.374Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:03.385Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:03.780Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:03.793Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:04.095Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:04.106Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:04.274Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:04.285Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:04.394Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:04.405Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:04.529Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:04.539Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:04.682Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:04.693Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:05.370Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:05.383Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:05.504Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:05.516Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:05.639Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:05.651Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:05.775Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:05.786Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:05.909Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:05.920Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:06.059Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:06.070Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:06.224Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:06.235Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:06.554Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:06.565Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:06.689Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:06.700Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:39.989Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:39.990Z] INFO: Backup deleteModel
+[01-07-25T16:48:39.991Z] INFO: Deleted model file "user.js"
+[01-07-25T16:48:39.991Z] DEBUG: [SQL] DROP TABLE IF EXISTS user 
+[01-07-25T16:48:40.000Z] INFO: Dropped table "user"
+[01-07-25T16:48:43.800Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:43.804Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:48:43.804Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:43.805Z] ERROR: find failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:48:51.121Z] DEBUG: [SQL] INSERT INTO user (name) VALUES (?) ["pierre"]
+[01-07-25T16:48:51.122Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:48:51.123Z] DEBUG: [SQL] SELECT * FROM user 
+[01-07-25T16:48:51.123Z] ERROR: find failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:54:55.554Z] DEBUG: [SQL] DROP TABLE IF EXISTS user 
+[01-07-25T16:54:55.555Z] INFO: Dropped table "user"
+[01-07-25T16:56:20.903Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id,name); 
+[01-07-25T16:56:20.904Z] DEBUG: [SQL] INSERT INTO user () VALUES () 
+[01-07-25T16:56:20.904Z] DEBUG: [SQL] INSERT INTO user (0, 1, 2, 3, 4, 5) VALUES (?, ?, ?, ?, ?, ?) ["p","i","e","r","r","e"]
+[01-07-25T16:56:20.905Z] ERROR: Insert failed: Error: SQLITE_ERROR: near ")": syntax error
+[01-07-25T16:56:20.905Z] ERROR: Insert failed: Error: SQLITE_ERROR: near "0": syntax error
+[01-07-25T16:56:20.913Z] INFO: Created table user with columns id,name
+[01-07-25T16:58:13.150Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id,name); 
+[01-07-25T16:58:13.151Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [1,"pierre"]
+[01-07-25T16:58:13.151Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [2,"pierre"]
+[01-07-25T16:58:13.151Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [3,"pierre"]
+[01-07-25T16:58:13.152Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [4,"pierre"]
+[01-07-25T16:58:13.152Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [5,"pierre"]
+[01-07-25T16:58:13.152Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [6,"pierre"]
+[01-07-25T16:58:13.152Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [7,"pierre"]
+[01-07-25T16:58:13.152Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [8,"pierre"]
+[01-07-25T16:58:13.152Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [9,"pierre"]
+[01-07-25T16:58:13.152Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [10,"pierre"]
+[01-07-25T16:58:13.152Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [11,"pierre"]
+[01-07-25T16:58:13.152Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [12,"pierre"]
+[01-07-25T16:58:13.153Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [13,"pierre"]
+[01-07-25T16:58:13.153Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [14,"pierre"]
+[01-07-25T16:58:13.153Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [15,"pierre"]
+[01-07-25T16:58:13.153Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [16,"pierre"]
+[01-07-25T16:58:13.153Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [17,"pierre"]
+[01-07-25T16:58:13.153Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [18,"pierre"]
+[01-07-25T16:58:13.153Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [19,"pierre"]
+[01-07-25T16:58:13.153Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [20,"pierre"]
+[01-07-25T16:58:13.153Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [21,"pierre"]
+[01-07-25T16:58:13.153Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [22,"pierre"]
+[01-07-25T16:58:13.153Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [23,"pierre"]
+[01-07-25T16:58:13.154Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [24,"pierre"]
+[01-07-25T16:58:13.154Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [25,"pierre"]
+[01-07-25T16:58:13.154Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.154Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.154Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.154Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.154Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.154Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.155Z] ERROR: Insert failed: Error: SQLITE_ERROR: no such table: user
+[01-07-25T16:58:13.166Z] INFO: Created table user with columns id,name
+[01-07-25T17:00:52.886Z] DEBUG: [SQL] CREATE TABLE IF NOT EXISTS user (id,name); 
+[01-07-25T17:00:52.896Z] INFO: Created table user with columns id,name
+[01-07-25T17:00:52.896Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [1,"pierre"]
+[01-07-25T17:00:52.896Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [2,"pierre"]
+[01-07-25T17:00:52.897Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [3,"pierre"]
+[01-07-25T17:00:52.897Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [4,"pierre"]
+[01-07-25T17:00:52.897Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [5,"pierre"]
+[01-07-25T17:00:52.897Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [6,"pierre"]
+[01-07-25T17:00:52.897Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [7,"pierre"]
+[01-07-25T17:00:52.897Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [8,"pierre"]
+[01-07-25T17:00:52.898Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [9,"pierre"]
+[01-07-25T17:00:52.898Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [10,"pierre"]
+[01-07-25T17:00:52.898Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [11,"pierre"]
+[01-07-25T17:00:52.898Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [12,"pierre"]
+[01-07-25T17:00:52.898Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [13,"pierre"]
+[01-07-25T17:00:52.898Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [14,"pierre"]
+[01-07-25T17:00:52.898Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [15,"pierre"]
+[01-07-25T17:00:52.898Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [16,"pierre"]
+[01-07-25T17:00:52.898Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [17,"pierre"]
+[01-07-25T17:00:52.898Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [18,"pierre"]
+[01-07-25T17:00:52.898Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [19,"pierre"]
+[01-07-25T17:00:52.899Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [20,"pierre"]
+[01-07-25T17:00:52.899Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [21,"pierre"]
+[01-07-25T17:00:52.899Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [22,"pierre"]
+[01-07-25T17:00:52.899Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [23,"pierre"]
+[01-07-25T17:00:52.899Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [24,"pierre"]
+[01-07-25T17:00:52.899Z] DEBUG: [SQL] INSERT INTO user (id, name) VALUES (?, ?) [25,"pierre"]

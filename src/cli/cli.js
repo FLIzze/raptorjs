@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
+import {Rollback} from "../db/rollback.js";
 import {Logger} from "../logs/logger.js";
-import db from "../db/database.js";
 import {Command} from "./command.js";
 import {argv, exit} from "process";
-
 const command = new Command();
+const rollback = new Rollback();
 
 const commands = {
         help: {
@@ -14,7 +14,7 @@ const commands = {
                         console.log("Usage: cli <command> [args]\n");
                         console.log("Available commands:");
                         for (const [name, cmd] of Object.entries(commands)) {
-                                console.log(`  ${name.padEnd(10)} - ${cmd.description}`);
+                                console.log(`  ${name.padEnd(15)} - ${cmd.description}`);
                         }
                 }
         },
@@ -36,7 +36,7 @@ const commands = {
         migrate: {
                 description: "Run database migrations.",
                 handler: async () => {
-                        await db.migrate();
+                        await command.migrate();
                 }
         },
         renameModel: {
@@ -53,12 +53,12 @@ const commands = {
                         await command.deleteModel(name);
                 }
         },
-        test: {
-                description: "command test",
+        rollback: {
+                description: "Rollbacks",
                 handler: async () => {
-                        await command.test();
+                        rollback.init();  
                 }
-        }
+        },
 };
 
 (async function main() {

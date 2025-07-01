@@ -141,4 +141,10 @@ export class Logger {
                 fs.appendFileSync(this.path, mes + "\n");
                 console.log(this.colorize(mes, "cyan"));
         }
+
+        success(message) {
+                const mes = this.date() + " SUCCESS: " + message;
+                fs.appendFileSync(this.path, mes + "\n");
+                console.log(this.colorize(mes, "green")); 
+        }
 }

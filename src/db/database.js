@@ -1,17 +1,15 @@
-import path from 'path';
 import sqlite3 from 'sqlite3';
 import { promisify } from 'util';
-import { pathToFileURL } from 'url'; import fs from 'fs';
 import { Logger } from '../logs/logger.js';
 
 sqlite3.verbose();
 
 /**
- * Lightweight SQLite ORM-like wrapper.
+ * SQLite ORM
  *
  * @example
  * await db.insert('users', { name: 'Jane Doe', age: 28 });
- * const users = await db.findAll('users');
+ * const users = await db.find('users');
  */
 export class Database {
         constructor() {
@@ -57,26 +55,6 @@ export class Database {
                         await this.run(sql, values);
                 } catch (err) {
                         this.logger.error(`Insert failed: ${err}`);
-                }
-        }
-
-        /**
-         * Retrieves all rows from the specified table.
-         *
-         * @param {string} table - The table name.
-         * @returns {Promise<Array<Object>>}
-         * @example
-         * const users = await db.findAll('users');
-         */
-        async findAll(table) {
-                try {
-                        const sql = `SELECT * FROM ${table}`;
-
-                        this.log(sql);
-
-                        return await this.all(sql);
-                } catch (err) {
-                        this.logger.error(`findAll failed: ${err}`);
                 }
         }
 
@@ -135,46 +113,9 @@ export class Database {
         }
 
         /**
-         * Creates tables from model definitions in `src/models`.
-         * Each model file must export a `fields` object defining columns.
+         * You should not use this command but instead `renameModel`
          *
-         * @returns {Promise<void>}
-         */
-        async migrate() {
-                const modelDir = path.join(process.cwd(), 'src/models');
-                const files = fs.readdirSync(modelDir).filter(file => file.endsWith('.js'));
-
-                this.logger.info('Starting migration...');
-
-                for (const file of files) {
-                        try {
-                                const modelPath = pathToFileURL(path.join(modelDir, file)).href;
-                                const mod = await import(modelPath);
-                                const fields = mod.fields || mod.default?.fields;
-
-                                if (!fields) {
-                                        this.logger.warn(`Skipping ${file}: No 'fields' export found`);
-                                        continue;
-                                }
-
-                                const columns = Object.entries(fields)
-                                        .map(([name, type]) => `${name} ${type}`)
-                                        .join(', ');
-                                const sql = `CREATE TABLE IF NOT EXISTS ${file.split('.')[0]} (${columns});`;
-
-                                this.log(sql);
-
-                                await this.run(sql);
-                        } catch (err) {
-                                this.logger.error(`Migration failed for ${file}: ${err}`);
-                        }
-                }
-                this.logger.info('Migration completed.');
-        }
-
-
-        /**
-         * @param {string} oldName
+         * @param {string} oldName 
          * @param {string} newName
          * @returns {Promise<void>}
          * @example 
@@ -194,10 +135,10 @@ export class Database {
         }
 
         /**
+         * You should not use this command but instead `deleteModel`
+         *
          * @param {string} name
          * @returns {Promise<void>}
-         * @example 
-         * await db.dropTable("users");
          */
         async dropTable(name) {
                 const sql = `DROP TABLE IF EXISTS ${name}`;
@@ -251,7 +192,21 @@ export class Database {
                         this.logger.error(`Update failed: ${err}`);
                 }
         }
-}
 
-const db = new Database();
-export default db;
+        /**
+         * You should not use this command but instead `addModel` then `migrate`
+         * @param {string} tableName
+         * @param {string} columns
+         */
+        async createTable(tableName, columns) {
+                try {
+                        const sql = `CREATE TABLE IF NOT EXISTS ${tableName} (${columns});`;
+
+                        this.log(sql);
+                        await this.run(sql);
+                        this.logger.info(`Created table ${tableName} with columns ${columns}`);
+                } catch (err) {
+                        this.logger.error(`Table creation failed: ${err}`);
+                }
+        }
+}
