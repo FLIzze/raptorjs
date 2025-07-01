@@ -53,6 +53,12 @@ const commands = {
                         await command.deleteModel(name);
                 }
         },
+        test: {
+                description: "command test",
+                handler: async () => {
+                        await command.test();
+                }
+        }
 };
 
 (async function main() {

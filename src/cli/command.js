@@ -2,22 +2,25 @@ import {exec, spawn} from "child_process";
 import fs from "fs";
 import fsp from "fs/promises";
 import path from "path";
-import {fileURLToPath} from "url";
 import {copyTo} from "../utils/copyTo.js";
 import {homedir} from "os";
 import db from "../db/database.js";
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
 
 export class Command {
         constructor() {
                 this.commandsFolderUrl = new URL("./commands/", import.meta.url);
                 this.pwd = process.cwd();
                 this.home = homedir();
+                this.filename = fileURLToPath(import.meta.url)
+                this.dirname = dirname(this.filename)
         }
 
         init() {
-                const initCommandUrl = new URL("init.sh", this.commandsFolderUrl);
+                const initCommandUrl = new URL("new_init.sh", this.commandsFolderUrl);
                 const initCommandPath = fileURLToPath(initCommandUrl);
-                this.execFile(initCommandPath);
+                this.execFile(initCommandPath, [this.filename]);
         }
 
         /**
@@ -130,6 +133,10 @@ export class Command {
                 }
 
                 await db.dropTable(name);
+        }
+
+        async test() {
+                console.log(this.dirname)
         }
 }
 
