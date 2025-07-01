@@ -1,0 +1,91 @@
+#!/usr/bin/env node
+
+import {Logger} from "../logs/logger.js";
+import db from "../db/database.js";
+import {Command} from "./command.js";
+import {argv, exit} from "process";
+
+const command = new Command();
+
+const commands = {
+        help: {
+                description: "Display this help message.",
+                handler: () => {
+                        console.log("Usage: cli <command> [args]\n");
+                        console.log("Available commands:");
+                        for (const [name, cmd] of Object.entries(commands)) {
+                                console.log(`  ${name.padEnd(10)} - ${cmd.description}`);
+                        }
+                }
+        },
+        init: {
+                description: "Initialize the project structure.",
+                handler: () => command.init()
+        },
+        addModel: {
+                description: "Add a new model. Usage: addModel <name>",
+                requiredArgs: 1,
+                handler: async ([name]) => {
+                        await command.addModel(name);
+                }
+        },
+        update: {
+                description: "Update framework files.",
+                handler: () => command.update()
+        },
+        migrate: {
+                description: "Run database migrations.",
+                handler: async () => {
+                        await db.migrate();
+                }
+        },
+        renameModel: {
+                description: "Rename a model and its DB table. Usage: renameModel <oldName> <newName>",
+                requiredArgs: 2,
+                handler: async ([oldName, newName]) => {
+                        await command.renameModel(oldName, newName);
+                }
+        },
+        deleteModel: {
+                description: "Delete a model and its DB table. Usage: deleteModel <name>",
+                requiredArgs: 1,
+                handler: async ([name]) => {
+                        await command.deleteModel(name);
+                }
+        },
+        test: {
+                description: "command test",
+                handler: async () => {
+                        await command.test();
+                }
+        }
+};
+
+(async function main() {
+        const [, , cmd, ...args] = argv;
+
+        if (!cmd || cmd === "--help" || cmd === "-h") {
+                commands.help.handler();
+                return;
+        }
+
+        const commandEntry = commands[cmd];
+
+        if (!commandEntry) {
+                console.error(`Unknown command: ${cmd}\nUse --help to list available commands.`);
+                exit(1);
+        }
+
+        if (commandEntry.requiredArgs && args.length < commandEntry.requiredArgs) {
+                console.error(`Missing arguments for "${cmd}".\nUsage: ${commandEntry.description}`);
+                exit(1);
+        }
+
+        try {
+                await commandEntry.handler(args);
+        } catch (err) {
+                const logger = new Logger();
+                logger.error(`Command "${cmd}" failed: ${err.message}`);
+                exit(1);
+        }
+})();

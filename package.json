@@ -1,0 +1,37 @@
+{
+        "name": "raptorjs-discord",
+        "version": "0.8.0",
+        "description": "RaptorJs",
+        "main": "src/main.js",
+        "bin": {
+                "raptorjs": "src/cli/cli.js"
+        },
+        "repository": {
+                "type": "git",
+                "url": "git+https://github.com/FLIzze/raptorjs.git"
+        },
+        "author": "RaptorTeam",
+        "license": "MIT",
+        "bugs": {
+                "url": "https://github.com/FLIzze/raptorjs/issues"
+        },
+        "homepage": "https://github.com/FLIzze/raptorjs#readme",
+        "type": "module",
+        "types": "src/main.d.ts",
+        "keywords": [
+                "cli",
+                "installer",
+                "node",
+                "raptorjs"
+        ],
+        "dependencies": {
+                "@inquirer/prompts": "^7.5.3",
+                "sqlite": "^5.1.1",
+                "sqlite3": "^5.1.7"
+        },
+        "devDependencies": {
+                "@eslint/js": "^9.29.0",
+                "eslint": "^9.29.0",
+                "globals": "^16.2.0"
+        }
+}
