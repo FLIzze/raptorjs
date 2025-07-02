@@ -1,5 +1,7 @@
 # RaptorJS
 
+Un framework CLI pour la gestion de bots Discord et d’outils associés, conçu pour la rapidité, la simplicité, et la scalabilité.
+
 ```
 npx raptorjs-discord init
 ```
