@@ -1,4 +1,5 @@
 import { input } from "@inquirer/prompts";
+import { existsSync } from "fs";
 
 export const addCommandFunc = async () => {
     const commandName = await input({
