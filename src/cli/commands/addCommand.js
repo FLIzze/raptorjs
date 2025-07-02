@@ -1,3 +1,3 @@
 export const addCommandFunc = async () => {
-    console.log()
+    console.log("coucou")
 };
