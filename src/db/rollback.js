@@ -3,8 +3,9 @@ import path from 'path';
 import {fileURLToPath} from 'url';
 import {select, confirm} from '@inquirer/prompts';
 import {Database} from "./database.js";
-import {addFile, removeFile, renameFile} from "../utils/file.js";
+import {addFile, readFile, removeFile, renameFile} from "../utils/file.js";
 import { ExitPromptError } from '@inquirer/core'; 
+import {exit} from "process";
 
 /**
  * @typedef {Object} DeleteModelData
