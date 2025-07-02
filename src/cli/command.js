@@ -1,24 +1,21 @@
-import {spawn} from "child_process";
 import fs from "fs";
 import fsp from "fs/promises";
 import path from "path";
-import {homedir} from "os";
 import {Database} from "../db/database.js";
 import {dirname, resolve} from "path";
 import {fileURLToPath, pathToFileURL} from "url";
 import {Rollback} from "../db/rollback.js";
 import {Logger} from "../logs/logger.js";
 import {copyFile} from "../utils/file.js";
-import { initFunc } from "./commands/init.js";
+import {initFunc} from "./commands/init.js";
 
 export class Command {
         constructor() {
                 this.commandsFolderUrl = new URL("./commands/", import.meta.url);
                 this.pwd = process.cwd();
-                this.home = homedir();
                 this.filename = fileURLToPath(import.meta.url);
                 this.dirname = dirname(this.filename);
-                this.npxpath = resolve(this.dirname, '..', '..')
+                this.npxpath = resolve(this.dirname, '..', '..');
 
                 this.db = new Database();
                 this.rollback = new Rollback();
@@ -35,7 +32,7 @@ export class Command {
         async addModel(modelName) {
                 this.register("addModel", {modelName: modelName}, `Added ${modelName}`);
 
-                const source = path.join(this.home, ".raptorjs", "templates", "db", "model.js");
+                const source = path.join(this.npxpath, "templates", "db", "model.js");
                 const targetDir = path.join(this.pwd, "src", "models");
 
                 try {
@@ -49,14 +46,6 @@ export class Command {
 
                 await copyFile(source, target);
                 this.logger.info(`Model successfully added as ${target}`);
-        }
-
-        execFile(filePath, args = []) {
-                const child = spawn("bash", [filePath, ...args], {stdio: "inherit"});
-
-                child.on("error", (err) => {
-                        this.logger.error(`Failed to start subprocess: ${err}`);
-                });
         }
 
         /**
@@ -119,13 +108,23 @@ export class Command {
 
         async migrate() {
                 const modelDir = path.join(process.cwd(), "src/models");
-                const files = fs.readdirSync(modelDir).filter(file => file.endsWith(".js"));
+                const files = fs.readdirSync(modelDir);
 
                 this.logger.info("Starting migration...");
-                this.register("migration", files, `Migrated ${files}`);
+
+                const migratedFiles = [];
 
                 for (const file of files) {
                         try {
+                                const tables = await this.db.getTable();
+
+                                const filenameWithoutExt = path.parse(file).name;
+                                const tableExists = tables.some(table => table.name === filenameWithoutExt);
+
+                                if (tableExists) {
+                                        continue;  // Skip already migrated
+                                }
+
                                 const modelPath = pathToFileURL(path.join(modelDir, file)).href;
                                 const mod = await import(modelPath);
                                 const fields = mod.fields || mod.default?.fields;
@@ -139,10 +138,19 @@ export class Command {
                                         .map(([name, type]) => `${name} ${type}`)
                                         .join(", ");
 
-                                this.db.createTable(file.split(".")[0], columns);
+                                await this.db.createTable(filenameWithoutExt, columns);
+
+                                migratedFiles.push(filenameWithoutExt);  
+
                         } catch (err) {
                                 this.logger.error(`Migration failed for ${file}: ${err}`);
                         }
+                }
+
+                if (migratedFiles.length > 0) {
+                        this.register("migration", migratedFiles, `Migrated ${migratedFiles.join(", ")}`);
+                } else {
+                        this.logger.info("No new migrations needed.");
                 }
 
                 this.logger.info("Migration completed.");
@@ -154,10 +162,16 @@ export class Command {
          * @param {string} recoveryMessage
          */
         register(type, data, recoveryMessage) {
+                /**
+                 * @type {Object} RollbackEntry
+                 * @property {"deleteModel"} type
+                 * @property {DeleteModelData} data
+                 * @property {string} recoveryMessage
+                 */
                 const register = {
-                        type: type,
-                        data: data,
-                        recoveryMessage: recoveryMessage,
+                        type,
+                        data,
+                        recoveryMessage,
                 };
 
                 this.rollback.register(register);
