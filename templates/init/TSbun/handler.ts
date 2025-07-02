@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { REST, Routes } from 'discord.js';
-import type { Command } from '../../type';
+import type { Command } from '../type';
 import { Logger } from 'raptorjs-discord';
 
 const logger = new Logger()

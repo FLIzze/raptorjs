@@ -66,6 +66,7 @@ export const initFunc = async (frameworkpath) => {
             await copyFile(`${frameworkpath}/templates/init/TSbun/tsconfig.json`, "tsconfig.json")
             await copyFile(`${frameworkpath}/templates/init/TSbun/raptor.config.json`, "raptor.config.json")
             await copyFile(`${frameworkpath}/templates/init/TSbun/index.ts`, "./src/index.ts")
+            await copyFile(`${frameworkpath}/templates/init/TSbun/type.ts`, "./src/type.ts")
             await copyFile(`${frameworkpath}/templates/init/TSbun/handler.ts`, "./src/commands/handler.ts")
             await copyFile(`${frameworkpath}/templates/init/TSbun/ping.ts`, "./src/commands/ping.ts")
             await addFile("package.json", JSON.stringify({
@@ -90,6 +91,10 @@ export const initFunc = async (frameworkpath) => {
         
         execSync("bun i", { stdio: "inherit" });
         execSync("bun i discord.js dotenv raptorjs-discord", { stdio: "inherit" })
+
+        if (sqlite) {
+            execSync("bun i sqlite3", { stdio: "inherit" });
+        }
 
     } catch (err) {
         if (err instanceof ExitPromptError) {
