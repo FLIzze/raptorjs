@@ -59,13 +59,19 @@ export async function removeFile(filePath) {
 /**
  * Reads and parses a JSON file.
  * @param {string} filePath - Path to the JSON file.
+ * @param {boolean} [isJson] - Set to true to parse json
  * @returns {Promise<any>} Parsed JSON content.
  */
-export async function readFile(filePath) {
+export async function readFile(filePath, isJson = false) {
         const logger = new Logger();
         try {
                 const content = await fsp.readFile(filePath, 'utf-8');
-                return JSON.parse(content);
+
+                if (isJson) {
+                        return JSON.parse(content);
+                }
+
+                return content;
         } catch (err) {
                 logger.error(`Error reading JSON file at ${filePath}: ${err.message}`);
                 throw err;

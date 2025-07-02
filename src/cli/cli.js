@@ -31,7 +31,7 @@ const commands = {
                 requiredArgs: 1,
                 handler: async ([name]) => {
                         checkIfIsInProjectDir();
-                        const command = await Command.init();
+                        const command = new Command();
                         await command.addModel(name);
                 }
         },
@@ -39,7 +39,7 @@ const commands = {
                 description: "Run database migrations.",
                 handler: async () => {
                         checkIfIsInProjectDir();
-                        const command = await Command.init();
+                        const command = new Command();
                         await command.migrate();
                 }
         },
@@ -48,7 +48,7 @@ const commands = {
                 requiredArgs: 2,
                 handler: async ([oldName, newName]) => {
                         checkIfIsInProjectDir();
-                        const command = await Command.init();
+                        const command = new Command();
                         await command.renameModel(oldName, newName);
                 }
         },
@@ -57,7 +57,7 @@ const commands = {
                 requiredArgs: 1,
                 handler: async ([name]) => {
                         checkIfIsInProjectDir();
-                        const command = await Command.init();
+                        const command = new Command();
                         await command.deleteModel(name);
                 }
         },

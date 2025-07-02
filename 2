@@ -95,29 +95,17 @@ export class Command {
          */
         async deleteModel(name) {
                 const model = await this.db.find(name);
+                console.log(model);
+                const keys = model[0].keys();
+                console.log(keys);
+                const values = model.values();
+                console.log(values);
 
-                if (!Array.isArray(model) || model.length === 0) {
-                        this.logger.warn(`No data found in model "${name}"`);
-                        return;
-                }
+                const file = await readFile(`${this.pwd}/src/models/${name}.${this.extension}`);
+                console.log("fileName");
+                console.log(file);
 
-                /**
-                 * @type {Array<{
-                 *   cid: number,
-                 *   name: string,
-                 *   type: string,
-                 *   notnull: number,
-                 *   dflt_value: string | null,
-                 *   pk: number
-                 * }>}
-                 */
-                const schemaRows = await this.db.all(`PRAGMA table_info(${name})`);
-
-                const keysType = schemaRows.map(row => row.type);
-                const keysName = schemaRows.map(row => row.name);
-                const values = model.map(mod => Object.values(mod));
-
-                this.register("deleteModel", { name, keysName, values, keysType }, `Deleted model ${name} with ${model.length} rows`);
+                this.register("deleteModel", { name, keys, values }, `Deleted model ${name} with ${model.length} rows`);
 
                 const modelPath = path.join(this.pwd, "src", "models", `${name}.${this.extension}`);
                 if (!fs.existsSync(modelPath)) {

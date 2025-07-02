@@ -9,7 +9,8 @@ import { ExitPromptError } from '@inquirer/core';
 /**
  * @typedef {Object} DeleteModelData
  * @property {string} name
- * @property {Array<string>} keys
+ * @property {Array<string>} keysName
+ * @property {Array<string>} keysType
  * @property {Array<string>} values
  */
 
@@ -58,7 +59,6 @@ import { ExitPromptError } from '@inquirer/core';
 
 export class Rollback {
         constructor() {
-                console.log('Rollback instantiated');
                 /** @type {string} */    
                 this.path = path.join(process.cwd(), ".rollback.backup.json");
                 this.buildBackupFile();
@@ -176,22 +176,41 @@ export class Rollback {
                 const pwd = process.cwd();
                 const modelsFolder = fileURLToPath(new URL(`${pwd}/src/models`, import.meta.url));
 
+                /** @type {"js" | "ts"} */
+                const extensionConfig = fs.existsSync(path.join(process.cwd(), "tsconfig.json")) ? "ts" : "js";
+
                 switch (rollbackData.type) {
-                case "deleteModel":
-                {
+                case "deleteModel": {
                         /** @type {DeleteModelData} */
                         const data = rollbackData.data;
 
-                        await this.db.createTable(data.name, data.keys);
-                        await addFile(`${modelsFolder}/${data.name}.js`, "shit");
+                        const columns = data.keysName.map((key, index) => `${key} ${data.keysType[index]}`);
+                        const columnsDef = columns.join(", ");
 
-                        if (data.values.length === undefined) {
+                        await this.db.createTable(data.name, columnsDef);
+
+                        const modelFields = data.keysName
+                                .map((key, index) => `    ${key}: "${data.keysType[index]}"`)
+                                .join(",\n");
+
+                        const modelContent = `export const fields = {\n${modelFields}\n};\n`;
+
+                        const modelPath = path.join(modelsFolder, `${data.name}.${extensionConfig}`);
+                        await addFile(modelPath, modelContent);
+
+                        if (!Array.isArray(data.values)) {
                                 return;
                         }
 
-                        data.values.forEach(async value => {
-                                await this.db.insert(data.name, value);
-                        });
+                        for (const rowValues of data.values) {
+                                const rowObject = {};
+                                data.keysName.forEach((key, index) => {
+                                        rowObject[key] = rowValues[index];
+                                });
+
+                                await this.db.insert(data.name, rowObject);
+                        }
+
                         break;
                 }
                 case "renameModel":
@@ -200,7 +219,7 @@ export class Rollback {
                         const data = rollbackData.data;
 
                         this.db.renameTable(data.oldName, data.newName);
-                        await renameFile(`${modelsFolder}/${data.oldName}.js`, `${modelsFolder}/${data.newName}.js`);
+                        await renameFile(`${modelsFolder}/${data.oldName}.${extensionConfig}`, `${modelsFolder}/${data.newName}.${extensionConfig}`);
                         break;
                 }
                 case "migration":
@@ -218,7 +237,7 @@ export class Rollback {
                         const data = rollbackData.data;
 
                         this.db.dropTable(data.modelName);
-                        await removeFile(`${modelsFolder}/${data.modelName}.js`);
+                        await removeFile(`${modelsFolder}/${data.modelName}.${extensionConfig}`);
                         break;
                 }
                 default:
