@@ -9,6 +9,7 @@ import {fileURLToPath, pathToFileURL} from "url";
 import {Rollback} from "../db/rollback.js";
 import {Logger} from "../logs/logger.js";
 import {copyFile} from "../utils/file.js";
+import {ReadmeManager} from "../utils/readme.js";
 import { initFunc } from "./commands/init.js";
 
 export class Command {
@@ -23,6 +24,7 @@ export class Command {
                 this.db = new Database();
                 this.rollback = new Rollback();
                 this.logger = new Logger();
+                this.readmeManager = new ReadmeManager();
         }
 
         async init() {
@@ -33,7 +35,7 @@ export class Command {
          * @param {string} modelName      
          */
         async addModel(modelName) {
-                this.register("addModel", {modelName: modelName}, `Added ${modelName}`);
+                await this.register("addModel", {modelName: modelName}, `Added model ${modelName}`);
 
                 const source = path.join(this.home, ".raptorjs", "templates", "db", "model.js");
                 const targetDir = path.join(this.pwd, "src", "models");
@@ -64,7 +66,7 @@ export class Command {
          * @param {string} newName
          */
         async renameModel(oldName, newName) {
-                this.register("renameModel", {oldName: oldName, newName: newName}, `Renamed ${oldName} to ${newName}`);
+                await this.register("renameModel", {oldName: oldName, newName: newName}, `Renamed model ${oldName} to ${newName}`);
 
                 const oldPath = path.join(this.pwd, "src", "models", `${oldName}.js`);
                 const newPath = path.join(this.pwd, "src", "models", `${newName}.js`);
@@ -98,7 +100,7 @@ export class Command {
                 const keys = model.keys();
                 const values = model.values();
 
-                this.register("deleteModel", {name: name, keys: keys, values: values}, `Deleted model ${name} with ${model.length} rows`);
+                await this.register("deleteModel", {name: name, keys: keys, values: values}, `Deleted model ${name} with ${model.length} entries`);
 
                 const modelPath = path.join(this.pwd, "src", "models", `${name}.js`);
                 if (!fs.existsSync(modelPath)) {
@@ -119,10 +121,16 @@ export class Command {
 
         async migrate() {
                 const modelDir = path.join(process.cwd(), "src/models");
+                
+                if (!fs.existsSync(modelDir)) {
+                        this.logger.warn("No models directory found, skipping migration");
+                        return;
+                }
+                
                 const files = fs.readdirSync(modelDir).filter(file => file.endsWith(".js"));
 
                 this.logger.info("Starting migration...");
-                this.register("migration", files, `Migrated ${files}`);
+                await this.register("migrate", files, `Migrated ${files.length} model(s)`);
 
                 for (const file of files) {
                         try {
@@ -149,18 +157,40 @@ export class Command {
         }
 
         /**
+         * Regenerate the project README completely
+         */
+        async generateReadme() {
+                try {
+                        await this.readmeManager.regenerateReadme();
+                        this.logger.success("README regenerated successfully");
+                } catch (err) {
+                        this.logger.error(`Error regenerating README: ${err.message}`);
+                }
+        }
+
+        /**
          * @param {string} type
          * @param {any} data
          * @param {string} recoveryMessage
          */
-        register(type, data, recoveryMessage) {
+        async register(type, data, recoveryMessage) {
                 const register = {
                         type: type,
                         data: data,
                         recoveryMessage: recoveryMessage,
                 };
 
+                // Register for rollback (existing system)
                 this.rollback.register(register);
                 this.logger.info(`Backup ${type}`);
+
+                // Add to README history and update
+                try {
+                        await this.readmeManager.addToHistory(type, recoveryMessage, data);
+                        await this.readmeManager.updateReadme();
+                        this.logger.info(`README updated automatically`);
+                } catch (err) {
+                        this.logger.error(`Error updating README: ${err.message}`);
+                }
         }
 }

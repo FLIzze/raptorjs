@@ -5,8 +5,7 @@ import { mkdir} from "fs/promises";
 import { existsSync } from "fs";
 import { execSync } from "child_process";
 import { copyFile, addFile } from '../../utils/file.js'
-
-
+import { ReadmeManager } from '../../utils/readme.js'
 
 export const initFunc = async (frameworkpath) => {    
     console.log("Welcome to RaptorJS init script")
@@ -36,13 +35,17 @@ export const initFunc = async (frameworkpath) => {
         
         chdir(`${projectName}`)
 
-        let packagejson = {}
-
         if (language === "js") {
             await copyFile(`${frameworkpath}/templates/init/JSbun/.gitignore_sample`, ".gitignore")
             await copyFile(`${frameworkpath}/templates/init/JSbun/bun.lock`, "bun.lock")
             await copyFile(`${frameworkpath}/templates/init/JSbun/jsconfig.json`, "jsconfig.json")
-            await copyFile(`${frameworkpath}/templates/init/JSbun/raptor.config.json`, "raptor.config.json")
+            await addFile("raptor.config.json", JSON.stringify({
+                ts: false,
+                projectName: projectName,
+                language: "javascript",
+                runtime: "bun",
+                database: sqlite
+            }, null, 2));
             await copyFile(`${frameworkpath}/templates/init/JSbun/index.js`, "./src/index.js")
             await copyFile(`${frameworkpath}/templates/init/JSbun/handler.js`, "./src/commands/handler.js")
             await copyFile(`${frameworkpath}/templates/init/JSbun/ping.js`, "./src/commands/ping.js")
@@ -60,11 +63,17 @@ export const initFunc = async (frameworkpath) => {
                     "typescript": "^5.0.0"
                 }
             }, null, 2));
-        } if (language === "ts") {
+        } else if (language === "ts") {
             await copyFile(`${frameworkpath}/templates/init/TSbun/.gitignore_sample`, ".gitignore")
             await copyFile(`${frameworkpath}/templates/init/TSbun/bun.lock`, "bun.lock")
             await copyFile(`${frameworkpath}/templates/init/TSbun/tsconfig.json`, "tsconfig.json")
-            await copyFile(`${frameworkpath}/templates/init/TSbun/raptor.config.json`, "raptor.config.json")
+            await addFile("raptor.config.json", JSON.stringify({
+                ts: true,
+                projectName: projectName,
+                language: "typescript",
+                runtime: "bun",
+                database: sqlite
+            }, null, 2));
             await copyFile(`${frameworkpath}/templates/init/TSbun/index.ts`, "./src/index.ts")
             await copyFile(`${frameworkpath}/templates/init/TSbun/type.ts`, "./src/type.ts")
             await copyFile(`${frameworkpath}/templates/init/TSbun/handler.ts`, "./src/commands/handler.ts")
@@ -85,9 +94,19 @@ export const initFunc = async (frameworkpath) => {
             }, null, 2));
         }
 
-
         await copyFile(`${frameworkpath}/templates/init/.env_sample`, ".env")
-        await copyFile(`${frameworkpath}/templates/init/README.md`, "README.md")
+        
+        const readmeManager = new ReadmeManager();
+        await readmeManager.regenerateReadme();
+        
+        await readmeManager.addToHistory('init', `Project ${projectName} initialized with ${language.toUpperCase()}`, {
+            projectName,
+            language,
+            sqlite,
+            runtime: 'bun'
+        });
+        
+        await readmeManager.updateReadme();
         
         execSync("bun i", { stdio: "inherit" });
         execSync("bun i discord.js dotenv raptorjs-discord", { stdio: "inherit" })
@@ -95,6 +114,9 @@ export const initFunc = async (frameworkpath) => {
         if (sqlite) {
             execSync("bun i sqlite3", { stdio: "inherit" });
         }
+
+        console.log(`\n✅ Project ${projectName} created successfully!`);
+        console.log(`📝 README automatically generated with command history`);
 
     } catch (err) {
         if (err instanceof ExitPromptError) {
@@ -104,5 +126,4 @@ export const initFunc = async (frameworkpath) => {
             exit(1);
         }
     }
-
 }

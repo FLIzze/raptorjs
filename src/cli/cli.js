@@ -56,8 +56,15 @@ const commands = {
                         await command.deleteModel(name);
                 }
         },
+        generateReadme: {
+                description: "Regenerate the project README with command history.",
+                handler: async () => {
+                        checkIfIsInProjectDir();
+                        await command.generateReadme();
+                }
+        },
         rollback: {
-                description: "Rollbacks",
+                description: "Rollback the last operation.",
                 handler: async () => {
                         checkIfIsInProjectDir();
                         rollback.init();  
@@ -95,10 +102,9 @@ const commands = {
 })();
 
 function checkIfIsInProjectDir() {
-        const configFilePath = path.join(process.cwd(), "raptor.conf.json");
+        const configFilePath = path.join(process.cwd(), "raptor.config.json");
         if (!fs.existsSync(configFilePath)) {
                 console.error("Please run this command from the project root directory.");
                 exit(1);
         }
-
 }
