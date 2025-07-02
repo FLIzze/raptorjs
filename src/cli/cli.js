@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
+import {Rollback} from "../db/rollback.js";
 import {Logger} from "../logs/logger.js";
-import db from "../db/database.js";
 import {Command} from "./command.js";
 import {argv, exit} from "process";
+import fs from "fs";
+import path from "path";
 
 const command = new Command();
+const rollback = new Rollback();
 
 const commands = {
         help: {
@@ -14,7 +17,7 @@ const commands = {
                         console.log("Usage: cli <command> [args]\n");
                         console.log("Available commands:");
                         for (const [name, cmd] of Object.entries(commands)) {
-                                console.log(`  ${name.padEnd(10)} - ${cmd.description}`);
+                                console.log(`  ${name.padEnd(15)} - ${cmd.description}`);
                         }
                 }
         },
@@ -26,23 +29,22 @@ const commands = {
                 description: "Add a new model. Usage: addModel <name>",
                 requiredArgs: 1,
                 handler: async ([name]) => {
+                        checkIfIsInProjectDir();
                         await command.addModel(name);
                 }
-        },
-        update: {
-                description: "Update framework files.",
-                handler: () => command.update()
         },
         migrate: {
                 description: "Run database migrations.",
                 handler: async () => {
-                        await db.migrate();
+                        checkIfIsInProjectDir();
+                        await command.migrate();
                 }
         },
         renameModel: {
                 description: "Rename a model and its DB table. Usage: renameModel <oldName> <newName>",
                 requiredArgs: 2,
                 handler: async ([oldName, newName]) => {
+                        checkIfIsInProjectDir();
                         await command.renameModel(oldName, newName);
                 }
         },
@@ -50,15 +52,17 @@ const commands = {
                 description: "Delete a model and its DB table. Usage: deleteModel <name>",
                 requiredArgs: 1,
                 handler: async ([name]) => {
+                        checkIfIsInProjectDir();
                         await command.deleteModel(name);
                 }
         },
-        test: {
-                description: "command test",
+        rollback: {
+                description: "Rollbacks",
                 handler: async () => {
-                        await command.test();
+                        checkIfIsInProjectDir();
+                        rollback.init();  
                 }
-        }
+        },
 };
 
 (async function main() {
@@ -89,3 +93,12 @@ const commands = {
                 exit(1);
         }
 })();
+
+function checkIfIsInProjectDir() {
+        const configFilePath = path.join(process.cwd(), "raptor.conf.json");
+        if (!fs.existsSync(configFilePath)) {
+                console.error("Please run this command from the project root directory.");
+                exit(1);
+        }
+
+}

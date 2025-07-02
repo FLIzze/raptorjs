@@ -1,6 +1,6 @@
 {
         "name": "raptorjs-discord",
-        "version": "0.5.7",
+        "version": "0.7.51",
         "description": "RaptorJs",
         "main": "src/main.js",
         "bin": {
@@ -24,6 +24,7 @@
                 "raptorjs"
         ],
         "dependencies": {
+                "@inquirer/prompts": "^7.5.3",
                 "sqlite": "^5.1.1",
                 "sqlite3": "^5.1.7"
         },

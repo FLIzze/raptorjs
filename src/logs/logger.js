@@ -33,6 +33,16 @@ export class Logger {
         }
 
         /**
+         * Logs SQL queries to console and file.
+         * @param {string} sql - The SQL query string.
+         * @param {Array} [params=[]] - Optional query parameters.
+         */
+        sql(sql, params = []) {
+                this.debug(`[SQL] ${sql} ${params.length ? JSON.stringify(params) : ''}`);
+        }
+
+
+        /**
          * Ensures the log directory and file exist.
          */
         buildLogFile() {
@@ -140,5 +150,11 @@ export class Logger {
                 const mes = this.date() + " TRACE: " + message;
                 fs.appendFileSync(this.path, mes + "\n");
                 console.log(this.colorize(mes, "cyan"));
+        }
+
+        success(message) {
+                const mes = this.date() + " SUCCESS: " + message;
+                fs.appendFileSync(this.path, mes + "\n");
+                console.log(this.colorize(mes, "green")); 
         }
 }

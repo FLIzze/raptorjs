@@ -92,5 +92,6 @@ if [[ $SQLITE == "y" || $SQLITE == "Y" ]]; then
 fi
 
 npm install ~/.raptorjs
+npm i @inquirer/prompts
 
 echo "Project '$PROJECT_NAME' created at '$(pwd)'"
