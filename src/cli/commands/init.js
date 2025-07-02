@@ -1,9 +1,10 @@
-import {input, select} from "@inquirer/prompts";
+import {input, select, confirm} from "@inquirer/prompts";
 import {ExitPromptError} from "@inquirer/core";
 import {chdir, exit} from "process";
 import {existsSync} from "fs";
 import {execSync} from "child_process";
 import {mkdir, copyFile, writeFile} from "fs/promises";
+import {ReadmeManager} from '../../utils/readme.js';
 
 /**
  * @param {string} frameworkpath
@@ -29,6 +30,8 @@ export const initFunc = async (frameworkpath) => {
                                 {name: 'TS', value: 'ts'},
                         ]
                 });
+
+                const sqlite = await confirm({message:'Would you like to use a sqlite database ?'});
 
                 await mkdir(`./${projectName}/src/commands`, {recursive: true});
 
@@ -83,12 +86,29 @@ export const initFunc = async (frameworkpath) => {
                         }, null, 2));
                 }
 
-
                 await copyFile(`${frameworkpath}/templates/init/.env_sample`, ".env");
-                await copyFile(`${frameworkpath}/templates/init/README.md`, "README.md");
+
+                const readmeManager = new ReadmeManager();
+                await readmeManager.regenerateReadme();
+                
+                await readmeManager.addToHistory('init', `Project ${projectName} initialized with ${language.toUpperCase()}`, {
+                        projectName,
+                        language,
+                        sqlite,
+                        runtime: 'bun'
+                });
+                
+                await readmeManager.updateReadme();
 
                 execSync("bun i", {stdio: "inherit"});
                 execSync("bun i discord.js dotenv raptorjs-discord", {stdio: "inherit"});
+
+                if (sqlite) {
+                        execSync("bun i sqlite3", {stdio: "inherit"});
+                }
+
+                console.log(`\nProject ${projectName} created successfully!`);
+                console.log(`README automatically generated with command history`);
 
         } catch (err) {
                 if (err instanceof ExitPromptError) {
@@ -98,5 +118,4 @@ export const initFunc = async (frameworkpath) => {
                         exit(1);
                 }
         }
-
 };

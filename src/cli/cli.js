@@ -61,12 +61,27 @@ const commands = {
                         await command.deleteModel(name);
                 }
         },
+        generateReadme: {
+                description: "Regenerate the project README with command history.",
+                handler: async () => {
+                        checkIfIsInProjectDir();
+                        await command.generateReadme();
+                }
+        },
         rollback: {
-                description: "Rollbacks",
+                description: "Rollback the last operation.",
                 handler: async () => {
                         checkIfIsInProjectDir();
                         const rollback = new Rollback();
                         rollback.init();
+                }
+        },
+        addCommand: {
+                description: "Add a new Discord command. Usage: addCommand <n>",
+                requiredArgs: 1,
+                handler: async ([name]) => {
+                        checkIfIsInProjectDir();
+                        await command.addCommand(name);
                 }
         },
 };
