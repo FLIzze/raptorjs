@@ -9,7 +9,7 @@ import { ExitPromptError } from '@inquirer/core';
 /**
  * @typedef {Object} DeleteModelData
  * @property {string} name
- * @property {Record<string, string>} keys
+ * @property {Array<Object>} keys
  * @property {Array<Object>} values
  */
 
@@ -47,7 +47,7 @@ import { ExitPromptError } from '@inquirer/core';
 
 /**
  * @typedef {Object} MigrateRollbackEntry
- * @property {"migrate"} type
+ * @property {"migration"} type
  * @property {string[]} data
  * @property {string} recoveryMessage
  */
@@ -144,7 +144,6 @@ export class Rollback {
                         try {
                                 confirmed = await confirm({
                                         message: `Are you sure you want to rollback: ${choices[selectedIndex].name}?`,
-                                        initial: false
                                 });
                         } catch (err) {
                                 if (err instanceof ExitPromptError) {
@@ -167,61 +166,60 @@ export class Rollback {
         }
 
         /**
-         * @param {RollbackEntry} rollbackData
+         * @param {AnyRollbackEntry} rollbackData
          */
         async handleRollbackType(rollbackData) {
                 const pwd = process.cwd();
                 const modelsFolder = fileURLToPath(new URL(`${pwd}/src/models`, import.meta.url));
 
                 switch (rollbackData.type) {
-                        case "deleteModel":
-                                {
-                                        /** @type {DeleteModelData} */
-                                        const data = rollbackData.data;
+                case "deleteModel":
+                {
+                        /** @type {DeleteModelData} */
+                        const data = rollbackData.data;
 
-                                        await this.db.createTable(data.name, data.keys);
-                                        await addFile(`${modelsFolder}/${data.name}.js`);
+                        await this.db.createTable(data.name, data.keys);
+                        await addFile(`${modelsFolder}/${data.name}.js`);
 
-                                        if (data.values.length === undefined) {
-                                                return;
-                                        }
+                        if (data.values.length === undefined) {
+                                return;
+                        }
 
-                                        data.values.forEach(async value => {
-                                                await this.db.insert(data.name, value);
-                                        });
-                                        break;
-                                }
-                        case "renameModel":
-                                {
-                                        /** @type {RenameModelData} */
-                                        const data = rollbackData.data;
+                        data.values.forEach(async value => {
+                                await this.db.insert(data.name, value);
+                        });
+                        break;
+                }
+                case "renameModel":
+                {
+                        /** @type {RenameModelData} */
+                        const data = rollbackData.data;
 
-                                        this.db.renameTable(data.oldName, data.newName);
-                                        await renameFile(`${modelsFolder}/${data.oldName}.js`, `${modelsFolder}/${data.newName}.js`);
-                                        break;
-                                }
-                        case "migration":
-                                {
-                                        /** @type {MigrateRollbackEntry} */
-                                        const data = rollbackData.data;
+                        this.db.renameTable(data.oldName, data.newName);
+                        await renameFile(`${modelsFolder}/${data.oldName}.js`, `${modelsFolder}/${data.newName}.js`);
+                        break;
+                }
+                case "migration":
+                {
+                        const data = rollbackData.data;
 
-                                        data.forEach(modelName => {
-                                                this.db.dropTable(`${modelName}`);
-                                        });
-                                        break;
-                                }
-                        case "addModel":
-                                {
-                                        /** @type {AddModelData} */
-                                        const data = rollbackData.data;
+                        data.forEach(modelName => {
+                                this.db.dropTable(`${modelName}`);
+                        });
+                        break;
+                }
+                case "addModel":
+                {
+                        /** @type {AddModelData} */
+                        const data = rollbackData.data;
 
-                                        this.db.dropTable(data.modelName);
-                                        await removeFile(`${modelsFolder}/${data.modelName}.js`);
-                                        break;
-                                }
-                        default:
-                                console.error("Rollback type not recognized");
-                                break;
+                        this.db.dropTable(data.modelName);
+                        await removeFile(`${modelsFolder}/${data.modelName}.js`);
+                        break;
+                }
+                default:
+                        console.error("Rollback type not recognized");
+                        break;
                 }
         }
 }

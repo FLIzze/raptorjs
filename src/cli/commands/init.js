@@ -56,7 +56,7 @@ export const initFunc = async (frameworkpath) => {
                                 }
                         }, null, 2));
                 } if (language === "ts") {
-                        const tsPath = `${frameworkpath}/templates/init/JSbun/`;
+                        const tsPath = `${frameworkpath}/templates/init/TSbun/`;
                         await copyFile(`${tsPath}.gitignore_sample`, ".gitignore");
                         await copyFile(`${tsPath}bun.lock`, "bun.lock");
                         await copyFile(`${tsPath}tsconfig.json`, "tsconfig.json");

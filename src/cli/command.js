@@ -1,4 +1,3 @@
-import {spawn} from "child_process";
 import fs from "fs";
 import fsp from "fs/promises";
 import path from "path";
@@ -47,14 +46,6 @@ export class Command {
 
                 await copyFile(source, target);
                 this.logger.info(`Model successfully added as ${target}`);
-        }
-
-        execFile(filePath, args = []) {
-                const child = spawn("bash", [filePath, ...args], {stdio: "inherit"});
-
-                child.on("error", (err) => {
-                        this.logger.error(`Failed to start subprocess: ${err}`);
-                });
         }
 
         /**
@@ -171,10 +162,16 @@ export class Command {
          * @param {string} recoveryMessage
          */
         register(type, data, recoveryMessage) {
+                /**
+                 * @type {Object} RollbackEntry
+                 * @property {"deleteModel"} type
+                 * @property {DeleteModelData} data
+                 * @property {string} recoveryMessage
+                 */
                 const register = {
-                        type: type,
-                        data: data,
-                        recoveryMessage: recoveryMessage,
+                        type,
+                        data,
+                        recoveryMessage,
                 };
 
                 this.rollback.register(register);

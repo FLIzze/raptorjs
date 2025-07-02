@@ -202,7 +202,7 @@ export class Database {
         /**
          * You should not use this command but instead `addModel` then `migrate`
          * @param {string} tableName
-         * @param {string} columns
+         * @param {string | Array<string>} columns
          */
         async createTable(tableName, columns) {
                 try {
