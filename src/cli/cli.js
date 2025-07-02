@@ -95,7 +95,7 @@ const commands = {
 })();
 
 function checkIfIsInProjectDir() {
-        const configFilePath = path.join(process.cwd(), "raptor.conf.json");
+        const configFilePath = path.join(process.cwd(), "raptor.config.json");
         if (!fs.existsSync(configFilePath)) {
                 console.error("Please run this command from the project root directory.");
                 exit(1);

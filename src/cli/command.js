@@ -2,20 +2,18 @@ import {spawn} from "child_process";
 import fs from "fs";
 import fsp from "fs/promises";
 import path from "path";
-import {homedir} from "os";
 import {Database} from "../db/database.js";
 import {dirname, resolve} from "path";
 import {fileURLToPath, pathToFileURL} from "url";
 import {Rollback} from "../db/rollback.js";
 import {Logger} from "../logs/logger.js";
 import {copyFile} from "../utils/file.js";
-import { initFunc } from "./commands/init.js";
+import {initFunc} from "./commands/init.js";
 
 export class Command {
         constructor() {
                 this.commandsFolderUrl = new URL("./commands/", import.meta.url);
                 this.pwd = process.cwd();
-                this.home = homedir();
                 this.filename = fileURLToPath(import.meta.url);
                 this.dirname = dirname(this.filename);
                 this.npxpath = resolve(this.dirname, '..', '..')
@@ -35,7 +33,7 @@ export class Command {
         async addModel(modelName) {
                 this.register("addModel", {modelName: modelName}, `Added ${modelName}`);
 
-                const source = path.join(this.home, ".raptorjs", "templates", "db", "model.js");
+                const source = path.join(this.npxpath, "templates", "db", "model.js");
                 const targetDir = path.join(this.pwd, "src", "models");
 
                 try {
@@ -119,10 +117,12 @@ export class Command {
 
         async migrate() {
                 const modelDir = path.join(process.cwd(), "src/models");
-                const files = fs.readdirSync(modelDir).filter(file => file.endsWith(".js"));
+
+                const files = fs.readdirSync(modelDir);
+                const filenamesWithoutExt = files.map(file => path.parse(file).name);
 
                 this.logger.info("Starting migration...");
-                this.register("migration", files, `Migrated ${files}`);
+                this.register("migration", filenamesWithoutExt, `Migrated ${filenamesWithoutExt}`);
 
                 for (const file of files) {
                         try {
