@@ -33,6 +33,16 @@ export class Logger {
         }
 
         /**
+         * Logs SQL queries to console and file.
+         * @param {string} sql - The SQL query string.
+         * @param {Array} [params=[]] - Optional query parameters.
+         */
+        sql(sql, params = []) {
+                this.debug(`[SQL] ${sql} ${params.length ? JSON.stringify(params) : ''}`);
+        }
+
+
+        /**
          * Ensures the log directory and file exist.
          */
         buildLogFile() {

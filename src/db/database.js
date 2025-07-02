@@ -14,7 +14,6 @@ sqlite3.verbose();
 export class Database {
         constructor() {
                 this.logger = new Logger();
-
                 this.db = new sqlite3.Database('db.sqlite', (err) => {
                         if (err) {
                                 this.logger.error(`Failed to connect to DB: ${err}`);
@@ -23,15 +22,6 @@ export class Database {
 
                 this.run = promisify(this.db.run.bind(this.db));
                 this.all = promisify(this.db.all.bind(this.db));
-        }
-
-        /**
-         * Logs SQL queries to console and file.
-         * @param {string} sql - The SQL query string.
-         * @param {Array} [params=[]] - Optional query parameters.
-         */
-        log(sql, params = []) {
-                this.logger.debug(`[SQL] ${sql} ${params.length ? JSON.stringify(params) : ''}`);
         }
 
         /**
@@ -50,7 +40,7 @@ export class Database {
                         const values = keys.map(k => data[k]);
                         const sql = `INSERT INTO ${table} (${keys.join(', ')}) VALUES (${placeholders})`;
 
-                        this.log(sql, values);
+                        this.logger.sql(sql, values);
 
                         await this.run(sql, values);
                 } catch (err) {
@@ -82,7 +72,7 @@ export class Database {
                                 sql += ` WHERE ${clause}`;
                         }
 
-                        this.log(sql, values);
+                        this.logger.sql(sql, values);
                         return await this.all(sql, values);
                 } catch (err) {
                         this.logger.error(`find failed: ${err}`);
@@ -104,7 +94,7 @@ export class Database {
                         const values = Object.values(conditions);
                         const sql = `DELETE FROM ${table} WHERE ${clause}`;
 
-                        this.log(sql, values);
+                        this.logger.sql(sql, values);
 
                         await this.run(sql, values);
                 } catch (err) {
@@ -124,7 +114,7 @@ export class Database {
         async renameTable(oldName, newName) {
                 const sql = `ALTER TABLE ${oldName} RENAME TO ${newName}`;
 
-                this.log(sql);
+                this.logger.sql(sql);
 
                 try {
                         await this.run(sql);
@@ -143,7 +133,7 @@ export class Database {
         async dropTable(name) {
                 const sql = `DROP TABLE IF EXISTS ${name}`;
 
-                this.log(sql);
+                this.logger.sql(sql);
 
                 try {
                         await this.run(sql);
@@ -183,7 +173,7 @@ export class Database {
                         const sql = `UPDATE ${table} SET ${setClause} WHERE ${whereClause}`;
                         const values = [...setValues, ...whereValues];
 
-                        this.log(sql, values);
+                        this.logger.sql(sql, values);
 
                         await this.run(sql, values);
 
@@ -202,7 +192,7 @@ export class Database {
                 try {
                         const sql = `CREATE TABLE IF NOT EXISTS ${tableName} (${columns});`;
 
-                        this.log(sql);
+                        this.logger.sql(sql);
                         await this.run(sql);
                         this.logger.info(`Created table ${tableName} with columns ${columns}`);
                 } catch (err) {

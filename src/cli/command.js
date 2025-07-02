@@ -2,14 +2,13 @@ import {spawn} from "child_process";
 import fs from "fs";
 import fsp from "fs/promises";
 import path from "path";
-import {copyTo} from "../utils/copyTo.js";
 import {homedir} from "os";
 import {Database} from "../db/database.js";
 import {dirname} from "path";
 import {fileURLToPath, pathToFileURL} from "url";
 import {Rollback} from "../db/rollback.js";
 import {Logger} from "../logs/logger.js";
-import {exit} from "process";
+import {copyFile} from "../utils/file.js";
 
 export class Command {
         constructor() {
@@ -34,8 +33,7 @@ export class Command {
          * @param {string} modelName      
          */
         async addModel(modelName) {
-                this.checkIfInProject();
-                this.register("addModel", {modelName: modelName});
+                this.register("addModel", {modelName: modelName}, `Added ${modelName}`);
 
                 const source = path.join(this.home, ".raptorjs", "templates", "db", "model.js");
                 const targetDir = path.join(this.pwd, "src", "models");
@@ -49,7 +47,7 @@ export class Command {
 
                 const target = path.join(targetDir, `${modelName}.js`);
 
-                await copyTo(source, target);
+                await copyFile(source, target);
                 this.logger.info(`Model successfully added as ${target}`);
         }
 
@@ -66,8 +64,7 @@ export class Command {
          * @param {string} newName
          */
         async renameModel(oldName, newName) {
-                this.checkIfInProject();
-                this.register("rename", {oldName: oldName, newName: newName});
+                this.register("renameModel", {oldName: oldName, newName: newName}, `Renamed ${oldName} to ${newName}`);
 
                 const oldPath = path.join(this.pwd, "src", "models", `${oldName}.js`);
                 const newPath = path.join(this.pwd, "src", "models", `${newName}.js`);
@@ -97,11 +94,11 @@ export class Command {
          * @param {string} name
          */
         async deleteModel(name) {
-                this.checkIfInProject();
-
                 const model = await this.db.find(name);
+                const keys = model.keys();
+                const values = model.values();
 
-                this.register("deleteModel", {name: name, table: model});
+                this.register("deleteModel", {name: name, keys: keys, values: values}, `Deleted model ${name} with ${model.length} rows`);
 
                 const modelPath = path.join(this.pwd, "src", "models", `${name}.js`);
                 if (!fs.existsSync(modelPath)) {
@@ -121,13 +118,11 @@ export class Command {
         }
 
         async migrate() {
-                this.checkIfInProject();
-
                 const modelDir = path.join(process.cwd(), "src/models");
                 const files = fs.readdirSync(modelDir).filter(file => file.endsWith(".js"));
 
                 this.logger.info("Starting migration...");
-                this.register("migration", files);
+                this.register("migration", files, `Migrated ${files}`);
 
                 for (const file of files) {
                         try {
@@ -153,23 +148,16 @@ export class Command {
                 this.logger.info("Migration completed.");
         }
 
-        checkIfInProject() {
-                const configFilePath = path.join(this.pwd, "raptor.conf.json");
-                if (!fs.existsSync(configFilePath)) {
-                        this.logger.error("Please run this command from the project root directory.");
-                        exit(1);
-                }
-
-        }
-
         /**
          * @param {string} type
          * @param {any} data
+         * @param {string} recoveryMessage
          */
-        register(type, data) {
+        register(type, data, recoveryMessage) {
                 const register = {
                         type: type,
-                        data: data
+                        data: data,
+                        recoveryMessage: recoveryMessage,
                 };
 
                 this.rollback.register(register);

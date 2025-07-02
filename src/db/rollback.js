@@ -3,31 +3,74 @@ import path from 'path';
 import {fileURLToPath} from 'url';
 import {select, confirm} from '@inquirer/prompts';
 import {Database} from "./database.js";
+import {addFile, removeFile, renameFile} from "../utils/file.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+/**
+ * @typedef {Object} DeleteModelData
+ * @property {string} name
+ * @property {Record<string, string>} keys
+ * @property {Array<Object>} values
+ */
+
+/**
+ * @typedef {Object} RenameModelData
+ * @property {string} oldName
+ * @property {string} newName
+ */
+
+/**
+ * @typedef {Object} AddModelData
+ * @property {string} modelName
+ */
 
 /**
  * @typedef {Object} RollbackEntry
- * @property { "deleteModel" | "renameModel" | "addModel" | "migrate" } type
- * @property {any} data
+ * @property {"deleteModel"} type
+ * @property {DeleteModelData} data
+ * @property {string} recoveryMessage
+ */
+
+/**
+ * @typedef {Object} RenameRollbackEntry
+ * @property {"renameModel"} type
+ * @property {RenameModelData} data
+ * @property {string} recoveryMessage
+ */
+
+/**
+ * @typedef {Object} AddRollbackEntry
+ * @property {"addModel"} type
+ * @property {AddModelData} data
+ * @property {string} recoveryMessage
+ */
+
+/**
+ * @typedef {Object} MigrateRollbackEntry
+ * @property {"migrate"} type
+ * @property {string[]} data
+ * @property {string} recoveryMessage
+ */
+
+/**
+ * @typedef {RollbackEntry | RenameRollbackEntry | AddRollbackEntry | MigrateRollbackEntry} AnyRollbackEntry
  */
 
 export class Rollback {
         constructor() {
-                this.path = path.join(__dirname, "..", ".rollback.backup.json");
+                this.path = path.join(process.cwd(), ".rollback.backup.json");
                 this.buildBackupFile();
                 this.db = new Database();
         }
 
         buildBackupFile() {
                 const dir = path.dirname(this.path);
+
                 if (!fs.existsSync(dir)) {
-                        fs.mkdirSync(dir, {recursive: true});
+                        fs.mkdirSync(dir, { recursive: true });
                 }
 
-                if (!fs.existsSync(this.path)) {
-                        fs.writeFileSync(this.path, "[]");
+                if (!fs.existsSync(this.path) || fs.statSync(this.path).isDirectory()) {
+                        fs.writeFileSync(this.path, "[]", { encoding: "utf-8" });
                 }
         }
 
@@ -72,10 +115,15 @@ export class Rollback {
                         return;
                 }
 
-                const choices = rollbackOptions.map((entry, index) => ({
-                        name: `${index + 1}. [${entry.type}] ${JSON.stringify(entry.data).slice(0, 50)}...`,
-                        value: index
-                }));
+                const maxTypeLength = Math.max(...rollbackOptions.map(entry => entry.type.length));
+
+                const choices = rollbackOptions.map((entry, index) => {
+                        const paddedType = entry.type.padEnd(maxTypeLength, ' ');
+                        return {
+                                name: `${index + 1}. ${paddedType} | ${entry.recoveryMessage}`,
+                                value: index
+                        };
+                });
 
                 const selectedIndex = await select({
                         message: "Choose a rollback to apply:",
@@ -100,31 +148,55 @@ export class Rollback {
          * @param {RollbackEntry} rollbackData
          */
         async handleRollbackType(rollbackData) {
-                const data = rollbackData.data;
+                const pwd = process.cwd();
+                const modelsFolder = fileURLToPath(new URL(`${pwd}/src/models`, import.meta.url));
+
                 switch (rollbackData.type) {
                 case "deleteModel":
                 {
-                        const keys = Object.keys(data.table[0]);
-                        const values = Object.values(data.table);
+                        /** @type {DeleteModelData} */
+                        const data = rollbackData.data;                       
 
-                        await this.db.createTable(data.name, keys);
+                        await this.db.createTable(data.name, data.keys);
+                        await addFile(`${modelsFolder}/${data.name}.js`);
 
-                        values.forEach(async value => {
+                        if (data.values.length === undefined) {
+                                return;
+                        }
+
+                        data.values.forEach(async value => {
                                 await this.db.insert(data.name, value);
                         });
                         break;
                 }
                 case "renameModel":
+                {
+                        /** @type {RenameModelData} */
+                        const data = rollbackData.data;                       
+
                         this.db.renameTable(data.oldName, data.newName);
+                        await renameFile(`${modelsFolder}/${data.oldName}.js`, `${modelsFolder}/${data.newName}.js`);
                         break;
+                }
                 case "migrate":
-                        rollbackData.data.forEach(modelName => {
-                                this.db.dropTable(modelName);
+                {
+                        /** @type {MigrateRollbackEntry} */
+                        const data = rollbackData.data;                       
+
+                        data.forEach(modelName => {
+                                this.db.dropTable(`${modelName}.js`);
                         });
                         break;
+                }
                 case "addModel":
+                {
+                        /** @type {AddModelData} */
+                        const data = rollbackData.data;                       
+
                         this.db.dropTable(data.modelName);
+                        await removeFile(`${modelsFolder}/${data.modelName}.js`);
                         break;
+                }
                 default:
                         console.error("Rollback type not recognized");
                         break;
