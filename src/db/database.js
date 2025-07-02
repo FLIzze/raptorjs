@@ -125,6 +125,22 @@ export class Database {
         }
 
         /**
+         * @returns {Promise<Array<{ name: string }>>}
+         */
+        async getTable() {
+                const sql = "SELECT name FROM sqlite_master WHERE type='table';";
+
+                this.logger.sql(sql);
+
+                try {
+                        const tables = await this.all(sql);
+                        return tables;
+                } catch (err) {
+                        this.logger.error(`Could not get table name:  ${err}`);
+                }
+        }
+
+        /**
          * You should not use this command but instead `deleteModel`
          *
          * @param {string} name

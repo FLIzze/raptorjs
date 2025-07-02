@@ -68,7 +68,7 @@ const commands = {
 (async function main() {
         const [, , cmd, ...args] = argv;
 
-        if (!cmd || cmd === "--help" || cmd === "-h") {
+        if (cmd === "--help" || cmd === "-h") {
                 commands.help.handler();
                 return;
         }
@@ -76,7 +76,7 @@ const commands = {
         const commandEntry = commands[cmd];
 
         if (!commandEntry) {
-                console.error(`Unknown command: ${cmd}\nUse --help to list available commands.`);
+                console.error(`Unknown command: ${cmd}\nUse -h or --help to list available commands.`);
                 exit(1);
         }
 

@@ -16,7 +16,7 @@ export class Command {
                 this.pwd = process.cwd();
                 this.filename = fileURLToPath(import.meta.url);
                 this.dirname = dirname(this.filename);
-                this.npxpath = resolve(this.dirname, '..', '..')
+                this.npxpath = resolve(this.dirname, '..', '..');
 
                 this.db = new Database();
                 this.rollback = new Rollback();
@@ -117,15 +117,23 @@ export class Command {
 
         async migrate() {
                 const modelDir = path.join(process.cwd(), "src/models");
-
                 const files = fs.readdirSync(modelDir);
-                const filenamesWithoutExt = files.map(file => path.parse(file).name);
 
                 this.logger.info("Starting migration...");
-                this.register("migration", filenamesWithoutExt, `Migrated ${filenamesWithoutExt}`);
+
+                const migratedFiles = [];
 
                 for (const file of files) {
                         try {
+                                const tables = await this.db.getTable();
+
+                                const filenameWithoutExt = path.parse(file).name;
+                                const tableExists = tables.some(table => table.name === filenameWithoutExt);
+
+                                if (tableExists) {
+                                        continue;  // Skip already migrated
+                                }
+
                                 const modelPath = pathToFileURL(path.join(modelDir, file)).href;
                                 const mod = await import(modelPath);
                                 const fields = mod.fields || mod.default?.fields;
@@ -139,10 +147,19 @@ export class Command {
                                         .map(([name, type]) => `${name} ${type}`)
                                         .join(", ");
 
-                                this.db.createTable(file.split(".")[0], columns);
+                                await this.db.createTable(filenameWithoutExt, columns);
+
+                                migratedFiles.push(filenameWithoutExt);  
+
                         } catch (err) {
                                 this.logger.error(`Migration failed for ${file}: ${err}`);
                         }
+                }
+
+                if (migratedFiles.length > 0) {
+                        this.register("migration", migratedFiles, `Migrated ${migratedFiles.join(", ")}`);
+                } else {
+                        this.logger.info("No new migrations needed.");
                 }
 
                 this.logger.info("Migration completed.");
