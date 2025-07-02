@@ -1,48 +1,73 @@
 import fs from "fs";
 import fsp from "fs/promises";
 import path from "path";
-import {Database} from "../db/database.js";
-import {dirname, resolve} from "path";
-import {fileURLToPath, pathToFileURL} from "url";
-import {Rollback} from "../db/rollback.js";
-import {Logger} from "../logs/logger.js";
-import {copyFile} from "../utils/file.js";
-import {initFunc} from "./commands/init.js";
+import { Database } from "../db/database.js";
+import { dirname, resolve } from "path";
+import { fileURLToPath, pathToFileURL } from "url";
+import { Rollback } from "../db/rollback.js";
+import { Logger } from "../logs/logger.js";
+import { copyFile, readFile } from "../utils/file.js";
 
 export class Command {
-        constructor() {
+        /**
+         * @param {"js" | "ts"} extension
+         */
+        constructor(extension) {
+                console.log('Command instantiated');
+                /** @type {URL} */
                 this.commandsFolderUrl = new URL("./commands/", import.meta.url);
+
+                /** @type {string} */
                 this.pwd = process.cwd();
+
+                /** @type {string} */
                 this.filename = fileURLToPath(import.meta.url);
+
+                /** @type {string} */
                 this.dirname = dirname(this.filename);
+
+                /** @type {string} */
                 this.npxpath = resolve(this.dirname, '..', '..');
 
+                /** @type {Database} */
                 this.db = new Database();
+
+                /** @type {Rollback} */
                 this.rollback = new Rollback();
+
+                /** @type {Logger} */
                 this.logger = new Logger();
+
+                /** @type {"js" | "ts"} */
+                this.extension = extension;
         }
 
-        async init() {
-                await initFunc(this.npxpath);
+        static async init() {
+                const raptorConfPath = `${process.cwd()}/raptor.config.json`;
+                const config = await readFile(raptorConfPath);
+                /** @type {"js" | "ts"} */
+                const extensionConfig = config.extension;
+
+                return new Command(extensionConfig);
         }
 
         /**
          * @param {string} modelName      
          */
         async addModel(modelName) {
-                this.register("addModel", {modelName: modelName}, `Added ${modelName}`);
+                this.register("addModel", { modelName }, `Added ${modelName}`);
 
-                const source = path.join(this.npxpath, "templates", "db", "model.js");
+                const source = path.join(this.npxpath, "templates", "db", "model");
                 const targetDir = path.join(this.pwd, "src", "models");
 
                 try {
-                        await fsp.mkdir(targetDir, {recursive: true});
+                        await fsp.mkdir(targetDir, { recursive: true });
                 } catch (err) {
                         this.logger.error(`Error creating models directory: ${err.message}`);
                         return;
                 }
 
-                const target = path.join(targetDir, `${modelName}.js`);
+                const target = path.join(targetDir, `${modelName}.${this.extension}`);
 
                 await copyFile(source, target);
                 this.logger.info(`Model successfully added as ${target}`);
@@ -53,10 +78,10 @@ export class Command {
          * @param {string} newName
          */
         async renameModel(oldName, newName) {
-                this.register("renameModel", {oldName: oldName, newName: newName}, `Renamed ${oldName} to ${newName}`);
+                this.register("renameModel", { oldName, newName }, `Renamed ${oldName} to ${newName}`);
 
-                const oldPath = path.join(this.pwd, "src", "models", `${oldName}.js`);
-                const newPath = path.join(this.pwd, "src", "models", `${newName}.js`);
+                const oldPath = path.join(this.pwd, "src", "models", `${oldName}.${this.extension}`);
+                const newPath = path.join(this.pwd, "src", "models", `${newName}.${this.extension}`);
 
                 if (!fs.existsSync(oldPath)) {
                         this.logger.error(`Model "${oldName}" does not exist.`);
@@ -87,9 +112,9 @@ export class Command {
                 const keys = model.keys();
                 const values = model.values();
 
-                this.register("deleteModel", {name: name, keys: keys, values: values}, `Deleted model ${name} with ${model.length} rows`);
+                this.register("deleteModel", { name, keys, values }, `Deleted model ${name} with ${model.length} rows`);
 
-                const modelPath = path.join(this.pwd, "src", "models", `${name}.js`);
+                const modelPath = path.join(this.pwd, "src", "models", `${name}.${this.extension}`);
                 if (!fs.existsSync(modelPath)) {
                         this.logger.error(`Model "${name}" does not exist.`);
                         return;
@@ -97,7 +122,7 @@ export class Command {
 
                 try {
                         await fsp.unlink(modelPath);
-                        this.logger.info(`Deleted model file "${name}.js"`);
+                        this.logger.info(`Deleted model file "${name}"`);
                 } catch (err) {
                         this.logger.error(`Failed to delete model file: ${err.message}`);
                         return;
@@ -122,7 +147,7 @@ export class Command {
                                 const tableExists = tables.some(table => table.name === filenameWithoutExt);
 
                                 if (tableExists) {
-                                        continue;  // Skip already migrated
+                                        continue;  
                                 }
 
                                 const modelPath = pathToFileURL(path.join(modelDir, file)).href;
@@ -140,7 +165,7 @@ export class Command {
 
                                 await this.db.createTable(filenameWithoutExt, columns);
 
-                                migratedFiles.push(filenameWithoutExt);  
+                                migratedFiles.push(filenameWithoutExt);
 
                         } catch (err) {
                                 this.logger.error(`Migration failed for ${file}: ${err}`);
@@ -157,7 +182,7 @@ export class Command {
         }
 
         /**
-         * @param {string} type
+         * @param {"deleteModel" | "renameModel" | "addModel" | "migration"} type
          * @param {any} data
          * @param {string} recoveryMessage
          */

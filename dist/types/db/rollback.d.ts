@@ -1,8 +1,8 @@
 /**
  * @typedef {Object} DeleteModelData
  * @property {string} name
- * @property {Array<Object>} keys
- * @property {Array<Object>} values
+ * @property {Array<string>} keys
+ * @property {Array<string>} values
  */
 /**
  * @typedef {Object} RenameModelData
@@ -60,8 +60,8 @@ export class Rollback {
 }
 export type DeleteModelData = {
     name: string;
-    keys: Array<any>;
-    values: Array<any>;
+    keys: Array<string>;
+    values: Array<string>;
 };
 export type RenameModelData = {
     oldName: string;

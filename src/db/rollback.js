@@ -9,8 +9,8 @@ import { ExitPromptError } from '@inquirer/core';
 /**
  * @typedef {Object} DeleteModelData
  * @property {string} name
- * @property {Array<Object>} keys
- * @property {Array<Object>} values
+ * @property {Array<string>} keys
+ * @property {Array<string>} values
  */
 
 /**
@@ -58,8 +58,12 @@ import { ExitPromptError } from '@inquirer/core';
 
 export class Rollback {
         constructor() {
+                console.log('Rollback instantiated');
+                /** @type {string} */    
                 this.path = path.join(process.cwd(), ".rollback.backup.json");
                 this.buildBackupFile();
+
+                /** @type {Database} */    
                 this.db = new Database();
         }
 
@@ -179,7 +183,7 @@ export class Rollback {
                         const data = rollbackData.data;
 
                         await this.db.createTable(data.name, data.keys);
-                        await addFile(`${modelsFolder}/${data.name}.js`);
+                        await addFile(`${modelsFolder}/${data.name}.js`, "shit");
 
                         if (data.values.length === undefined) {
                                 return;

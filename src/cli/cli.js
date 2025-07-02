@@ -1,14 +1,11 @@
 #!/usr/bin/env node
 
 import {Rollback} from "../db/rollback.js";
-import {Logger} from "../logs/logger.js";
 import {Command} from "./command.js";
-import {argv, exit} from "process";
 import fs from "fs";
-import path from "path";
-
-const command = new Command();
-const rollback = new Rollback();
+import path, {resolve, dirname} from "path";
+import {initFunc} from "./commands/init.js";
+import {fileURLToPath} from "url";
 
 const commands = {
         help: {
@@ -23,13 +20,18 @@ const commands = {
         },
         init: {
                 description: "Initialize the project structure.",
-                handler: () => command.init()
+                handler: async () => {
+                        const filename = fileURLToPath(import.meta.url);
+                        const npxpath = resolve(dirname(filename), '..', '..');
+                        await initFunc(npxpath);
+                }
         },
         addModel: {
                 description: "Add a new model. Usage: addModel <name>",
                 requiredArgs: 1,
                 handler: async ([name]) => {
                         checkIfIsInProjectDir();
+                        const command = await Command.init();
                         await command.addModel(name);
                 }
         },
@@ -37,6 +39,7 @@ const commands = {
                 description: "Run database migrations.",
                 handler: async () => {
                         checkIfIsInProjectDir();
+                        const command = await Command.init();
                         await command.migrate();
                 }
         },
@@ -45,6 +48,7 @@ const commands = {
                 requiredArgs: 2,
                 handler: async ([oldName, newName]) => {
                         checkIfIsInProjectDir();
+                        const command = await Command.init();
                         await command.renameModel(oldName, newName);
                 }
         },
@@ -53,6 +57,7 @@ const commands = {
                 requiredArgs: 1,
                 handler: async ([name]) => {
                         checkIfIsInProjectDir();
+                        const command = await Command.init();
                         await command.deleteModel(name);
                 }
         },
@@ -60,37 +65,46 @@ const commands = {
                 description: "Rollbacks",
                 handler: async () => {
                         checkIfIsInProjectDir();
-                        rollback.init();  
+                        const rollback = new Rollback();
+                        rollback.init();
                 }
         },
 };
 
+/**
+ * @typedef {Object} CommandEntry
+ * @property {string} description
+ * @property {number} [requiredArgs]
+ * @property {(args: string[]) => Promise<void> | void} handler
+ */
+
 (async function main() {
-        const [, , cmd, ...args] = argv;
+        const cmd = process.argv[2];
+        const args = process.argv.slice(3);
 
         if (cmd === "--help" || cmd === "-h") {
                 commands.help.handler();
                 return;
         }
 
-        const commandEntry = commands[cmd];
+        /** @type {CommandEntry | undefined} */
+        const commandEntry = cmd ? commands[cmd] : undefined;
 
         if (!commandEntry) {
                 console.error(`Unknown command: ${cmd}\nUse -h or --help to list available commands.`);
-                exit(1);
+                process.exit(1);
         }
 
         if (commandEntry.requiredArgs && args.length < commandEntry.requiredArgs) {
                 console.error(`Missing arguments for "${cmd}".\nUsage: ${commandEntry.description}`);
-                exit(1);
+                process.exit(1);
         }
 
         try {
                 await commandEntry.handler(args);
         } catch (err) {
-                const logger = new Logger();
-                logger.error(`Command "${cmd}" failed: ${err.message}`);
-                exit(1);
+                console.error(`Command "${cmd}" failed: ${err.message ?? err}`);
+                process.exit(1);
         }
 })();
 
@@ -98,7 +112,6 @@ function checkIfIsInProjectDir() {
         const configFilePath = path.join(process.cwd(), "raptor.config.json");
         if (!fs.existsSync(configFilePath)) {
                 console.error("Please run this command from the project root directory.");
-                exit(1);
+                process.exit(1);
         }
-
 }

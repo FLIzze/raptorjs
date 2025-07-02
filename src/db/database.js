@@ -13,7 +13,9 @@ sqlite3.verbose();
  */
 export class Database {
         constructor() {
+                /** @type {Logger} */
                 this.logger = new Logger();
+
                 this.db = new sqlite3.Database('db.sqlite', (err) => {
                         if (err) {
                                 this.logger.error(`Failed to connect to DB: ${err}`);

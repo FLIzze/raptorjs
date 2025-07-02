@@ -1,11 +1,13 @@
 import {input, select} from "@inquirer/prompts";
 import {ExitPromptError} from "@inquirer/core";
 import {chdir, exit} from "process";
-import {mkdir} from "fs/promises";
 import {existsSync} from "fs";
 import {execSync} from "child_process";
-import {copyFile, addFile} from '../../utils/file.js';
+import {mkdir, copyFile, writeFile} from "fs/promises";
 
+/**
+ * @param {string} frameworkpath
+ */
 export const initFunc = async (frameworkpath) => {
         console.log("Welcome to RaptorJS init script");
 
@@ -41,7 +43,7 @@ export const initFunc = async (frameworkpath) => {
                         await copyFile(`${jsPath}index.js`, "./src/index.js");
                         await copyFile(`${jsPath}handler.js`, "./src/commands/handler.js");
                         await copyFile(`${jsPath}ping.js`, "./src/commands/ping.js");
-                        await addFile("package.json", JSON.stringify({
+                        await writeFile("package.json", JSON.stringify({
                                 name: projectName,
                                 module: "src/index.js",
                                 type: "module",
@@ -65,7 +67,7 @@ export const initFunc = async (frameworkpath) => {
                         await copyFile(`${tsPath}type.ts`, "./src/type.ts");
                         await copyFile(`${tsPath}handler.ts`, "./src/commands/handler.ts");
                         await copyFile(`${tsPath}ping.ts`, "./src/commands/ping.ts");
-                        await addFile("package.json", JSON.stringify({
+                        await writeFile("package.json", JSON.stringify({
                                 name: projectName,
                                 module: "src/index.ts",
                                 type: "module",
