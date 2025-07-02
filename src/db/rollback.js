@@ -3,9 +3,9 @@ import path from 'path';
 import {fileURLToPath} from 'url';
 import {select, confirm} from '@inquirer/prompts';
 import {Database} from "./database.js";
-import {addFile, readFile, removeFile, renameFile} from "../utils/file.js";
+import {addFile, removeFile, renameFile} from "../utils/file.js";
 import { ExitPromptError } from '@inquirer/core'; 
-import {exit} from "process";
+import {Logger} from "../logs/logger.js";
 
 /**
  * @typedef {Object} DeleteModelData
@@ -66,6 +66,9 @@ export class Rollback {
 
                 /** @type {Database} */    
                 this.db = new Database();
+
+                /** @type {Logger} */    
+                this.logger = new Logger();
         }
 
         buildBackupFile() {
@@ -185,6 +188,10 @@ export class Rollback {
                         /** @type {DeleteModelData} */
                         const data = rollbackData.data;
 
+                        if (!data.values || data.values.length === 0) {
+                                this.logger.error(`No data found in table ${data.name}, use 'deleteModel if you wish to delete it`);
+                        }
+
                         const columns = data.keysName.map((key, index) => `${key} ${data.keysType[index]}`);
                         const columnsDef = columns.join(", ");
 
@@ -194,7 +201,7 @@ export class Rollback {
                                 .map((key, index) => `    ${key}: "${data.keysType[index]}"`)
                                 .join(",\n");
 
-                        const modelContent = `export const fields = {\n${modelFields}\n};\n`;
+                        const modelContent = `// file name is table name\n\nexport const fields = {\n${modelFields}\n};\n`;
 
                         const modelPath = path.join(modelsFolder, `${data.name}.${extensionConfig}`);
                         await addFile(modelPath, modelContent);

@@ -1,2 +1,2 @@
-export { Database } from "./db/database.js";
-export { Logger } from "./logs/logger.js";
+export { Database } from "./db/database";
+export { Logger } from "./logs/logger";

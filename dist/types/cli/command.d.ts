@@ -1,9 +1,4 @@
 export class Command {
-    static init(): Promise<Command>;
-    /**
-     * @param {"js" | "ts"} extension
-     */
-    constructor(extension: "js" | "ts");
     /** @type {URL} */
     commandsFolderUrl: URL;
     /** @type {string} */
@@ -18,8 +13,7 @@ export class Command {
     db: Database;
     /** @type {Rollback} */
     rollback: Rollback;
-    /** @type {Logger} */
-    logger: Logger;
+    /** @type {Logger} */ logger: Logger;
     /** @type {"js" | "ts"} */
     extension: "js" | "ts";
     /**

@@ -1,7 +1,8 @@
 /**
  * @typedef {Object} DeleteModelData
  * @property {string} name
- * @property {Array<string>} keys
+ * @property {Array<string>} keysName
+ * @property {Array<string>} keysType
  * @property {Array<string>} values
  */
 /**
@@ -45,6 +46,8 @@ export class Rollback {
     path: string;
     /** @type {Database} */
     db: Database;
+    /** @type {Logger} */
+    logger: Logger;
     buildBackupFile(): void;
     /**
      * @param {RollbackEntry} entry
@@ -62,7 +65,8 @@ export class Rollback {
 }
 export type DeleteModelData = {
     name: string;
-    keys: Array<string>;
+    keysName: Array<string>;
+    keysType: Array<string>;
     values: Array<string>;
 };
 export type RenameModelData = {
@@ -94,3 +98,4 @@ export type MigrateRollbackEntry = {
 };
 export type AnyRollbackEntry = RollbackEntry | RenameRollbackEntry | AddRollbackEntry | MigrateRollbackEntry;
 import { Database } from "./database.js";
+import { Logger } from "../logs/logger.js";

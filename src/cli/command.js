@@ -6,7 +6,7 @@ import { dirname, resolve } from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 import { Rollback } from "../db/rollback.js";
 import { Logger } from "../logs/logger.js";
-import { copyFile, readFile } from "../utils/file.js";
+import { copyFile } from "../utils/file.js";
 
 export class Command {
         constructor() {
