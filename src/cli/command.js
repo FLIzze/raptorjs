@@ -193,4 +193,60 @@ export class Command {
                         this.logger.error(`Error updating README: ${err.message}`);
                 }
         }
+
+        /**
+         * @param {string} commandName      
+         */
+        async addCommand(commandName) {
+                await this.register("addCommand", {commandName: commandName}, `Added Discord command ${commandName}`);
+
+                // Determine if project uses TypeScript
+                const configPath = path.join(this.pwd, "raptor.config.json");
+                let isTs = false;
+                
+                try {
+                        if (fs.existsSync(configPath)) {
+                                const config = JSON.parse(await fsp.readFile(configPath, 'utf-8'));
+                                isTs = config.ts === true;
+                        }
+                } catch (err) {
+                        this.logger.warn("Could not read config, defaulting to JavaScript");
+                }
+
+                const extension = isTs ? 'ts' : 'js';
+                const templatePath = path.join(this.home, ".raptorjs", "templates", "init", isTs ? "TSbun" : "JSbun", `ping.${extension}`);
+                const targetDir = path.join(this.pwd, "src", "commands");
+                
+                try {
+                        await fsp.mkdir(targetDir, {recursive: true});
+                } catch (err) {
+                        this.logger.error(`Error creating commands directory: ${err.message}`);
+                        return;
+                }
+
+                const target = path.join(targetDir, `${commandName}.${extension}`);
+
+                if (fs.existsSync(target)) {
+                        this.logger.error(`Command "${commandName}" already exists.`);
+                        return;
+                }
+
+                // Create command file from template
+                try {
+                        let templateContent = await fsp.readFile(templatePath, 'utf-8');
+                        
+                        // Replace template content with actual command data
+                        const commandTemplate = templateContent
+                                .replace(/PingCommand/g, `${commandName.charAt(0).toUpperCase() + commandName.slice(1)}Command`)
+                                .replace(/name:\s*"ping"/g, `name: "${commandName}"`)
+                                .replace(/description:\s*"reply : Pong!"/g, `description: "Description for ${commandName} command"`)
+                                .replace(/await interaction\.reply\('Pong!'\)/g, `await interaction.reply('Hello from ${commandName}!')`)
+                                .replace(/The ping command was used/g, `The ${commandName} command was used`);
+                        
+                        await fsp.writeFile(target, commandTemplate);
+                        this.logger.info(`Command successfully added as ${target}`);
+                } catch (err) {
+                        this.logger.error(`Error creating command file: ${err.message}`);
+                }
+        }
 }

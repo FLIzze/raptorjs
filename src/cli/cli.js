@@ -70,6 +70,14 @@ const commands = {
                         rollback.init();  
                 }
         },
+        addCommand: {
+                description: "Add a new Discord command. Usage: addCommand <n>",
+                requiredArgs: 1,
+                handler: async ([name]) => {
+                        checkIfIsInProjectDir();
+                        await command.addCommand(name);
+                }
+        },
 };
 
 (async function main() {

@@ -117,6 +117,8 @@ export class ReadmeManager {
             if (entry.data && Object.keys(entry.data).length > 0) {
                 if (entry.command === 'addModel' && entry.data.modelName) {
                     section += `   - Model created: \`${entry.data.modelName}\`\n`;
+                } else if (entry.command === 'addCommand' && entry.data.commandName) {
+                    section += `   - Discord command created: \`${entry.data.commandName}\`\n`;
                 } else if (entry.command === 'renameModel' && entry.data.oldName && entry.data.newName) {
                     section += `   - Renamed: \`${entry.data.oldName}\` → \`${entry.data.newName}\`\n`;
                 } else if (entry.command === 'deleteModel' && entry.data.name) {
@@ -131,6 +133,54 @@ export class ReadmeManager {
         });
 
         return section;
+    }
+
+    /**
+     * Generate Discord commands section
+     * @returns {string}
+     */
+    async generateCommandsSection() {
+        try {
+            const commandsDir = path.join(process.cwd(), "src", "commands");
+            
+            if (!fs.existsSync(commandsDir)) {
+                return `## 🤖 Discord Commands
+
+*No commands created yet*
+
+`;
+            }
+
+            const commandFiles = fs.readdirSync(commandsDir)
+                .filter(file => (file.endsWith('.js') || file.endsWith('.ts')) && file !== 'handler.js' && file !== 'handler.ts');
+            
+            if (commandFiles.length === 0) {
+                return `## 🤖 Discord Commands
+
+*No commands created yet*
+
+`;
+            }
+
+            let section = `## 🤖 Discord Commands
+
+`;
+
+            commandFiles.forEach((file, index) => {
+                const commandName = file.replace(/\.(js|ts)$/, '');
+                section += `${index + 1}. \`/${commandName}\` - \`src/commands/${file}\`\n`;
+            });
+
+            section += '\n';
+            return section;
+        } catch (err) {
+            logger.error(`Error generating commands section: ${err.message}`);
+            return `## 🤖 Discord Commands
+
+*Error reading commands*
+
+`;
+        }
     }
 
     /**
@@ -198,10 +248,12 @@ export class ReadmeManager {
             // Generate new sections
             const historySection = await this.generateHistorySection();
             const modelsSection = await this.generateModelsSection();
+            const commandsSection = await this.generateCommandsSection();
             
             // Add sections at the end
             content += `\n<!-- AUTO-GENERATED SECTIONS - DO NOT EDIT MANUALLY -->\n`;
             content += historySection;
+            content += commandsSection;
             content += modelsSection;
             content += `<!-- END AUTO-GENERATED SECTIONS -->\n`;
             
