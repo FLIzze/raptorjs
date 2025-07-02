@@ -1,4 +1,3 @@
-import {spawn} from "child_process";
 import fs from "fs";
 import fsp from "fs/promises";
 import path from "path";
@@ -19,7 +18,7 @@ export class Command {
                 this.home = homedir();
                 this.filename = fileURLToPath(import.meta.url);
                 this.dirname = dirname(this.filename);
-                this.npxpath = resolve(this.dirname, '..', '..')
+                this.npxpath = resolve(this.dirname, '..', '..');
 
                 this.db = new Database();
                 this.rollback = new Rollback();
@@ -37,7 +36,7 @@ export class Command {
         async addModel(modelName) {
                 await this.register("addModel", {modelName: modelName}, `Added model ${modelName}`);
 
-                const source = path.join(this.home, ".raptorjs", "templates", "db", "model.js");
+                const source = path.join(this.npxpath, "templates", "db", "model.js");
                 const targetDir = path.join(this.pwd, "src", "models");
 
                 try {
@@ -51,14 +50,6 @@ export class Command {
 
                 await copyFile(source, target);
                 this.logger.info(`Model successfully added as ${target}`);
-        }
-
-        execFile(filePath, args = []) {
-                const child = spawn("bash", [filePath, ...args], {stdio: "inherit"});
-
-                child.on("error", (err) => {
-                        this.logger.error(`Failed to start subprocess: ${err}`);
-                });
         }
 
         /**
@@ -130,10 +121,20 @@ export class Command {
                 const files = fs.readdirSync(modelDir).filter(file => file.endsWith(".js"));
 
                 this.logger.info("Starting migration...");
-                await this.register("migrate", files, `Migrated ${files.length} model(s)`);
+                
+                const migratedFiles = [];
 
                 for (const file of files) {
                         try {
+                                const tables = await this.db.getTable();
+
+                                const filenameWithoutExt = path.parse(file).name;
+                                const tableExists = tables.some(table => table.name === filenameWithoutExt);
+
+                                if (tableExists) {
+                                        continue;  // Skip already migrated
+                                }
+
                                 const modelPath = pathToFileURL(path.join(modelDir, file)).href;
                                 const mod = await import(modelPath);
                                 const fields = mod.fields || mod.default?.fields;
@@ -147,10 +148,19 @@ export class Command {
                                         .map(([name, type]) => `${name} ${type}`)
                                         .join(", ");
 
-                                this.db.createTable(file.split(".")[0], columns);
+                                await this.db.createTable(filenameWithoutExt, columns);
+
+                                migratedFiles.push(filenameWithoutExt);  
+
                         } catch (err) {
                                 this.logger.error(`Migration failed for ${file}: ${err}`);
                         }
+                }
+
+                if (migratedFiles.length > 0) {
+                        await this.register("migrate", migratedFiles, `Migrated ${migratedFiles.join(", ")}`);
+                } else {
+                        this.logger.info("No new migrations needed.");
                 }
 
                 this.logger.info("Migration completed.");
@@ -175,9 +185,9 @@ export class Command {
          */
         async register(type, data, recoveryMessage) {
                 const register = {
-                        type: type,
-                        data: data,
-                        recoveryMessage: recoveryMessage,
+                        type,
+                        data,
+                        recoveryMessage,
                 };
 
                 // Register for rollback (existing system)

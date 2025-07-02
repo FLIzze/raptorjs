@@ -1,9 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const ANSI_COLORS = {
         reset: "\x1b[0m",
@@ -52,7 +48,6 @@ export class Logger {
                 }
                 if (!fs.existsSync(this.path)) {
                         fs.writeFileSync(this.path, "");
-                        this.info("Log file created");
                 }
         }
 
