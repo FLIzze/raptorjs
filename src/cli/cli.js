@@ -25,6 +25,13 @@ const commands = {
                 description: "Initialize the project structure.",
                 handler: () => command.init()
         },
+        addCommand: {
+                description: "Add Command",
+                handler: () => {
+                        checkIfIsInProjectDir();
+                        command.addCommand()
+                }
+        },
         addModel: {
                 description: "Add a new model. Usage: addModel <name>",
                 requiredArgs: 1,
@@ -95,7 +102,7 @@ const commands = {
 })();
 
 function checkIfIsInProjectDir() {
-        const configFilePath = path.join(process.cwd(), "raptor.conf.json");
+        const configFilePath = path.join(process.cwd(), "raptor.config.json");
         if (!fs.existsSync(configFilePath)) {
                 console.error("Please run this command from the project root directory.");
                 exit(1);

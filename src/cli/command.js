@@ -10,6 +10,7 @@ import {Rollback} from "../db/rollback.js";
 import {Logger} from "../logs/logger.js";
 import {copyFile} from "../utils/file.js";
 import { initFunc } from "./commands/init.js";
+import { addCommandFunc } from "./commands/addCommand.js";
 
 export class Command {
         constructor() {
@@ -27,6 +28,10 @@ export class Command {
 
         async init() {
                 await initFunc(this.npxpath);
+        }
+
+        async addCommand() {
+                await addCommandFunc();
         }
 
         /**
