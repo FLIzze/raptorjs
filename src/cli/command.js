@@ -4,11 +4,12 @@ import fsp from "fs/promises";
 import path from "path";
 import {homedir} from "os";
 import {Database} from "../db/database.js";
-import {dirname} from "path";
+import {dirname, resolve} from "path";
 import {fileURLToPath, pathToFileURL} from "url";
 import {Rollback} from "../db/rollback.js";
 import {Logger} from "../logs/logger.js";
 import {copyFile} from "../utils/file.js";
+import { initFunc } from "./commands/init.js";
 
 export class Command {
         constructor() {
@@ -17,16 +18,15 @@ export class Command {
                 this.home = homedir();
                 this.filename = fileURLToPath(import.meta.url);
                 this.dirname = dirname(this.filename);
+                this.npxpath = resolve(this.dirname, '..', '..')
 
                 this.db = new Database();
                 this.rollback = new Rollback();
                 this.logger = new Logger();
         }
 
-        init() {
-                const initCommandUrl = new URL("init.sh", this.commandsFolderUrl);
-                const initCommandPath = fileURLToPath(initCommandUrl);
-                this.execFile(initCommandPath, [this.filename]);
+        async init() {
+                await initFunc(this.npxpath);
         }
 
         /**
