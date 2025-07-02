@@ -1,1 +1,1 @@
-export function initFunc(frameworkpath: any): Promise<void>;
+export function initFunc(frameworkpath: string): Promise<void>;

@@ -41,7 +41,9 @@
  * @typedef {RollbackEntry | RenameRollbackEntry | AddRollbackEntry | MigrateRollbackEntry} AnyRollbackEntry
  */
 export class Rollback {
+    /** @type {string} */
     path: string;
+    /** @type {Database} */
     db: Database;
     buildBackupFile(): void;
     /**

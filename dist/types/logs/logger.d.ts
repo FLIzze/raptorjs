@@ -12,6 +12,7 @@ export class Logger {
      * @param {string} [logPath] - Optional custom log file path.
      */
     constructor(logPath?: string);
+    /** @type {string} */
     path: string;
     /**
      * Logs SQL queries to console and file.
@@ -77,5 +78,12 @@ export class Logger {
      * logger.trace("Function entered: parseData()");
      */
     trace(message: string): void;
-    success(message: any): void;
+    /**
+     * Logs a success message.
+     *
+     * @param {string} message - Message to log.
+     * @example
+     * logger.success("Function entered: parseData()");
+     */
+    success(message: string): void;
 }

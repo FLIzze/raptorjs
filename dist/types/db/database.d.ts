@@ -6,6 +6,7 @@
  * const users = await db.find('users');
  */
 export class Database {
+    /** @type {Logger} */
     logger: Logger;
     db: sqlite3.Database;
     run: Function;
