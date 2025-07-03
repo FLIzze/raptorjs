@@ -2,16 +2,15 @@ import { ExitPromptError } from "@inquirer/core";
 import {exit} from "process";
 import path from 'path';
 import { readFile,readdir,writeFile } from "fs/promises";
-import { confirm, select } from "@inquirer/prompts";
+import { select } from "@inquirer/prompts";
 import prettier from "prettier";
 import { loadOpt } from "../../utils/loadOpt.js";
-import { askOpts } from "../../utils/askOpts.js";
 import { addFile } from "../../utils/file.js";
 
 export const rmOptFunc = async () => {
     try {
     
-        console.log("Welcome to RaptorJS addOpt script");
+        console.log("Welcome to RaptorJS rmOpt script");
 
         const CmdDir = `${path.resolve(process.cwd())}/src/commands/`
         const raptorConfig = JSON.parse(await readFile("./raptor.config.json", "utf-8"))
@@ -32,6 +31,8 @@ export const rmOptFunc = async () => {
             choices: commands
         })
 
+        const commandName = commands.find(cmd => cmd.value === commandPath)?.name;
+
         const OldOpt = await loadOpt(commandPath);
         
         const choices = OldOpt.map(opt => ({
@@ -45,21 +46,26 @@ export const rmOptFunc = async () => {
             choices: choices
         })
 
-        const Options = OldOpt.filter(opt => opt.name !== optToDelete);
+        if (await confirm({message:`Are you sure you want to delete ths option "${optToDelete}" from "${commandName}" command`})) {
 
-        const content = await readFile(commandPath, "utf-8");
+            const Options = OldOpt.filter(opt => opt.name !== optToDelete);
 
-        const updated = content.replace(
-            /options\s*:\s*\[[\s\S]*?\]/,
-            `options: ${JSON.stringify(Options, null, 2)}`
-        )
+            const content = await readFile(commandPath, "utf-8");
 
-        const formatted = await prettier.format(updated, {
-            parser: commandPath.endsWith(".ts") ? "typescript" : "babel",
-        });
+            const updated = content.replace(
+                /options\s*:\s*\[[\s\S]*?\]/,
+                `options: ${JSON.stringify(Options, null, 2)}`
+            )
 
-        await addFile(commandPath, formatted);
-        console.log(`Options updated in ${commandPath}`);
+            const formatted = await prettier.format(updated, {
+                parser: commandPath.endsWith(".ts") ? "typescript" : "babel",
+            });
+
+            await addFile(commandPath, formatted);
+            console.log(`Options updated in ${commandPath}`);
+        } else {
+            exit(0)
+        }
 
     } catch (err) {
         if (err instanceof ExitPromptError) {
