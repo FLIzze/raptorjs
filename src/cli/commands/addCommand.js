@@ -8,7 +8,7 @@ import path from 'path';
 export const addCommandFunc = async () => {
     try {
 
-        const CmdDir = `${path.resolve(process.cwd())}/src/command/`
+        const CmdDir = `${path.resolve(process.cwd())}/src/commands/`
         const raptorConfig = JSON.parse(await readFile("./raptor.config.json", "utf-8"))
 
         const commandName = await input({
