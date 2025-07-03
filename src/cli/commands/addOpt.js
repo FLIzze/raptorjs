@@ -34,7 +34,7 @@ export const addCommandOptFunc = async () => {
 
         const commandName = commands.find(cmd => cmd.value === commandPath)?.name;
 
-        const OldOpt = await loadOpt();
+        const OldOpt = await loadOpt(commandPath);
 
         const NewOpt = await askOpts(OldOpt);
 
