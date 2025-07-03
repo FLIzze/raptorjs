@@ -1,12 +1,18 @@
 import fs from "fs";
 import fsp from "fs/promises";
 import path from "path";
-import { Database } from "../db/database.js";
-import { dirname, resolve } from "path";
-import { fileURLToPath, pathToFileURL } from "url";
-import { Rollback } from "../db/rollback.js";
-import { Logger } from "../logs/logger.js";
-import { copyFile } from "../utils/file.js";
+import {homedir} from "os";
+import {Database} from "../db/database.js";
+import {dirname, resolve} from "path";
+import {fileURLToPath, pathToFileURL} from "url";
+import {Rollback} from "../db/rollback.js";
+import {Logger} from "../logs/logger.js";
+import {copyFile} from "../utils/file.js";
+import { initFunc } from "./commands/init.js";
+import { addCommandFunc } from "./commands/addCommand.js";
+import { rmCommandFunc } from "./commands/rmCommand.js";
+import { addCommandOptFunc } from "./commands/addOpt.js";
+import { rmOptFunc } from "./commands/rmOpt.js";
 
 export class Command {
         constructor() {
@@ -35,6 +41,22 @@ export class Command {
 
                 /** @type {"js" | "ts"} */
                 this.extension = fs.existsSync(path.join(process.cwd(), "tsconfig.json")) ? "ts" : "js";
+        }
+
+        async addCommand() {
+                await addCommandFunc();
+        }
+
+        async rmCommand() {
+                await rmCommandFunc();
+        }
+
+        async addOpt() {
+                await addCommandOptFunc();
+        }
+
+        async rmOpt() {
+                await rmOptFunc();
         }
 
         /**

@@ -26,6 +26,34 @@ const commands = {
                         await initFunc(npxpath);
                 }
         },
+        addCommand: {
+                description: "Add Command",
+                handler: () => {
+                        checkIfIsInProjectDir();
+                        command.addCommand()
+                }
+        },
+        rmCommand: {
+                description: "Remove command",
+                handler: () => {
+                        checkIfIsInProjectDir();
+                        command.rmCommand();
+                }
+        },
+        addOpt: {
+                description: "Add Option to one command",
+                handler: () => {
+                        checkIfIsInProjectDir();
+                        command.addOpt();
+                }
+        },
+        rmOpt: {
+                description: "Remove Option to one command",
+                handler: () => {
+                        checkIfIsInProjectDir();
+                        command.rmOpt();
+                }
+        },
         addModel: {
                 description: "Add a new model. Usage: addModel <name>",
                 requiredArgs: 1,

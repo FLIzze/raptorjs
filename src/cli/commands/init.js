@@ -6,7 +6,19 @@ import {execSync} from "child_process";
 import {mkdir, copyFile, writeFile} from "fs/promises";
 
 /**
- * @param {string} frameworkpath
+ * Initializes a new RaptorJS project by prompting the user for configuration options,
+ * creating the project directory structure, copying template files, and installing dependencies.
+ *
+ * @async
+ * @function initFunc
+ * @param {string} frameworkpath - The path to the RaptorJS framework templates.
+ * @returns {Promise<void>} Resolves when the initialization is complete.
+ *
+ * @throws {ExitPromptError} If the user exits the prompt.
+ * @throws {Error} If an unexpected error occurs during initialization.
+ *
+ * @example
+ * await initFunc('/path/to/raptorjs/framework');
  */
 export const initFunc = async (frameworkpath) => {
         console.log("Welcome to RaptorJS init script");
@@ -20,14 +32,6 @@ export const initFunc = async (frameworkpath) => {
                                 if (existsSync(`./${value}`)) return "This project name is already taken";
                                 return true;
                         }
-                });
-
-                const language = await select({
-                        message: 'Select language',
-                        choices: [
-                                {name: 'JS', value: 'js'},
-                                {name: 'TS', value: 'ts'},
-                        ]
                 });
 
                 await mkdir(`./${projectName}/src/commands`, {recursive: true});
