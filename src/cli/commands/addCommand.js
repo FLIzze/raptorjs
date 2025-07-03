@@ -1,6 +1,6 @@
 import { input } from "@inquirer/prompts";
 import { existsSync } from "fs";
-import { addFile } from "../../utils/file";
+import { addFile } from '../../utils/file.js'
 import { readFile } from "fs/promises";
 
 export const addCommandFunc = async () => {
