@@ -13,12 +13,14 @@
 ### Setup .env
 
 First go to the [developers applications](https://discord.com/developers/applications)
-```
-In general information: Copy your application ID
-In Bot                : Copy your token
-```
+- In **general information**: Copy your **Application ID**
+- In **Bot**                : Copy your **Token**
 
-Then paste in .env
+Copy the **serverId**:
+- Right click on server
+- Copy Server ID
+
+**Paste** in **.env**
 
 ```
 BOT_TOKEN=your_bot_token_here
