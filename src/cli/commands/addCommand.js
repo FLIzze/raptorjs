@@ -8,6 +8,7 @@ import path from 'path';
 export const addCommandFunc = async () => {
     try {
 
+        const CmdDir = `${path.resolve(process.cwd())}/src/command/`
         const raptorConfig = JSON.parse(await readFile("./raptor.config.json", "utf-8"))
 
         const commandName = await input({
@@ -45,7 +46,7 @@ export const ${commandName}Command = {
     }
 
 }`
-            await addFile(`${path.resolve(process.cwd())}/src/command/${commandName}.js`, code)
+            await addFile(`${CmdDir}${commandName}.js`, code)
         } else if (raptorConfig.ts) {
             const code = `\
 import { Logger } from "raptorjs-discord"
@@ -63,7 +64,7 @@ export const ${commandName}Command = {
     }
 
 }`
-            await addFile(`${path.resolve(process.cwd())}/src/command/${commandName}.ts`, code)
+            await addFile(`${CmdDir}${commandName}.ts`, code)
         } else {
             console.log("probleme")
         }
