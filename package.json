@@ -1,8 +1,7 @@
 {
         "name": "raptorjs-discord",
-        "version": "0.8.64",
+        "version": "0.10.67",
         "description": "RaptorJs",
-        "main": "src/main.js",
         "bin": {
                 "raptorjs": "src/cli/cli.js"
         },
@@ -17,7 +16,8 @@
         },
         "homepage": "https://github.com/FLIzze/raptorjs#readme",
         "type": "module",
-        "types": "src/main.d.ts",
+        "main": "src/main.js",
+        "types": "dist/types/main.d.ts",
         "keywords": [
                 "cli",
                 "installer",
@@ -32,6 +32,7 @@
         },
         "devDependencies": {
                 "@eslint/js": "^9.29.0",
+                "@types/node": "^24.0.10",
                 "eslint": "^9.29.0",
                 "globals": "^16.2.0"
         }

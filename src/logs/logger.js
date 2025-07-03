@@ -1,9 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const ANSI_COLORS = {
         reset: "\x1b[0m",
@@ -28,6 +24,7 @@ export class Logger {
          * @param {string} [logPath] - Optional custom log file path.
          */
         constructor(logPath) {
+                /** @type {string} */    
                 this.path = logPath ?? path.join(path.resolve(process.cwd()), "log", "raptorjs.log");
                 this.buildLogFile();
         }
@@ -52,7 +49,6 @@ export class Logger {
                 }
                 if (!fs.existsSync(this.path)) {
                         fs.writeFileSync(this.path, "");
-                        this.info("Log file created");
                 }
         }
 
@@ -63,7 +59,7 @@ export class Logger {
          */
         date() {
                 const date = new Date();
-                const pad = (n, len = 2) => String(n).padStart(len, '0');
+                const pad = (/** @type {number} */ n, len = 2) => String(n).padStart(len, '0');
 
                 const day = pad(date.getDate());
                 const month = pad(date.getMonth() + 1);
@@ -152,6 +148,13 @@ export class Logger {
                 console.log(this.colorize(mes, "cyan"));
         }
 
+        /**
+         * Logs a success message.
+         *
+         * @param {string} message - Message to log.
+         * @example
+         * logger.success("Function entered: parseData()");
+         */
         success(message) {
                 const mes = this.date() + " SUCCESS: " + message;
                 fs.appendFileSync(this.path, mes + "\n");
