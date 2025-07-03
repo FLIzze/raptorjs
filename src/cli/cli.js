@@ -28,30 +28,34 @@ const commands = {
         },
         addCommand: {
                 description: "Add Command",
-                handler: () => {
+                handler: async () => {
                         checkIfIsInProjectDir();
-                        command.addCommand()
+                        const command = new Command();
+                        await command.addCommand();
                 }
         },
         rmCommand: {
                 description: "Remove command",
-                handler: () => {
+                handler: async () => {
                         checkIfIsInProjectDir();
-                        command.rmCommand();
+                        const command = new Command();
+                        await command.rmCommand();
                 }
         },
         addOpt: {
                 description: "Add Option to one command",
-                handler: () => {
+                handler: async () => {
                         checkIfIsInProjectDir();
-                        command.addOpt();
+                        const command = new Command();
+                        await command.addOpt();
                 }
         },
         rmOpt: {
                 description: "Remove Option to one command",
-                handler: () => {
+                handler: async () => {
                         checkIfIsInProjectDir();
-                        command.rmOpt();
+                        const command = new Command();
+                        await command.rmOpt();
                 }
         },
         addModel: {
@@ -94,7 +98,7 @@ const commands = {
                 handler: async () => {
                         checkIfIsInProjectDir();
                         const rollback = new Rollback();
-                        rollback.init();
+                        await rollback.init();
                 }
         },
 };

@@ -24,59 +24,59 @@ import { addFile } from "../../utils/file.js";
  * @throws {Error} If an unexpected error occurs during the process.
  */
 export const addCommandOptFunc = async () => {
-    try {
+        try {
     
-        console.log("Welcome to RaptorJS addOpt script");
+                console.log("Welcome to RaptorJS addOpt script");
 
-        const CmdDir = `${path.resolve(process.cwd())}/src/commands/`
-        const raptorConfig = JSON.parse(await readFile("./raptor.config.json", "utf-8"))
-        const extension = raptorConfig.ts ? "ts" : "js";
-        const files = await readdir(CmdDir)
+                const CmdDir = `${path.resolve(process.cwd())}/src/commands/`;
+                const raptorConfig = JSON.parse(await readFile("./raptor.config.json", "utf-8"));
+                const extension = raptorConfig.ts ? "ts" : "js";
+                const files = await readdir(CmdDir);
 
-        const commands = files
-            .filter((file) => file.endsWith(`.${extension}`) && file !== `handler.${extension}`)
-            .map((file) => {
-                const name = path.basename(file, `.${extension}`);
-                const fullPath = path.join(CmdDir, file);
-                return { name, value: fullPath };
-            });
+                const commands = files
+                        .filter((file) => file.endsWith(`.${extension}`) && file !== `handler.${extension}`)
+                        .map((file) => {
+                                const name = path.basename(file, `.${extension}`);
+                                const fullPath = path.join(CmdDir, file);
+                                return { name, value: fullPath };
+                        });
         
 
-        const commandPath = await select({
-            message: 'Which command do you want add option:',
-            choices: commands
-        })
+                const commandPath = await select({
+                        message: 'Which command do you want add option:',
+                        choices: commands
+                });
 
-        const OldOpt = await loadOpt(commandPath);
+                const OldOpt = await loadOpt(commandPath);
 
-        const NewOpt = await askOpts(OldOpt);
+                const NewOpt = await askOpts(OldOpt);
 
-        if (NewOpt.length === 0) {
-            exit(0);
+                if (NewOpt.length === 0) {
+                        exit(0);
+                }
+
+                const Options = [...OldOpt, ...NewOpt];
+
+                const content = await readFile(commandPath, "utf-8");
+
+                const updated = content.replace(
+                        /options\s*:\s*\[[\s\S]*?\]/,
+                        `options: ${JSON.stringify(Options, null, 2)}`
+                );
+
+                const formatted = await prettier.format(updated, {
+                        parser: commandPath.endsWith(".ts") ? "typescript" : "babel",
+                });
+
+                await addFile(commandPath, formatted);
+                console.log(`Options updated in ${commandPath}`);
+
+        } catch (err) {
+                if (err instanceof ExitPromptError) {
+                        exit(1);
+                } else {
+                        console.error("Unexpected error:", err);
+                        exit(1);
+                }
         }
-
-        const Options = [...OldOpt, ...NewOpt];
-
-        const content = await readFile(commandPath, "utf-8");
-
-        const updated = content.replace(
-            /options\s*:\s*\[[\s\S]*?\]/,
-            `options: ${JSON.stringify(Options, null, 2)}`
-        )
-
-        const formatted = await prettier.format(updated, {
-            parser: commandPath.endsWith(".ts") ? "typescript" : "babel",
-        });
-
-        await addFile(commandPath, formatted);
-        console.log(`Options updated in ${commandPath}`);
-
-    } catch (err) {
-        if (err instanceof ExitPromptError) {
-            exit(1)
-        } else {
-            console.error("Unexpected error:", err);
-            exit(1);
-        }
-    }
 };

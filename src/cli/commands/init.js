@@ -26,6 +26,7 @@ export const initFunc = async (frameworkpath) => {
         try {
                 const projectName = await input({
                         message: 'What is your project name ?',
+                        /** @param {string} value */
                         validate: (value) => {
                                 if (!value || value.trim() === "") return "Project name is required";
                                 if (/[/\\?%*:|"<>]/.test(value)) return "Project name contains invalid characters";
@@ -34,7 +35,13 @@ export const initFunc = async (frameworkpath) => {
                         }
                 });
 
-                await mkdir(`./${projectName}/src/commands`, {recursive: true});
+                const language = await select({
+                        message: 'Select language',
+                        choices: [
+                                {name: 'JS', value: 'js'},
+                                {name: 'TS', value: 'ts'},
+                        ]
+                });                await mkdir(`./${projectName}/src/commands`, {recursive: true});
 
                 chdir(`${projectName}`);
 
@@ -92,7 +99,7 @@ export const initFunc = async (frameworkpath) => {
                 await copyFile(`${frameworkpath}/templates/init/README.md`, "README.md");
 
                 execSync("bun i", {stdio: "inherit"});
-                execSync("bun i discord.js dotenv raptorjs-discord", {stdio: "inherit"});
+                execSync("bun i sqlite3 discord.js dotenv raptorjs-discord", {stdio: "inherit"});
 
         } catch (err) {
                 if (err instanceof ExitPromptError) {

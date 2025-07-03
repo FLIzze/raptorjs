@@ -1,1 +1,4 @@
-{"extension":"js"}
+{
+  "extension":"js",
+  "ts": false
+}

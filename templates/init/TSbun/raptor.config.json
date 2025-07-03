@@ -1,1 +1,4 @@
-{"extension":"ts"}
+{
+  "extension":"ts",
+  "ts": true
+}
