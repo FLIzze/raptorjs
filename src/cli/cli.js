@@ -39,7 +39,7 @@ const commands = {
                         command.rmCommand();
                 }
         },
-        rmOpt: {
+        addOpt: {
                 description: "Add Option to one command",
                 handler: () => {
                         checkIfIsInProjectDir();
