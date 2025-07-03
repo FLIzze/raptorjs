@@ -3,7 +3,7 @@ import {exit} from "process";
 import path from 'path';
 import { readFile,readdir } from "fs/promises";
 import { confirm, select } from "@inquirer/prompts";
-import { removeFile } from "../../utils/file";
+import { removeFile } from "../../utils/file.js";
 
 export const rmCommandFunc = async () => {
     try {
