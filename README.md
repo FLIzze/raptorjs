@@ -12,7 +12,9 @@
 
 ### Setup .env
 
-First go to the [developers applications](https://discord.com/developers/applications)
+Create a bot using `New Application` or select one you already have
+
+Go to the [developers applications](https://discord.com/developers/applications)
 - In **general information**: Copy your **Application ID**
 - In **Bot**                : Copy your **Token**
 
@@ -27,6 +29,10 @@ BOT_TOKEN=your_bot_token_here
 CLIENT_ID=your_client_id_here
 GUILD_ID=your_guild_id_here
 ```
+
+Invite the bot to your server - Don't forget to change the CLIENT_ID
+
+```https://discord.com/api/oauth2/authorize?client_id=<CLIENT_ID>&permissions=0&scope=bot%20applications.commands```
 
 ### You're ready to go!
 
