@@ -1,4 +1,5 @@
 import { input } from "@inquirer/prompts";
+import {exit} from "process";
 import { ExitPromptError } from "@inquirer/core";
 import { existsSync } from "fs";
 import { addFile } from '../../utils/file.js'
@@ -32,9 +33,11 @@ export const addCommandFunc = async () => {
         })
 
         const options = await askOpts();
+
+        let code = ""
         
         if (!raptorConfig.ts) {
-            const code = `\
+            code = `\
 import { Logger } from "raptorjs-discord"
 const logger = new Logger()
 
@@ -51,7 +54,7 @@ export const ${commandName}Command = {
 
 }`
         } else if (raptorConfig.ts) {
-            const code = `\
+            code = `\
 import { Logger } from "raptorjs-discord"
 const logger = new Logger()
 
@@ -74,7 +77,7 @@ export const ${commandName}Command = {
         const formatted = await prettier.format(code, { parser: raptorConfig.ts ? "typescript" : "babel" });
 
         await addFile(`${CmdDir}${commandName}.${raptorConfig.ts ? "ts" : "js"}`, formatted);
-        
+
     } catch (err) {
         if (err instanceof ExitPromptError) {
             exit(1)
