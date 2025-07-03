@@ -34,6 +34,11 @@ export const rmOptFunc = async () => {
         const commandName = commands.find(cmd => cmd.value === commandPath)?.name;
 
         const OldOpt = await loadOpt(commandPath);
+
+        if (OldOpt.length === 0) {
+            console.log(`No options found for the "${commandName}" command.`);
+            exit(0);
+        }
         
         const choices = OldOpt.map(opt => ({
             name:opt.name,
