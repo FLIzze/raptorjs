@@ -4,6 +4,7 @@ import { existsSync } from "fs";
 import { addFile } from '../../utils/file.js'
 import { readFile } from "fs/promises";
 import path from 'path';
+import { askOpts } from "../../utils/askOpts.js";
 
 export const addCommandFunc = async () => {
     try {
@@ -28,6 +29,8 @@ export const addCommandFunc = async () => {
                 return true;
             }
         })
+
+        const options = await askOpts();
         
         if (!raptorConfig.ts) {
             const code = `\
@@ -38,7 +41,7 @@ export const ${commandName}Command = {
 
     name:"${commandName}",
     description:"${description}",
-    options:[],
+    options:${options},
 
     cmd : async (interaction) => {
         await interaction.reply('${commandName} reponse !')
@@ -56,7 +59,7 @@ export const ${commandName}Command = {
 
     name:"${commandName}",
     description:"${description}",
-    options:[],
+    options:${options},
 
     cmd : async (interaction: { reply: (arg0: string) => any; client: { user: { username: any } }; user: { tag: any } }) => {
         await interaction.reply('${commandName} reponse !')
