@@ -46,6 +46,13 @@ const commands = {
                         command.addOpt();
                 }
         },
+        rmOpt: {
+                description: "Remove Option to one command",
+                handler: () => {
+                        checkIfIsInProjectDir();
+                        command.rmOpt();
+                }
+        },
         addModel: {
                 description: "Add a new model. Usage: addModel <name>",
                 requiredArgs: 1,

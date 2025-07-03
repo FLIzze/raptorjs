@@ -8,7 +8,7 @@ import { loadOpt } from "../../utils/loadOpt.js";
 import { askOpts } from "../../utils/askOpts.js";
 import { addFile } from "../../utils/file.js";
 
-export const addCommandOptFunc = async () => {
+export const rmOptFunc = async () => {
     try {
     
         console.log("Welcome to RaptorJS addOpt script");

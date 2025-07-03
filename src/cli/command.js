@@ -13,6 +13,7 @@ import { initFunc } from "./commands/init.js";
 import { addCommandFunc } from "./commands/addCommand.js";
 import { rmCommandFunc } from "./commands/rmCommand.js";
 import { addCommandOptFunc } from "./commands/addOpt.js";
+import { rmOptFunc } from "./commands/rmOpt.js";
 
 export class Command {
         constructor() {
@@ -42,6 +43,10 @@ export class Command {
 
         async addOpt() {
                 await addCommandOptFunc();
+        }
+
+        async rmOpt() {
+                await rmOptFunc();
         }
 
         /**
