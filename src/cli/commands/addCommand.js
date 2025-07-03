@@ -5,6 +5,7 @@ import { addFile } from '../../utils/file.js'
 import { readFile } from "fs/promises";
 import path from 'path';
 import { askOpts } from "../../utils/askOpts.js";
+import prettier from "prettier";
 
 export const addCommandFunc = async () => {
     try {
@@ -49,7 +50,6 @@ export const ${commandName}Command = {
     }
 
 }`
-            await addFile(`${CmdDir}${commandName}.js`, code)
         } else if (raptorConfig.ts) {
             const code = `\
 import { Logger } from "raptorjs-discord"
@@ -67,10 +67,14 @@ export const ${commandName}Command = {
     }
 
 }`
-            await addFile(`${CmdDir}${commandName}.ts`, code)
         } else {
             console.log("probleme")
         }
+
+        const formatted = await prettier.format(code, { parser: raptorConfig.ts ? "typescript" : "babel" });
+
+        await addFile(`${CmdDir}${commandName}.${raptorConfig.ts ? "ts" : "js"}`, formatted);
+        
     } catch (err) {
         if (err instanceof ExitPromptError) {
             exit(1)
