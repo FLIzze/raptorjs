@@ -1,4 +1,5 @@
 import { input } from "@inquirer/prompts";
+import { ExitPromptError } from "@inquirer/core";
 import { existsSync } from "fs";
 import { addFile } from '../../utils/file.js'
 import { readFile } from "fs/promises";
