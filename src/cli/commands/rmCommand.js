@@ -22,7 +22,11 @@ export const rmCommandFunc = async () => {
                 const fullPath = path.join(CmdDir, file);
                 return { name, value: fullPath };
             });
-        
+
+        if (commands.length === 0) {
+            console.log("No commands found to delete.");
+            exit(0);
+        }
 
         const commandPath = await select({
             message: 'Which command do you want to delete:',
