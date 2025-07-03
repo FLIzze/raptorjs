@@ -32,13 +32,13 @@ export const addCommandOptFunc = async () => {
             choices: commands
         })
 
-        const commandName = commands.find(cmd => cmd.value === commandPath)?.name;
-
         const OldOpt = await loadOpt(commandPath);
 
         const NewOpt = await askOpts(OldOpt);
 
         const Options = [...OldOpt, ...NewOpt];
+
+        const content = await readFile(commandPath, "utf-8");
 
         const updated = content.replace(
             /options\s*:\s*\[[\s\S]*?\]/,
@@ -49,7 +49,7 @@ export const addCommandOptFunc = async () => {
             parser: commandPath.endsWith(".ts") ? "typescript" : "babel",
         });
 
-        await addFile(commandPath, updated);
+        await addFile(commandPath, formatted);
         console.log(`Options updated in ${commandPath}`);
 
     } catch (err) {
