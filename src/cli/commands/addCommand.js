@@ -11,6 +11,8 @@ import prettier from "prettier";
 export const addCommandFunc = async () => {
     try {
 
+        console.log("Welcome to RaptorJS addCommand script")
+
         const CmdDir = `${path.resolve(process.cwd())}/src/commands/`
         const raptorConfig = JSON.parse(await readFile("./raptor.config.json", "utf-8"))
 
