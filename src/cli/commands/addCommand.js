@@ -2,6 +2,7 @@ import { input } from "@inquirer/prompts";
 import { existsSync } from "fs";
 import { addFile } from '../../utils/file.js'
 import { readFile } from "fs/promises";
+import path from 'path';
 
 export const addCommandFunc = async () => {
     try {
@@ -43,7 +44,7 @@ export const ${commandName}Command = {
     }
 
 }`
-            await addFile(`./src/command/${commandName}.js`, code)
+            await addFile(`${path.resolve(process.cwd())}/src/command/${commandName}.js`, code)
         } else if (raptorConfig.ts) {
             const code = `\
 import { Logger } from "raptorjs-discord"
@@ -61,7 +62,7 @@ export const ${commandName}Command = {
     }
 
 }`
-            await addFile(`./src/command/${commandName}.ts`, code)
+            await addFile(`${path.resolve(process.cwd())}/src/command/${commandName}.ts`, code)
         } else {
             console.log("probleme")
         }
