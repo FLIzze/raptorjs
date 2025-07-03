@@ -2,7 +2,7 @@ import { ExitPromptError } from "@inquirer/core";
 import {exit} from "process";
 import path from 'path';
 import { readFile,readdir,writeFile } from "fs/promises";
-import { select } from "@inquirer/prompts";
+import { select, confirm } from "@inquirer/prompts";
 import prettier from "prettier";
 import { loadOpt } from "../../utils/loadOpt.js";
 import { addFile } from "../../utils/file.js";
