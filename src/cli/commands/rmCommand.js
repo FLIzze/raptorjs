@@ -3,6 +3,7 @@ import {exit} from "process";
 import path from 'path';
 import { readFile,readdir } from "fs/promises";
 import { confirm, select } from "@inquirer/prompts";
+import { removeFile } from "../../utils/file";
 
 export const rmCommandFunc = async () => {
     try {
@@ -31,7 +32,8 @@ export const rmCommandFunc = async () => {
         const commandName = commands.find(cmd => cmd.value === commandPath)?.name;
 
         if (await confirm({message:`Are you sure you want to delete the "${commandName}" command?`})) {
-            console.log(commandName)
+            removeFile(commandPath);
+            console.log(`Command "${commandName}" has been deleted successfully!`)
         }
 
     } catch (err) {
