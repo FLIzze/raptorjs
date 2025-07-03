@@ -1,13 +1,19 @@
 import { input } from "@inquirer/prompts";
 import { existsSync } from "fs";
+import { addFile } from "../../utils/file";
+import { readFile } from "fs/promises";
 
 export const addCommandFunc = async () => {
     try {
+
+        const raptorConfig = JSON.parse(await readFile("./raptor.config.json", "utf-8"))
+
         const commandName = await input({
             message: 'What is your command name ?',
             validate: (value) => {
                 if (!value || value.trim() === "") return "Command name is required";
                 if (/[/\\?%*:|"<>]/.test(value)) return "Command name contains invalid characters";
+                if (value !== value.toLowerCase()) return "Command name must be in lowercase";
                 if (existsSync(`./src/commands/${value}.js`) || existsSync(`./src/commands/${value}.ts`)) return "This Command name is already taken";
                 return true;
             }
@@ -20,23 +26,45 @@ export const addCommandFunc = async () => {
             }
         })
         
-        const code = `\
+        if (!raptorConfig.ts) {
+            const code = `\
 import { Logger } from "raptorjs-discord"
 const logger = new Logger()
 
-export const PingCommand = {
+export const ${commandName}Command = {
 
     name:"${commandName}",
     description:"${description}",
     options:[],
 
     cmd : async (interaction) => {
-        await interaction.reply('Pong!')
-        logger.info(\`The ping command was used. The bot "\${interaction.client.user.username}" replied to the user "\${interaction.user.tag}".\`)
+        await interaction.reply('${commandName} reponse !')
+        logger.info(\`The ${commandName} command was used. The bot "\${interaction.client.user.username}" replied to the user "\${interaction.user.tag}".\`)
     }
 
 }`
-        console.log(code)
+            await addFile(`./src/command/${commandName}.js`, code)
+        } else if (raptorConfig.ts) {
+            const code = `\
+import { Logger } from "raptorjs-discord"
+const logger = new Logger()
+
+export const ${commandName}Command = {
+
+    name:"${commandName}",
+    description:"${description}",
+    options:[],
+
+    cmd : async (interaction: { reply: (arg0: string) => any; client: { user: { username: any } }; user: { tag: any } }) => {
+        await interaction.reply('${commandName} reponse !')
+        logger.info(\`The ${commandName} command was used. The bot "\${interaction.client.user.username}" replied to the user "\${interaction.user.tag}".\`)
+    }
+
+}`
+            await addFile(`./src/command/${commandName}.ts`, code)
+        } else {
+            console.log("probleme")
+        }
     } catch (err) {
         if (err instanceof ExitPromptError) {
             exit(1)
