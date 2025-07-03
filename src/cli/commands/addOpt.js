@@ -36,6 +36,10 @@ export const addCommandOptFunc = async () => {
 
         const NewOpt = await askOpts(OldOpt);
 
+        if (NewOpt.length === 0) {
+            exit(0);
+        }
+
         const Options = [...OldOpt, ...NewOpt];
 
         const content = await readFile(commandPath, "utf-8");
