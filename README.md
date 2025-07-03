@@ -1,5 +1,3 @@
-# RaptorJS
-
 ![Logo raptorjs](./img/raptorlogo.webp)
 
 ## Dependencies
