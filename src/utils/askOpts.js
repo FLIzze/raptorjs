@@ -1,6 +1,6 @@
 import { confirm, input, select } from "@inquirer/prompts";
 
-export const askOpts = async () => {
+export const askOpts = async (optexists=[]) => {
     let whantOpts = await confirm({message:'do you whant option for your command ?'})
 
     const options = []
@@ -12,7 +12,7 @@ export const askOpts = async () => {
                     if (!value || value.trim() === "") return "Option name is required";
                     if (/[/\\?%*:|"<>]/.test(value)) return "Option name contains invalid characters";
                     if (value !== value.toLowerCase()) return "Option name must be in lowercase";
-                    if (options.some(opt => opt.name === value)) return "This option name is already taken";
+                    if (options.some(opt => opt.name === value) || optexists.some(opt => opt.name === value)) return "This option name is already taken";
                     return true;
                 }
         })

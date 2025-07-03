@@ -39,6 +39,13 @@ const commands = {
                         command.rmCommand();
                 }
         },
+        rmCommand: {
+                description: "Add Option to one command",
+                handler: () => {
+                        checkIfIsInProjectDir();
+                        command.addOpt();
+                }
+        },
         addModel: {
                 description: "Add a new model. Usage: addModel <name>",
                 requiredArgs: 1,

@@ -12,6 +12,7 @@ import {copyFile} from "../utils/file.js";
 import { initFunc } from "./commands/init.js";
 import { addCommandFunc } from "./commands/addCommand.js";
 import { rmCommandFunc } from "./commands/rmCommand.js";
+import { addCommandOptFunc } from "./commands/addOpt.js";
 
 export class Command {
         constructor() {
@@ -37,6 +38,10 @@ export class Command {
 
         async rmCommand() {
                 await rmCommandFunc();
+        }
+
+        async addOpt() {
+                await addCommandOptFunc();
         }
 
         /**
