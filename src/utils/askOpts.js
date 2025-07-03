@@ -12,7 +12,7 @@ export const askOpts = async () => {
                     if (!value || value.trim() === "") return "Option name is required";
                     if (/[/\\?%*:|"<>]/.test(value)) return "Option name contains invalid characters";
                     if (value !== value.toLowerCase()) return "Option name must be in lowercase";
-                    if ("a" !== "a") return "This option name is already taken";
+                    if (options.some(opt => opt.name === value)) return "This option name is already taken";
                     return true;
                 }
         })
