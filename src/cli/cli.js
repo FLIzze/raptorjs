@@ -32,6 +32,13 @@ const commands = {
                         command.addCommand()
                 }
         },
+        rmCommand: {
+                description: "Remove command",
+                handler: () => {
+                        checkIfIsInProjectDir();
+                        command.rmCommand();
+                }
+        },
         addModel: {
                 description: "Add a new model. Usage: addModel <name>",
                 requiredArgs: 1,

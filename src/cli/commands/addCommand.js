@@ -17,7 +17,7 @@ export const addCommandFunc = async () => {
         const raptorConfig = JSON.parse(await readFile("./raptor.config.json", "utf-8"))
 
         const commandName = await input({
-            message: 'What is your command name ?',
+            message: 'What is your new command name ?',
             validate: (value) => {
                 if (!value || value.trim() === "") return "Command name is required";
                 if (/[/\\?%*:|"<>]/.test(value)) return "Command name contains invalid characters";
@@ -27,7 +27,7 @@ export const addCommandFunc = async () => {
             }
         })
         const description = await input({
-            message: 'What is your command description ?',
+            message: `What is ${commandName} command description ?`,
             validate: (value) => {
                 if (!value || value.trim() === "") return "Command description is required";
                 return true;
