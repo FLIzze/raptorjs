@@ -40,7 +40,12 @@ export const askOpts = async () => {
 
         const required  = await confirm({message:'This option is required ?'})
 
-        options.push({name:name,description:description,type:type,required:required})
+        options.push({
+            name:name,
+            description:description,
+            type: Number(type),
+            required:required
+        })
 
         whantOpts = await confirm({message:'do you whant an other option ?'})
     }

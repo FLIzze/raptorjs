@@ -41,7 +41,7 @@ export const ${commandName}Command = {
 
     name:"${commandName}",
     description:"${description}",
-    options:${options},
+    options:${JSON.stringify(options, null, 2)},
 
     cmd : async (interaction) => {
         await interaction.reply('${commandName} reponse !')
@@ -59,7 +59,7 @@ export const ${commandName}Command = {
 
     name:"${commandName}",
     description:"${description}",
-    options:${options},
+    options:${JSON.stringify(options, null, 2)},
 
     cmd : async (interaction: { reply: (arg0: string) => any; client: { user: { username: any } }; user: { tag: any } }) => {
         await interaction.reply('${commandName} reponse !')
