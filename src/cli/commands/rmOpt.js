@@ -7,6 +7,22 @@ import prettier from "prettier";
 import { loadOpt } from "../../utils/loadOpt.js";
 import { addFile } from "../../utils/file.js";
 
+
+/**
+ * Asynchronously removes an option from a selected command file in the RaptorJS project.
+ *
+ * This function:
+ * - Lists available command files in the `src/commands/` directory.
+ * - Prompts the user to select a command and an option to remove.
+ * - Confirms the removal with the user.
+ * - Updates the command file by removing the selected option from its options array.
+ * - Formats the updated file using Prettier.
+ *
+ * @async
+ * @function rmOptFunc
+ * @throws {ExitPromptError} If the user exits the prompt.
+ * @throws {Error} If an unexpected error occurs during the process.
+ */
 export const rmOptFunc = async () => {
     try {
     

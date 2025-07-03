@@ -8,6 +8,21 @@ import { copyFile, addFile } from '../../utils/file.js'
 
 
 
+/**
+ * Initializes a new RaptorJS project by prompting the user for configuration options,
+ * creating the project directory structure, copying template files, and installing dependencies.
+ *
+ * @async
+ * @function initFunc
+ * @param {string} frameworkpath - The path to the RaptorJS framework templates.
+ * @returns {Promise<void>} Resolves when the initialization is complete.
+ *
+ * @throws {ExitPromptError} If the user exits the prompt.
+ * @throws {Error} If an unexpected error occurs during initialization.
+ *
+ * @example
+ * await initFunc('/path/to/raptorjs/framework');
+ */
 export const initFunc = async (frameworkpath) => {    
     console.log("Welcome to RaptorJS init script")
 

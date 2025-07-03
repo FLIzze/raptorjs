@@ -8,6 +8,19 @@ import path from 'path';
 import { askOpts } from "../../utils/askOpts.js";
 import prettier from "prettier";
 
+/**
+ * Interactive CLI function to add a new command file for RaptorJS Discord bots.
+ * 
+ * This function prompts the user for a command name, description, and options,
+ * then generates a new command file (JavaScript or TypeScript based on config)
+ * in the `src/commands/` directory. It ensures command name validity and uniqueness,
+ * formats the generated code with Prettier, and handles errors gracefully.
+ * 
+ * @async
+ * @function
+ * @throws {ExitPromptError} If the user cancels the prompt.
+ * @throws {Error} For unexpected errors during file operations or formatting.
+ */
 export const addCommandFunc = async () => {
     try {
 

@@ -8,6 +8,21 @@ import { loadOpt } from "../../utils/loadOpt.js";
 import { askOpts } from "../../utils/askOpts.js";
 import { addFile } from "../../utils/file.js";
 
+
+/**
+ * Adds new options to an existing command file in the RaptorJS project.
+ * 
+ * This function prompts the user to select a command, loads its current options,
+ * allows the user to add new options, and updates the command file accordingly.
+ * It also formats the updated file using Prettier.
+ *
+ * @async
+ * @function addCommandOptFunc
+ * @returns {Promise<void>} Resolves when the command options have been updated and the file has been saved.
+ *
+ * @throws {ExitPromptError} If the user cancels the prompt.
+ * @throws {Error} If an unexpected error occurs during the process.
+ */
 export const addCommandOptFunc = async () => {
     try {
     

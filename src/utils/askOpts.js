@@ -1,5 +1,17 @@
 import { confirm, input, select } from "@inquirer/prompts";
 
+/**
+ * Prompts the user to interactively define command options.
+ *
+ * @async
+ * @param {Array<Object>} [optexists=[]] - An array of existing option objects to check for name conflicts.
+ * @returns {Promise<Array<{name: string, description: string, type: number, required: boolean}>>} 
+ *   Resolves to an array of option objects, each containing:
+ *   - name: The unique, lowercase name of the option.
+ *   - description: The description of the option.
+ *   - type: The numeric type identifier for the option.
+ *   - required: Whether the option is required.
+ */
 export const askOpts = async (optexists=[]) => {
     let whantOpts = await confirm({message:'do you whant option for your command ?'})
 

@@ -5,6 +5,20 @@ import { readFile,readdir } from "fs/promises";
 import { confirm, select } from "@inquirer/prompts";
 import { removeFile } from "../../utils/file.js";
 
+/**
+ * Asynchronously handles the removal of a command file from the RaptorJS project.
+ *
+ * This function lists available command files (excluding the handler file) in the `src/commands/` directory,
+ * prompts the user to select one for deletion, confirms the action, and deletes the selected file if confirmed.
+ * It reads the project configuration to determine the file extension (TypeScript or JavaScript).
+ *
+ * @async
+ * @function rmCommandFunc
+ * @returns {Promise<void>} Resolves when the command removal process is complete.
+ *
+ * @throws {ExitPromptError} If the user exits the prompt unexpectedly.
+ * @throws {Error} For any other unexpected errors during the process.
+ */
 export const rmCommandFunc = async () => {
     try {
 
