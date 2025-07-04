@@ -1,12 +1,12 @@
 import { ExitPromptError } from "@inquirer/core";
 import {exit} from "process";
 import path from 'path';
-import { readFile,readdir,writeFile } from "fs/promises";
-import { confirm, select } from "@inquirer/prompts";
+import { readFile,readdir } from "fs/promises";
+import { select } from "@inquirer/prompts";
 import prettier from "prettier";
 import { loadOpt } from "../../utils/loadOpt.js";
 import { askOpts } from "../../utils/askOpts.js";
-import { addFile } from "../../utils/file.js";
+import { writeFile } from "../../utils/file.js";
 
 
 /**
@@ -68,7 +68,7 @@ export const addCommandOptFunc = async () => {
                         parser: commandPath.endsWith(".ts") ? "typescript" : "babel",
                 });
 
-                await addFile(commandPath, formatted);
+                await writeFile(commandPath, formatted);
                 console.log(`Options updated in ${commandPath}`);
 
         } catch (err) {

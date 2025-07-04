@@ -33,7 +33,7 @@ export async function renameFile(oldPath, newPath) {
  * @param {string} filePath
  * @param {string} content
  */
-export async function addFile(filePath, content = "") {
+export async function writeFile(filePath, content = "") {
         const logger = new Logger();
         try {
                 await fsp.writeFile(filePath, content);

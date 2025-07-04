@@ -3,7 +3,7 @@ import path from 'path';
 import {fileURLToPath} from 'url';
 import {select, confirm} from '@inquirer/prompts';
 import {Database} from "./database.js";
-import {addFile, removeFile, renameFile} from "../utils/file.js";
+import {writeFile, removeFile, renameFile} from "../utils/file.js";
 import { ExitPromptError } from '@inquirer/core'; 
 import {Logger} from "../logs/logger.js";
 
@@ -166,10 +166,32 @@ export class Rollback {
                         }
 
                         const selectedRollback = rollbackOptions[selectedIndex];
-                        this.handleRollbackType(selectedRollback);
+
+                        try {
+                                await this.handleRollbackType(selectedRollback);
+                                await this.removeRollbackFromHistory(rollbackOptions, selectedIndex); 
+                        } catch (err) {
+                                console.error("Rollback failed:", err);
+                        }
 
                 } catch (error) {
                         console.error("An unexpected error occurred:", error);
+                }
+        }
+
+        /**
+         * @param {RollbackEntry[]} rollbackEntries
+         * @param {number} index
+         */
+        async removeRollbackFromHistory(rollbackEntries, index) {
+                try {
+                        rollbackEntries.splice(index, 1);
+
+                        await writeFile(this.path, JSON.stringify(rollbackEntries, null, 2));
+
+                        this.logger.info("Rollback history updated.");
+                } catch (err) {
+                        this.logger.error("Failed to remove rollback from history:", err);
                 }
         }
 
@@ -204,7 +226,7 @@ export class Rollback {
                         const modelContent = `// file name is table name\n\nexport const fields = {\n${modelFields}\n};\n`;
 
                         const modelPath = path.join(modelsFolder, `${data.name}.${extensionConfig}`);
-                        await addFile(modelPath, modelContent);
+                        await writeFile(modelPath, modelContent);
 
                         if (!Array.isArray(data.values)) {
                                 return;

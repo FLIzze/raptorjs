@@ -2,7 +2,7 @@ import {input} from "@inquirer/prompts";
 import {exit} from "process";
 import {ExitPromptError} from "@inquirer/core";
 import {existsSync} from "fs";
-import {addFile} from '../../utils/file.js';
+import {writeFile} from '../../utils/file.js';
 import {readFile} from "fs/promises";
 import path from 'path';
 import {askOpts} from "../../utils/askOpts.js";
@@ -91,7 +91,7 @@ export const ${commandName}Command = {
 
                 const formatted = await prettier.format(code, {parser: raptorConfig.ts ? "typescript" : "babel"});
 
-                await addFile(`${CmdDir}${commandName}.${raptorConfig.ts ? "ts" : "js"}`, formatted);
+                await writeFile(`${CmdDir}${commandName}.${raptorConfig.ts ? "ts" : "js"}`, formatted);
 
         } catch (err) {
                 if (err instanceof ExitPromptError) {

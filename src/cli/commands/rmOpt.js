@@ -5,7 +5,7 @@ import { readFile,readdir } from "fs/promises";
 import { select, confirm } from "@inquirer/prompts";
 import prettier from "prettier";
 import { loadOpt } from "../../utils/loadOpt.js";
-import { addFile } from "../../utils/file.js";
+import { writeFile } from "../../utils/file.js";
 
 
 /**
@@ -82,7 +82,7 @@ export const rmOptFunc = async () => {
                                 parser: commandPath.endsWith(".ts") ? "typescript" : "babel",
                         });
 
-                        await addFile(commandPath, formatted);
+                        await writeFile(commandPath, formatted);
                         console.log(`Options updated in ${commandPath}`);
                 } else {
                         exit(0);
