@@ -1,4 +1,5 @@
 {
   "extension":"ts",
-  "ts": true
+  "ts": true,
+  "rollbackNbr": 5
 }

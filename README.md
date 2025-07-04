@@ -36,7 +36,9 @@ Invite the bot to your server - Don't forget to change the CLIENT_ID
 
 ### You're ready to go!
 
-*All commands start with `bun x raptorjs`*
+to start the bot *bun run bot*
+
+*All framework commands start with `bun x raptorjs`*
 
 ```
 Available commands:

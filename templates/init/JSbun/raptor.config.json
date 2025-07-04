@@ -1,4 +1,5 @@
 {
   "extension":"js",
-  "ts": false
+  "ts": false,
+  "rollbackNbr": 5
 }

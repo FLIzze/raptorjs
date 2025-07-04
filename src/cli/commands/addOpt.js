@@ -7,6 +7,7 @@ import prettier from "prettier";
 import { loadOpt } from "../../utils/loadOpt.js";
 import { askOpts } from "../../utils/askOpts.js";
 import { writeFile } from "../../utils/file.js";
+import {Logger} from "../../main.js";
 
 
 /**
@@ -68,7 +69,8 @@ export const addCommandOptFunc = async () => {
                         parser: commandPath.endsWith(".ts") ? "typescript" : "babel",
                 });
 
-                await writeFile(commandPath, formatted);
+                const logger = new Logger();
+                await writeFile(commandPath, logger, formatted);
                 console.log(`Options updated in ${commandPath}`);
 
         } catch (err) {

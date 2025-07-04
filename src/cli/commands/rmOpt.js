@@ -6,6 +6,7 @@ import { select, confirm } from "@inquirer/prompts";
 import prettier from "prettier";
 import { loadOpt } from "../../utils/loadOpt.js";
 import { writeFile } from "../../utils/file.js";
+import {Logger} from "../../logs/logger.js";
 
 
 /**
@@ -82,7 +83,8 @@ export const rmOptFunc = async () => {
                                 parser: commandPath.endsWith(".ts") ? "typescript" : "babel",
                         });
 
-                        await writeFile(commandPath, formatted);
+                        const logger = new Logger();
+                        await writeFile(commandPath, logger, formatted);
                         console.log(`Options updated in ${commandPath}`);
                 } else {
                         exit(0);

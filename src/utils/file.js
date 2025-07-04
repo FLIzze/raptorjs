@@ -4,9 +4,9 @@ import { Logger } from "../logs/logger.js";
 /**
  * @param {string} src
  * @param {string} dest
+ * @param {Logger} logger
  */
-export async function copyFile(src, dest) {
-        const logger = new Logger();
+export async function copyFile(src, dest, logger) {
         try {
                 await fsp.copyFile(src, dest);
                 logger.info(`Copied file from ${src} to ${dest}`);
@@ -18,9 +18,9 @@ export async function copyFile(src, dest) {
 /**
  * @param {string} oldPath
  * @param {string} newPath
+ * @param {Logger} logger
  */
-export async function renameFile(oldPath, newPath) {
-        const logger = new Logger();
+export async function renameFile(oldPath, newPath, logger) {
         try {
                 await fsp.rename(oldPath, newPath);
                 logger.info(`Renamed file from ${oldPath} to ${newPath}`);
@@ -32,9 +32,9 @@ export async function renameFile(oldPath, newPath) {
 /**
  * @param {string} filePath
  * @param {string} content
+ * @param {Logger} logger
  */
-export async function writeFile(filePath, content = "") {
-        const logger = new Logger();
+export async function writeFile(filePath, logger, content = "") {
         try {
                 await fsp.writeFile(filePath, content);
                 logger.info(`Created file at ${filePath}`);
@@ -45,9 +45,9 @@ export async function writeFile(filePath, content = "") {
 
 /**
  * @param {string} filePath
+ * @param {Logger} logger
  */
-export async function removeFile(filePath) {
-        const logger = new Logger();
+export async function removeFile(filePath, logger) {
         try {
                 await fsp.unlink(filePath);
                 logger.info(`Removed file at ${filePath}`);
@@ -59,11 +59,11 @@ export async function removeFile(filePath) {
 /**
  * Reads and parses a JSON file.
  * @param {string} filePath - Path to the JSON file.
+ * @param {Logger} logger
  * @param {boolean} [isJson] - Set to true to parse json
  * @returns {Promise<any>} Parsed JSON content.
  */
-export async function readFile(filePath, isJson = false) {
-        const logger = new Logger();
+export async function readFile(filePath, logger, isJson = false) {
         try {
                 const content = await fsp.readFile(filePath, 'utf-8');
 

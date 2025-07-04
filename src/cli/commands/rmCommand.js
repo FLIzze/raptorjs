@@ -4,6 +4,7 @@ import path from 'path';
 import { readFile,readdir } from "fs/promises";
 import { confirm, select } from "@inquirer/prompts";
 import { removeFile } from "../../utils/file.js";
+import {Logger} from "../../logs/logger.js";
 
 /**
  * Asynchronously handles the removal of a command file from the RaptorJS project.
@@ -50,7 +51,8 @@ export const rmCommandFunc = async () => {
                 const commandName = commands.find(cmd => cmd.value === commandPath)?.name;
 
                 if (await confirm({message:`Are you sure you want to delete the "${commandName}" command?`})) {
-                        removeFile(commandPath);
+                        const logger = new Logger();
+                        removeFile(commandPath, logger);
                         console.log(`Command "${commandName}" has been deleted successfully!`);
                 }
 

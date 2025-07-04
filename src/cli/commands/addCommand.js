@@ -7,6 +7,7 @@ import {readFile} from "fs/promises";
 import path from 'path';
 import {askOpts} from "../../utils/askOpts.js";
 import prettier from "prettier";
+import {Logger} from "../../main.js";
 
 /**
  * Interactive CLI function to add a new command file for RaptorJS Discord bots.
@@ -91,7 +92,8 @@ export const ${commandName}Command = {
 
                 const formatted = await prettier.format(code, {parser: raptorConfig.ts ? "typescript" : "babel"});
 
-                await writeFile(`${CmdDir}${commandName}.${raptorConfig.ts ? "ts" : "js"}`, formatted);
+                const logger = new Logger();
+                await writeFile(`${CmdDir}${commandName}.${raptorConfig.ts ? "ts" : "js"}`, logger, formatted);
 
         } catch (err) {
                 if (err instanceof ExitPromptError) {

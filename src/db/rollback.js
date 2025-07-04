@@ -62,6 +62,8 @@ export class Rollback {
         constructor() {
                 /** @type {string} */    
                 this.path = path.join(process.cwd(), ".rollback.backup.json");
+                this.conf = path.join(process.cwd(), "raptor.config.json");
+
                 this.buildBackupFile();
 
                 /** @type {Database} */    
@@ -69,6 +71,19 @@ export class Rollback {
 
                 /** @type {Logger} */    
                 this.logger = new Logger();
+
+                this.rollbackNbr = 5;
+                try {
+                        if (fs.existsSync(this.conf)) {
+                                const confData = fs.readFileSync(this.conf, 'utf-8');
+                                const confJson = JSON.parse(confData);
+                                if (typeof confJson.rollbackNbr === 'number' && confJson.rollbackNbr > 0) {
+                                        this.rollbackNbr = confJson.rollbackNbr;
+                                }
+                        }
+                } catch (err) {
+                        console.error("Failed to read config rollbackNbr, using default 5:", err);
+                }
         }
 
         buildBackupFile() {
@@ -89,8 +104,7 @@ export class Rollback {
         register(entry) {
                 try {
                         const currentEntries = this.read();
-
-                        if (currentEntries.length >= 5) {
+                        if (currentEntries.length >= this.rollbackNbr) {
                                 currentEntries.pop();
                         };
 
@@ -187,11 +201,11 @@ export class Rollback {
                 try {
                         rollbackEntries.splice(index, 1);
 
-                        await writeFile(this.path, JSON.stringify(rollbackEntries, null, 2));
+                        await writeFile(this.path, this.logger, JSON.stringify(rollbackEntries, null, 2));
 
                         this.logger.info("Rollback history updated.");
                 } catch (err) {
-                        this.logger.error("Failed to remove rollback from history:", err);
+                        this.logger.error(`Failed to remove rollback from history: ${err}`);
                 }
         }
 
@@ -226,7 +240,7 @@ export class Rollback {
                         const modelContent = `// file name is table name\n\nexport const fields = {\n${modelFields}\n};\n`;
 
                         const modelPath = path.join(modelsFolder, `${data.name}.${extensionConfig}`);
-                        await writeFile(modelPath, modelContent);
+                        await writeFile(modelPath, this.logger, modelContent);
 
                         if (!Array.isArray(data.values)) {
                                 return;
@@ -249,7 +263,7 @@ export class Rollback {
                         const data = rollbackData.data;
 
                         this.db.renameTable(data.oldName, data.newName);
-                        await renameFile(`${modelsFolder}/${data.oldName}.${extensionConfig}`, `${modelsFolder}/${data.newName}.${extensionConfig}`);
+                        await renameFile(`${modelsFolder}/${data.oldName}.${extensionConfig}`, `${modelsFolder}/${data.newName}.${extensionConfig}`, this.logger);
                         break;
                 }
                 case "migration":
@@ -267,7 +281,7 @@ export class Rollback {
                         const data = rollbackData.data;
 
                         this.db.dropTable(data.modelName);
-                        await removeFile(`${modelsFolder}/${data.modelName}.${extensionConfig}`);
+                        await removeFile(`${modelsFolder}/${data.modelName}.${extensionConfig}`, this.logger);
                         break;
                 }
                 default:

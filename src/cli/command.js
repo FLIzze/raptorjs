@@ -7,10 +7,12 @@ import {fileURLToPath, pathToFileURL} from "url";
 import {Rollback} from "../db/rollback.js";
 import {Logger} from "../logs/logger.js";
 import {copyFile} from "../utils/file.js";
-import { addCommandFunc } from "./commands/addCommand.js";
-import { rmCommandFunc } from "./commands/rmCommand.js";
-import { addCommandOptFunc } from "./commands/addOpt.js";
-import { rmOptFunc } from "./commands/rmOpt.js";
+import {addCommandFunc} from "./commands/addCommand.js";
+import {rmCommandFunc} from "./commands/rmCommand.js";
+import {addCommandOptFunc} from "./commands/addOpt.js";
+import {rmOptFunc} from "./commands/rmOpt.js";
+
+// TODO - Add transactions for addModel and deleteModel
 
 export class Command {
         constructor() {
@@ -61,13 +63,13 @@ export class Command {
          * @param {string} modelName      
          */
         async addModel(modelName) {
-                this.register("addModel", { modelName }, `Added ${modelName}`);
+                this.register("addModel", {modelName}, `Added ${modelName}`);
 
                 const source = path.join(this.npxpath, "templates", "db", "model");
                 const targetDir = path.join(this.pwd, "src", "models");
 
                 try {
-                        await fsp.mkdir(targetDir, { recursive: true });
+                        await fsp.mkdir(targetDir, {recursive: true});
                 } catch (err) {
                         this.logger.error(`Error creating models directory: ${err.message}`);
                         return;
@@ -75,7 +77,7 @@ export class Command {
 
                 const target = path.join(targetDir, `${modelName}.${this.extension}`);
 
-                await copyFile(source, target);
+                await copyFile(source, target, this.logger);
                 this.logger.info(`Model successfully added as ${target}`);
         }
 
@@ -84,7 +86,7 @@ export class Command {
          * @param {string} newName
          */
         async renameModel(oldName, newName) {
-                this.register("renameModel", { oldName, newName }, `Renamed ${oldName} to ${newName}`);
+                this.register("renameModel", {oldName, newName}, `Renamed ${oldName} to ${newName}`);
 
                 const oldPath = path.join(this.pwd, "src", "models", `${oldName}.${this.extension}`);
                 const newPath = path.join(this.pwd, "src", "models", `${newName}.${this.extension}`);
@@ -107,7 +109,23 @@ export class Command {
                         return;
                 }
 
-                await this.db.renameTable(oldName, newName);
+                try {
+                        this.db.run("BEGIN TRANSACTION");
+                        this.db.renameTable(oldName, newName);
+                        this.db.run("COMMIT");
+                } catch (err) {
+                        this.logger.error(`Failed to rename database table: ${err.message}`);
+
+                        try {
+                                await fsp.rename(newPath, oldPath);
+                                this.logger.info(`Reverted file rename due to DB rename failure.`);
+                        } catch (rollbackErr) {
+                                this.logger.error(`Failed to revert file rename: ${rollbackErr.message}`);
+                        }
+
+                        this.db.run("ROLLBACK");
+                        return;
+                }
         }
 
         /**
@@ -137,7 +155,7 @@ export class Command {
                 const keysName = schemaRows.map(row => row.name);
                 const values = model.map(mod => Object.values(mod));
 
-                this.register("deleteModel", { name, keysName, values, keysType }, `Deleted model ${name} with ${model.length} rows`);
+                this.register("deleteModel", {name, keysName, values, keysType}, `Deleted model ${name} with ${model.length} rows`);
 
                 const modelPath = path.join(this.pwd, "src", "models", `${name}.${this.extension}`);
                 if (!fs.existsSync(modelPath)) {
@@ -172,7 +190,7 @@ export class Command {
                                 const tableExists = tables.some(table => table.name === filenameWithoutExt);
 
                                 if (tableExists) {
-                                        continue;  
+                                        continue;
                                 }
 
                                 const modelPath = pathToFileURL(path.join(modelDir, file)).href;

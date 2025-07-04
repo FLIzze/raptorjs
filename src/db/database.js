@@ -26,6 +26,22 @@ export class Database {
                 this.all = promisify(this.db.all.bind(this.db));
         }
 
+        close() {
+                return promisify(this.db.close.bind(this.db))();
+        }
+
+        async begin() {
+                await this.run("BEGIN TRANSACTION");
+        }
+
+        async commit() {
+                await this.run("COMMIT");
+        }
+
+        async rollback() {
+                await this.run("ROLLBACK");
+        }
+
         /**
          * Inserts a row into the specified table.
          *
@@ -41,8 +57,6 @@ export class Database {
                         const placeholders = keys.map(() => '?').join(', ');
                         const values = keys.map(k => data[k]);
                         const sql = `INSERT INTO ${table} (${keys.join(', ')}) VALUES (${placeholders})`;
-
-                        this.logger.sql(sql, values);
 
                         await this.run(sql, values);
                 } catch (err) {
@@ -74,7 +88,6 @@ export class Database {
                                 sql += ` WHERE ${clause}`;
                         }
 
-                        this.logger.sql(sql, values);
                         return await this.all(sql, values);
                 } catch (err) {
                         this.logger.error(`find failed: ${err}`);
@@ -96,8 +109,6 @@ export class Database {
                         const values = Object.values(conditions);
                         const sql = `DELETE FROM ${table} WHERE ${clause}`;
 
-                        this.logger.sql(sql, values);
-
                         await this.run(sql, values);
                 } catch (err) {
                         this.logger.error(`Delete failed: ${err}`);
@@ -116,8 +127,6 @@ export class Database {
         async renameTable(oldName, newName) {
                 const sql = `ALTER TABLE ${oldName} RENAME TO ${newName}`;
 
-                this.logger.sql(sql);
-
                 try {
                         await this.run(sql);
                         this.logger.info(`Renamed table "${oldName}" to "${newName}"`);
@@ -131,8 +140,6 @@ export class Database {
          */
         async getTable() {
                 const sql = "SELECT name FROM sqlite_master WHERE type='table';";
-
-                this.logger.sql(sql);
 
                 try {
                         const tables = await this.all(sql);
@@ -150,8 +157,6 @@ export class Database {
          */
         async dropTable(name) {
                 const sql = `DROP TABLE IF EXISTS ${name}`;
-
-                this.logger.sql(sql);
 
                 try {
                         await this.run(sql);
@@ -191,8 +196,6 @@ export class Database {
                         const sql = `UPDATE ${table} SET ${setClause} WHERE ${whereClause}`;
                         const values = [...setValues, ...whereValues];
 
-                        this.logger.sql(sql, values);
-
                         await this.run(sql, values);
 
                         this.logger.info(`Updated rows in table "${table}"`);
@@ -210,7 +213,6 @@ export class Database {
                 try {
                         const sql = `CREATE TABLE IF NOT EXISTS ${tableName} (${columns});`;
 
-                        this.logger.sql(sql);
                         await this.run(sql);
                         this.logger.info(`Created table ${tableName} with columns ${columns}`);
                 } catch (err) {
